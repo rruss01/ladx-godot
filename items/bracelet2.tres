@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ttryefivr0wb"]
+
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="1_be6di"]
+[ext_resource type="Texture2D" uid="uid://d1l6ae2bnw12v" path="res://assets/hud/items/icon_bracelet2.tres" id="1_wn2ll"]
+
+[resource]
+script = ExtResource("1_be6di")
+DisplayName = "bracelet2"
+Icon = ExtResource("1_wn2ll")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

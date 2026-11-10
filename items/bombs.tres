@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c66lsps70847l"]
+
+[ext_resource type="Texture2D" uid="uid://bt5b7vx7ufj5j" path="res://assets/hud/items/icon_bombs.tres" id="1_eu8mm"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_8os4v"]
+
+[resource]
+script = ExtResource("2_8os4v")
+DisplayName = "bombs"
+Icon = ExtResource("1_eu8mm")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

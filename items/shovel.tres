@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://2wvu8yojnh7h"]
+
+[ext_resource type="Texture2D" uid="uid://dwmd67kq3v4ws" path="res://assets/hud/items/icon_shovel.tres" id="1_1wpxi"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_whifd"]
+
+[resource]
+script = ExtResource("2_whifd")
+DisplayName = "shovel"
+Icon = ExtResource("1_1wpxi")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

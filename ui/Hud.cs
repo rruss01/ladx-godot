@@ -15,6 +15,7 @@ public partial class Hud : CanvasLayer
 	private TextureRect _aIcon;
 	private Control _hearts;
 	private Control _rupeeDigits;
+	private Control _bar;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -23,13 +24,23 @@ public partial class Hud : CanvasLayer
 		_aIcon = GetNode<TextureRect>("BottomBar/IconA");
 		_hearts = GetNode<Control>("BottomBar/Hearts");
 		_rupeeDigits = GetNode<Control>("BottomBar/RupeeDigits");
-
-		SetItemB(null);
-		SetItemA(null);
+		_bar = GetNode<Control>("BottomBar");
+		
+		Inventory.Instance.EquippedChanged += OnEquippedChanged;
+		SetItemB(Inventory.Instance.GetEquipped(ItemButton.B));
+		SetItemA(Inventory.Instance.GetEquipped(ItemButton.A));
 	}
 
 	public void SetItemB(ItemData item) => _bIcon.Texture = item?.Icon;
 	public void SetItemA(ItemData item) => _aIcon.Texture = item?.Icon;
+	
+	public void SetMenuOpen(bool open) {
+		_bar.Position = open ? Vector2.Zero : new Vector2(0, 128);
+	}
+	
+	private void OnEquippedChanged(int button, ItemData item) {
+		if (button == (int)ItemButton.B) SetItemB(item); else SetItemA(item);
+	}
 
 	public void SetHearts(int currentHealth, int maxHealth)
 	{

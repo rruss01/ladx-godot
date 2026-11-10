@@ -9,9 +9,6 @@ public partial class World : Node2D
 		var player = GetNode<Player>("Player");
 		var hud = GetNode<Hud>("HUD");
 		
-		player.ItemBChanged += hud.SetItemB;
-		player.ItemAChanged += hud.SetItemA;
-		
 		player.HealthChanged += hud.SetHearts;
 		player.RupeesChanged += hud.SetRupees;
 	}

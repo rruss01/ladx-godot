@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://x3lvfx7vsr3y"]
+
+[ext_resource type="Texture2D" uid="uid://cbrgnjqwjqwx2" path="res://assets/hud/items/icon_rocs_feather.tres" id="1_rg5vh"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_104pd"]
+
+[resource]
+script = ExtResource("2_104pd")
+DisplayName = "rocs_feather"
+Icon = ExtResource("1_rg5vh")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

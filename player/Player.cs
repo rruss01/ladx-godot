@@ -2,15 +2,10 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-
-	[Signal] public delegate void ItemBChangedEventHandler(ItemData item);
-	[Signal] public delegate void ItemAChangedEventHandler(ItemData item);
 	[Signal] public delegate void HealthChangedEventHandler(int health, int maxHealth);
 	[Signal] public delegate void RupeesChangedEventHandler(int amount);
 
 	// PLAYER SHOULD NOT BE HANDLING THIS
-	private ItemData _itemB;
-	private ItemData _itemA;
 	private int _health;
 	private int _rupees;
 
@@ -18,22 +13,8 @@ public partial class Player : CharacterBody2D
 	public void TakeDamage(int amount) => SetHealth(_health - amount);
 	public void Heal(int amount) => SetHealth(_health + amount);
 
-	// debug values
-	[Export] public ItemData StartingB { get; set; }
-	[Export] public ItemData StartingA { get; set; }
+	// debug value
 	[Export] public int MaxHealth { get; set; } = 6;
-
-	public void EquipB(ItemData item)
-	{
-		_itemB = item;
-		EmitSignal(SignalName.ItemBChanged, item);
-	}
-
-	public void EquipA(ItemData item)
-	{
-		_itemA = item;
-		EmitSignal(SignalName.ItemAChanged, item);
-	}
 
 	private void SetHealth(int value)
 	{
@@ -47,15 +28,15 @@ public partial class Player : CharacterBody2D
 		EmitSignal(SignalName.RupeesChanged, _rupees);
 	}
 
-	// --- Movement (1/16 px per tick; values from the game's lookup table) ---
+	// --- Movement (1/16 px per tick; values from LADX disassembly) ---
 	private const int StraightSpeed = 16; // $10
 	private const int DiagonalSpeed = 12; // $0C per axis
 	private Vector2I _facing = Vector2I.Down;
-	// Y starts at 8 so the axes don't pause on the same frame (fixes the diagonal hitch).
+	// Y starts at 8 so the axes don't pause on the same frame (fixes diagonal jitter).
 	private Vector2I _subpixel = new Vector2I(0, 8);
 
 	// --- Sword ---
-	// Arrays can't be 'const' in C#, so use static readonly.
+	// Arrays can't be const in C#, so use static readonly.
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
 	private const int SwordSwingFrames = 14; // sum of SwordSwingSteps
 	private const int SpinAtkMaxCharge = 40; // $28 frames to fully charge
@@ -84,8 +65,6 @@ public partial class Player : CharacterBody2D
 	
 	private void EquipStartingItems()
 	{
-		EquipB(StartingB);
-		EquipA(StartingA);
 		SetHealth(MaxHealth);
 		AddRupees(0);
 	}
@@ -122,6 +101,8 @@ public partial class Player : CharacterBody2D
 		}
 
 		// otherwise move normally
+		if (Input.IsActionJustPressed("button_b")) Inventory.Instance.GetEquipped(ItemButton.B)?.Use(this);
+		if (Input.IsActionJustPressed("button_a")) Inventory.Instance.GetEquipped(ItemButton.A)?.Use(this);
 		UpdateMovement();
 	}
 

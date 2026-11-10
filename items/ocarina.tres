@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bwhpnv684wbm0"]
+
+[ext_resource type="Texture2D" uid="uid://dxfogn1jjsnr5" path="res://assets/hud/items/icon_ocarina.tres" id="1_u4u8d"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_5c57f"]
+
+[resource]
+script = ExtResource("2_5c57f")
+DisplayName = "ocarina"
+Icon = ExtResource("1_u4u8d")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

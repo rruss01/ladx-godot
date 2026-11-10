@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://2l3kocqiw7lw"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b7u7bdfkntsk6"]
 
 [ext_resource type="Texture2D" uid="uid://c4hdmc4wjjshr" path="res://assets/hud/items/icon_shield1.tres" id="1_fv0lc"]
 [ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="1_qqbfg"]

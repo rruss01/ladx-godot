@@ -4,26 +4,25 @@
 [ext_resource type="Texture2D" uid="uid://dga1jvs3homyc" path="res://assets/maps/overworld.png" id="2_llyeo"]
 [ext_resource type="Texture2D" uid="uid://b600cls0ralc3" path="res://assets/maps/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Tilesets - Overworld Tileset.png" id="3_2tavo"]
 [ext_resource type="PackedScene" uid="uid://20rjv10got0b" path="res://player/player.tscn" id="4_k8wd0"]
-[ext_resource type="Resource" uid="uid://2l3kocqiw7lw" path="res://items/shield1.tres" id="5_0pnie"]
-[ext_resource type="Resource" uid="uid://cvfgwmowqihff" path="res://items/sword1.tres" id="6_llyeo"]
 [ext_resource type="PackedScene" uid="uid://b1vcvh1qb7x2h" path="res://ui/hud.tscn" id="7_bwxdu"]
 [ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="8_lwhbe"]
-[ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/heart_full.tres" id="9_ftqqi"]
-[ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/heart_half.tres" id="10_avd5l"]
-[ext_resource type="Texture2D" uid="uid://8vgclhw0t58u" path="res://assets/hud/heart_empty.tres" id="11_ll3gq"]
-[ext_resource type="Texture2D" uid="uid://cr4qq76gb2tfj" path="res://assets/hud/digit_0.tres" id="12_jgi7c"]
-[ext_resource type="Texture2D" uid="uid://now2ie3kqonn" path="res://assets/hud/digit_1.tres" id="13_cqwbg"]
-[ext_resource type="Texture2D" uid="uid://c4yxmclw4s37v" path="res://assets/hud/digit_2.tres" id="14_q3kex"]
-[ext_resource type="Texture2D" uid="uid://cl6gidvm823bk" path="res://assets/hud/digit_3.tres" id="15_hm5b2"]
-[ext_resource type="Texture2D" uid="uid://dlge7ng5pjmpo" path="res://assets/hud/digit_4.tres" id="16_hnpqp"]
-[ext_resource type="Texture2D" uid="uid://c87mspg6myvw2" path="res://assets/hud/digit_5.tres" id="17_33qpb"]
-[ext_resource type="Texture2D" uid="uid://b4phcu7hkkj4" path="res://assets/hud/digit_6.tres" id="18_ifjjt"]
-[ext_resource type="Texture2D" uid="uid://estpmd2d3wn4" path="res://assets/hud/digit_7.tres" id="19_behgl"]
-[ext_resource type="Texture2D" uid="uid://c3gdi2arn7ell" path="res://assets/hud/digit_8.tres" id="20_k83x5"]
-[ext_resource type="Texture2D" uid="uid://d0v337whncvmo" path="res://assets/hud/digit_9.tres" id="21_b8tmp"]
+[ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/hearts/heart_full.tres" id="9_ftqqi"]
+[ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/hearts/heart_half.tres" id="10_avd5l"]
+[ext_resource type="Texture2D" uid="uid://8vgclhw0t58u" path="res://assets/hud/hearts/heart_empty.tres" id="11_ll3gq"]
+[ext_resource type="Texture2D" uid="uid://cr4qq76gb2tfj" path="res://assets/hud/digits/digit_0.tres" id="12_jgi7c"]
+[ext_resource type="Texture2D" uid="uid://now2ie3kqonn" path="res://assets/hud/digits/digit_1.tres" id="13_cqwbg"]
+[ext_resource type="Texture2D" uid="uid://c4yxmclw4s37v" path="res://assets/hud/digits/digit_2.tres" id="14_q3kex"]
+[ext_resource type="Texture2D" uid="uid://cl6gidvm823bk" path="res://assets/hud/digits/digit_3.tres" id="15_hm5b2"]
+[ext_resource type="Texture2D" uid="uid://dlge7ng5pjmpo" path="res://assets/hud/digits/digit_4.tres" id="16_hnpqp"]
+[ext_resource type="Texture2D" uid="uid://c87mspg6myvw2" path="res://assets/hud/digits/digit_5.tres" id="17_33qpb"]
+[ext_resource type="Texture2D" uid="uid://b4phcu7hkkj4" path="res://assets/hud/digits/digit_6.tres" id="18_ifjjt"]
+[ext_resource type="Texture2D" uid="uid://estpmd2d3wn4" path="res://assets/hud/digits/digit_7.tres" id="19_behgl"]
+[ext_resource type="Texture2D" uid="uid://c3gdi2arn7ell" path="res://assets/hud/digits/digit_8.tres" id="20_k83x5"]
+[ext_resource type="Texture2D" uid="uid://d0v337whncvmo" path="res://assets/hud/digits/digit_9.tres" id="21_b8tmp"]
 [ext_resource type="Script" uid="uid://dah5f1vnf3lhy" path="res://world/ScreenScroller.cs" id="22_0pnie"]
 [ext_resource type="TileSet" uid="uid://djhvcdg1wnx27" path="res://assets/maps/collision/solid.tres" id="23_pfbnl"]
 [ext_resource type="Script" uid="uid://dw7pfqatjxexr" path="res://world/CollisionLoader.cs" id="24_0pnie"]
+[ext_resource type="PackedScene" uid="uid://dnpdp3rpltjwe" path="res://ui/inventory_menu.tscn" id="24_gi7ib"]
 [ext_resource type="Texture2D" uid="uid://binhs4oourp4r" path="res://assets/maps/collision/overworld_collision.png" id="25_h4vgh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_il2jm"]
@@ -1311,8 +1310,6 @@ tile_set = SubResource("TileSet_tlwt5")
 [node name="Player" parent="." unique_id=1190535338 instance=ExtResource("4_k8wd0")]
 position = Vector2(90, 91)
 motion_mode = 1
-StartingB = ExtResource("5_0pnie")
-StartingA = ExtResource("6_llyeo")
 
 [node name="HUD" parent="." unique_id=2058347049 instance=ExtResource("7_bwxdu")]
 script = ExtResource("8_lwhbe")
@@ -1335,3 +1332,6 @@ script = ExtResource("24_0pnie")
 Scroller = NodePath("../ScreenScroller")
 Collision = NodePath("../Collision")
 MaskTexture = ExtResource("25_h4vgh")
+
+[node name="InventoryMenu" parent="." unique_id=376511760 node_paths=PackedStringArray("BottomBar") instance=ExtResource("24_gi7ib")]
+BottomBar = NodePath("../HUD")

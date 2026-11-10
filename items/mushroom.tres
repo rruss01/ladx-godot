@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://qk4plnfcvqxm"]
+
+[ext_resource type="Texture2D" uid="uid://b6d7vcvv5h6hm" path="res://assets/hud/items/icon_mushroom.tres" id="1_m1fjb"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_s6r1l"]
+
+[resource]
+script = ExtResource("2_s6r1l")
+DisplayName = "mushroom"
+Icon = ExtResource("1_m1fjb")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"

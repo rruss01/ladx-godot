@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c66lsps70847l"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://brm5go51akvw1"]
 
 [ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="1_nq6lk"]
 [ext_resource type="Texture2D" uid="uid://2kl1qjqive2f" path="res://assets/hud/items/icon_boomerang.tres" id="1_s3u3b"]

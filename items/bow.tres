@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://2l3kocqiw7lw"]
+
+[ext_resource type="Texture2D" uid="uid://cug37oawrtv5w" path="res://assets/hud/items/icon_bow.tres" id="1_4sso7"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_65rus"]
+
+[resource]
+script = ExtResource("2_65rus")
+DisplayName = "bow"
+Icon = ExtResource("1_4sso7")
+metadata/_custom_type_script = "uid://77rcrk7c21yd"
