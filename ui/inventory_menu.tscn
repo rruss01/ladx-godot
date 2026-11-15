@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://dnpdp3rpltjwe"]
 
-[ext_resource type="Script" uid="uid://bqd8d6qlsr0x" path="res://InventoryMenu.cs" id="1_vaigm"]
+[ext_resource type="Script" uid="uid://bqd8d6qlsr0x" path="res://ui/InventoryMenu.cs" id="1_vaigm"]
+[ext_resource type="Texture2D" uid="uid://bs8qwa13l5sm4" path="res://assets/hud/items/icon_empty.tres" id="2_cmdnq"]
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png" id="2_o13uu"]
 [ext_resource type="Shader" uid="uid://c5t430wsawbbo" path="res://ui/cursor.gdshader" id="3_xink8"]
 [ext_resource type="Texture2D" uid="uid://b6ul30ara6sm2" path="res://assets/hud/items/icon_cursor.tres" id="4_cmdnq"]
@@ -100,6 +101,7 @@ shader_parameter/tolerance = 0.01
 script = ExtResource("1_vaigm")
 Grid = NodePath("Panel/Grid")
 Cursor = NodePath("Panel/Cursor")
+EmptySlotTexture = ExtResource("2_cmdnq")
 
 [node name="Panel" type="Control" parent="." unique_id=1772257805]
 layout_mode = 3
@@ -111,6 +113,8 @@ offset_bottom = 144.0
 [node name="TileMapLayer" type="TileMapLayer" parent="Panel" unique_id=1337920392]
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAwAAAAAAAEAAAAAAA0AAAAAAAIAAAAAAA4AAAAAAAMAAAAAAA8AAAAAAAQAAAAAABAAAAAAAAUAAAAAABEAAAAAAAYAAAAAABIAAAAAAAcAAAAAABMAAAABAAAAAAABAAwAAAABAAEAAAABAA0AAAABAAIAAAABAA4AAAABAAMAAAABAA8AAAABAAQAAAABABAAAAABAAUAAAABABEAAAABAAYAAAABABIAAAABAAcAAAABABMAAAACAAAAAAACAAwAAAACAAEAAAACAA0AAAACAAIAAAACAA4AAAACAAMAAAACAA8AAAACAAQAAAACABAAAAACAAUAAAACABEAAAACAAYAAAACABIAAAACAAcAAAACABMAAAADAAAAAAADAAwAAAADAAEAAAADAA0AAAADAAIAAAADAA4AAAADAAMAAAADAA8AAAADAAQAAAADABAAAAADAAUAAAADABEAAAADAAYAAAADABIAAAADAAcAAAADABMAAAAEAAAAAAAEAAwAAAAEAAEAAAAEAA0AAAAEAAIAAAAEAA4AAAAEAAMAAAAEAA8AAAAEAAQAAAAEABAAAAAEAAUAAAAEABEAAAAEAAYAAAAEABIAAAAEAAcAAAAEABMAAAAFAAAAAAAFAAwAAAAFAAEAAAAFAA0AAAAFAAIAAAAFAA4AAAAFAAMAAAAFAA8AAAAFAAQAAAAFABAAAAAFAAUAAAAFABEAAAAFAAYAAAAFABIAAAAFAAcAAAAFABMAAAAGAAAAAAAGAAwAAAAGAAEAAAAGAA0AAAAGAAIAAAAGAA4AAAAGAAMAAAAGAA8AAAAGAAQAAAAGABAAAAAGAAUAAAAGABEAAAAGAAYAAAAGABIAAAAGAAcAAAAGABMAAAAHAAAAAAAHAAwAAAAHAAEAAAAHAA0AAAAHAAIAAAAHAA4AAAAHAAMAAAAHAA8AAAAHAAQAAAAHABAAAAAHAAUAAAAHABEAAAAHAAYAAAAHABIAAAAHAAcAAAAHABMAAAAIAAAAAAAIAAwAAAAIAAEAAAAIAA0AAAAIAAIAAAAIAA4AAAAIAAMAAAAIAA8AAAAIAAQAAAAIABAAAAAIAAUAAAAIABEAAAAIAAYAAAAIABIAAAAIAAcAAAAIABMAAAAJAAAAAAAJAAwAAAAJAAEAAAAJAA0AAAAJAAIAAAAJAA4AAAAJAAMAAAAJAA8AAAAJAAQAAAAJABAAAAAJAAUAAAAJABEAAAAJAAYAAAAJABIAAAAJAAcAAAAJABMAAAA=")
 tile_set = SubResource("TileSet_vgjww")
+rendering_quadrant_size = 8
+physics_quadrant_size = 8
 
 [node name="Grid" type="GridContainer" parent="Panel" unique_id=1788220420]
 layout_mode = 0
@@ -186,9 +190,9 @@ stretch_mode = 2
 [node name="Cursor" type="Control" parent="Panel" unique_id=828864353]
 custom_minimum_size = Vector2(28, 16)
 anchors_preset = 0
-offset_left = 6.0
+offset_left = 8.0
 offset_top = 8.0
-offset_right = 34.0
+offset_right = 36.0
 offset_bottom = 24.0
 
 [node name="CursorSprite" type="TextureRect" parent="Panel/Cursor" unique_id=1885650885]

@@ -16,18 +16,6 @@ public partial class Player : CharacterBody2D
 	// debug value
 	[Export] public int MaxHealth { get; set; } = 6;
 
-	private void SetHealth(int value)
-	{
-		_health = Mathf.Clamp(value, 0, MaxHealth);
-		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
-	}
-
-	public void AddRupees(int amount)
-	{
-		_rupees = Mathf.Clamp(_rupees + amount, 0, 999);
-		EmitSignal(SignalName.RupeesChanged, _rupees);
-	}
-
 	// --- Movement (1/16 px per tick; values from LADX disassembly) ---
 	private const int StraightSpeed = 16; // $10
 	private const int DiagonalSpeed = 12; // $0C per axis
@@ -40,10 +28,20 @@ public partial class Player : CharacterBody2D
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
 	private const int SwordSwingFrames = 14; // sum of SwordSwingSteps
 	private const int SpinAtkMaxCharge = 40; // $28 frames to fully charge
+	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
 	private int _charge = 0;
 
 	private AnimatedSprite2D _sprite;
+	private bool _swordOut;
+	private SwordSprite _sword;
+
+	public Vector2I Facing => _facing;
+
+	private static readonly ItemButton[] Buttons = { ItemButton.B, ItemButton.A };
+	private static string ActionFor(ItemButton b) => b == ItemButton.B ? "button_b" : "button_a";
+	private ItemButton _useButton;
+	private ItemButton _swordButton;
 
 	// dpad struct to handle movement
 	private readonly record struct DPad(bool Right, bool Left, bool Up, bool Down)
@@ -61,12 +59,25 @@ public partial class Player : CharacterBody2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		GlobalPosition = GlobalPosition.Round();
 		CallDeferred(MethodName.EquipStartingItems);
+		_sword = GetNode<SwordSprite>("Sword");
 	}
 	
 	private void EquipStartingItems()
 	{
 		SetHealth(MaxHealth);
 		AddRupees(0);
+	}
+
+	private void SetHealth(int value)
+	{
+		_health = Mathf.Clamp(value, 0, MaxHealth);
+		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
+	}
+
+	public void AddRupees(int amount)
+	{
+		_rupees = Mathf.Clamp(_rupees + amount, 0, 999);
+		EmitSignal(SignalName.RupeesChanged, _rupees);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -78,31 +89,35 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		// 2. Button pressed: start a swing this tick (no movement this tick)
-		// TODO: Only attack if equip slot button is pressed and has sword
-		if (Input.IsActionJustPressed("attack"))
-		{
-			StartSwing();
-			return;
+		// 2. Use item if item button pressed.
+		foreach (ItemButton button in Buttons) {
+			if (!Input.IsActionJustPressed(ActionFor(button)))
+				continue;
+
+			_useButton = button;
+			Inventory.Instance.GetEquipped(button)?.Use(this);
+
+			if (_swingFrame >= 0)
+				return;
 		}
 
-		// 3. Charging spin attack
-		if (Input.IsActionPressed("attack"))
+		// 3. Charging spin attack (swords only)
+		if (_swordOut && Input.IsActionPressed(ActionFor(_swordButton)))
 		{
 			_charge = Mathf.Min(_charge + 1, SpinAtkMaxCharge);
 		}
 		else
 		{
-			if (_charge >= SpinAtkMaxCharge)
+			if (_charge >= SpinAtkMaxCharge) 
 			{
 				// TODO: spin attack
 			}
 			_charge = 0;
+			_swordOut = false;
+			_sword.HideSword();
 		}
 
 		// otherwise move normally
-		if (Input.IsActionJustPressed("button_b")) Inventory.Instance.GetEquipped(ItemButton.B)?.Use(this);
-		if (Input.IsActionJustPressed("button_a")) Inventory.Instance.GetEquipped(ItemButton.A)?.Use(this);
 		UpdateMovement();
 	}
 
@@ -119,7 +134,7 @@ public partial class Player : CharacterBody2D
 	// Facing only changes when exactly one direction is held (otherwise it's kept)
 	private void UpdateFacing(DPad dpad)
 	{
-		if (dpad.Count == 1)
+		if (dpad.Count == 1 && !_swordOut)
 			_facing = new Vector2I(dpad.X, dpad.Y);
 	}
 
@@ -155,19 +170,36 @@ public partial class Player : CharacterBody2D
 
 		UpdateFacing(dpad);
 
+		if (_swordOut) {
+			_sword.ShowPose(_facing, _sword.HoldPose);
+			switch (FacingDirection()) {
+				case "up":
+					_sword.Position += new Vector2(0, 3);
+					break;
+				case "down":
+					_sword.Position -= new Vector2(0, 3);
+					break;
+				case "right":
+					_sword.Position += new Vector2(_facing.X < 0 ? 3 : -3, 0);
+					break;
+			}
+		}
+
 		// Walking animation = any d-pad direction held, even if blocked or cancelled
 		string state = dpad.Count > 0 ? "walk" : "idle";
 		_sprite.Play($"{state}-{FacingDirection()}");
 		_sprite.FlipH = _facing.X < 0;
 	}
 
-	private void StartSwing()
+	public void StartSwing(bool chargeable = true)
 	{
+		_swordButton = _useButton;
+		_swordOut = chargeable;
 		UpdateFacing(ReadDpad());
 		Velocity = Vector2.Zero;
 		_charge = 0;
 		_swingFrame = 0;
-		UpdateSwing(); // show the first pose on this same tick, like the game
+		UpdateSwing();
 	}
 
 	private void UpdateSwing()
@@ -182,9 +214,24 @@ public partial class Player : CharacterBody2D
 		_sprite.Frame = pose;
 		_sprite.Pause();
 		_sprite.FlipH = _facing.X < 0;
+		_sword.ShowPose(_facing, pose);
+		if (pose >= 1)
+			ProbeSword();
 
 		_swingFrame++;
-		if (_swingFrame >= SwordSwingFrames)
+		if (_swingFrame >= SwordSwingFrames) {
 			_swingFrame = -1;
+			if (!_swordOut)
+				_sword.HideSword();
+		}
+	}
+
+	private void ProbeSword() {
+		Vector2 forward = new Vector2(_facing.X, _facing.Y);
+		Vector2 side = new Vector2(Mathf.Abs(forward.Y), Mathf.Abs(forward.X));
+
+		// Three points across the blade, so a slash can hit a tile on either side.
+		foreach (float spread in new[] { -7f, 0f, 7f })
+			InteractiveTiles.Instance?.TryInteract(GlobalPosition + forward * SwordReach + side * spread, Interaction.Slash);
 	}
 }

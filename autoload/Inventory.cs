@@ -65,8 +65,6 @@ public partial class Inventory : Node
 	public void Equip(int slot, ItemButton button)
 	{
 		ItemData chosen = _slots[slot];
-		if (chosen == null)
-			return;
 
 		ItemData previous = _equipped[(int)button];
 		_slots[slot] = previous;

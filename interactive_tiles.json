@@ -1,0 +1,184 @@
+{
+ "15": {
+  "slash": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "68": {
+  "lift": {
+   "r": 87,
+   "e": "",
+   "p": 1
+  },
+  "push": {
+   "r": 2,
+   "e": "",
+   "p": 1
+  }
+ },
+ "100": {
+  "lift": {
+   "r": 45,
+   "e": "",
+   "p": 0
+  }
+ },
+ "103": {
+  "slash": {
+   "r": 17,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 17,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 17,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "151": {
+  "lift": {
+   "r": 45,
+   "e": "",
+   "p": 0
+  },
+  "push": {
+   "r": 45,
+   "e": "",
+   "p": 0
+  }
+ },
+ "152": {
+  "slash": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "206": {
+  "bomb": {
+   "r": 101,
+   "e": "",
+   "p": 0
+  },
+  "perm": true
+ },
+ "226": {
+  "push": {
+   "r": 7,
+   "e": "",
+   "p": 1
+  },
+  "lift": {
+   "r": 7,
+   "e": "",
+   "p": 1
+  }
+ },
+ "236": {
+  "lift": {
+   "r": 202,
+   "e": "",
+   "p": 1
+  },
+  "push": {
+   "r": 202,
+   "e": "",
+   "p": 1
+  }
+ },
+ "336": {
+  "slash": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 0,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "401": {
+  "slash": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "402": {
+  "slash": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ },
+ "436": {
+  "bomb": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "lift": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "slash": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  }
+ }
+}

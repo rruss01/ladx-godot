@@ -1,6 +1,6 @@
 using Godot;
 
-// Builds wall collision for the CURRENT room from ONE big black-and-white mask
+// Builds wall collision for the CURRENT room from one b&w mask
 // image covering the whole overworld (white = solid, black = walkable).
 //
 // The mask is laid out exactly like the room grid: room (x, y) occupies the
@@ -17,12 +17,14 @@ public partial class CollisionLoader : Node
 	// The whole-overworld mask (e.g. res://overworld_mask.png).
 	[Export] public Texture2D MaskTexture { get; set; }
 
-	// Must match ScreenScroller.RoomSize and your collision TileSet's tile size.
+	// Must match ScreenScroller.RoomSize and the collision TileSet's tile size.
 	[Export] public Vector2I RoomSize { get; set; } = new Vector2I(160, 128);
 	[Export] public Vector2I TileSize { get; set; } = new Vector2I(8, 8);
 
 	// A tile becomes solid if at least this fraction of its mask pixels are white.
 	[Export(PropertyHint.Range, "0.05,1,0.05")] public float SolidThreshold { get; set; } = 0.5f;
+
+	[Signal] public delegate void RoomLoadedEventHandler(Vector2I room);
 
 	// Which tile in the collision TileSet is the solid one.
 	[Export] public int SolidSourceId { get; set; } = 0;
@@ -65,16 +67,23 @@ public partial class CollisionLoader : Node
 			Scroller.RoomChanged -= LoadRoom;
 	}
 
+	
 	private void LoadRoom(Vector2I room)
 	{
+		BuildRoom(room);
+		EmitSignal(SignalName.RoomLoaded, room);
+	}
+ 
+	private void BuildRoom(Vector2I room)
+	{
 		Collision.Clear();
-
+ 
 		// Where this room's block starts inside the big mask.
 		Vector2I rel = room - Scroller.MinRoom;
 		Vector2I maskOrigin = new Vector2I(rel.X * _maskPerRoom.X, rel.Y * _maskPerRoom.Y);
-
+ 
 		Vector2I tiles = new Vector2I(RoomSize.X / TileSize.X, RoomSize.Y / TileSize.Y); // 20 x 16
-
+ 
 		// The mask can be any size that divides evenly into the tile grid:
 		// 1 px per tile, 8 px per tile (full resolution), and so on.
 		if (_maskPerRoom.X % tiles.X != 0 || _maskPerRoom.Y % tiles.Y != 0)
@@ -83,30 +92,24 @@ public partial class CollisionLoader : Node
 				$"doesn't divide evenly into {tiles.X}x{tiles.Y} tiles.");
 			return;
 		}
-
+ 
 		int blockW = _maskPerRoom.X / tiles.X;
 		int blockH = _maskPerRoom.Y / tiles.Y;
 		int blockArea = blockW * blockH;
 		Vector2I tileOrigin = new Vector2I(room.X * tiles.X, room.Y * tiles.Y);
-
-		for (int ty = 0; ty < tiles.Y; ty++)
-		{
-			for (int tx = 0; tx < tiles.X; tx++)
-			{
+ 
+		for (int ty = 0; ty < tiles.Y; ty++) {
+			for (int tx = 0; tx < tiles.X; tx++) {
 				int white = 0;
-				for (int py = 0; py < blockH; py++)
-				{
-					for (int px = 0; px < blockW; px++)
-					{
-						Color c = _mask.GetPixel(
-							maskOrigin.X + tx * blockW + px,
-							maskOrigin.Y + ty * blockH + py);
+				for (int py = 0; py < blockH; py++) {
+					for (int px = 0; px < blockW; px++) {
+						Color c = _mask.GetPixel(maskOrigin.X + tx * blockW + px, maskOrigin.Y + ty * blockH + py);
 						// Opaque and bright = solid.
 						if (c.A > 0.5f && (c.R + c.G + c.B) / 3f > 0.5f)
 							white++;
 					}
 				}
-
+ 
 				if ((float)white / blockArea >= SolidThreshold)
 					Collision.SetCell(tileOrigin + new Vector2I(tx, ty), SolidSourceId, SolidAtlasCoords);
 			}

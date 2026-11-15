@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bryjcet8633np"]
+[gd_resource type="Resource" format=3 uid="uid://bryjcet8633np"]
 
 [ext_resource type="Texture2D" uid="uid://do7xygpk8ld1t" path="res://assets/hud/items/icon_sword2.tres" id="1_ypjlr"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_6tme3"]
+[ext_resource type="Script" uid="uid://l7e04d006dwn" path="res://items/Swingable.cs" id="2_ypjlr"]
 
 [resource]
-script = ExtResource("2_6tme3")
+script = ExtResource("2_ypjlr")
 DisplayName = "sword2"
 Icon = ExtResource("1_ypjlr")
 metadata/_custom_type_script = "uid://77rcrk7c21yd"

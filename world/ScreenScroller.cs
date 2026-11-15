@@ -20,11 +20,11 @@ public partial class ScreenScroller : Camera2D
 	// Distance from the new room's edge to the target's CENTER after a scroll.
 	// Keep this >= TargetHalfSize, or the target lands partly outside the room
 	// and immediately triggers another scroll.
-	[Export] public int EdgeInset { get; set; } = 8;
+	public int EdgeInset { get; set; } = 12;
 
 	// Rooms outside this grid range are ignored (no scrolling into the void).
-	[Export] public Vector2I MinRoom { get; set; } = Vector2I.Zero;
-	[Export] public Vector2I MaxRoom { get; set; } = new Vector2I(15, 15);
+	public Vector2I MinRoom { get; set; } = Vector2I.Zero;
+	public Vector2I MaxRoom { get; set; } = new Vector2I(15, 15);
 
 	public Vector2I CurrentRoom => _room;
 
@@ -44,7 +44,7 @@ public partial class ScreenScroller : Camera2D
 		// Position now means "top-left corner of the view", so room origins line up.
 		AnchorMode = AnchorModeEnum.FixedTopLeft;
 		PositionSmoothingEnabled = false;
-
+		Warp(7, 8);
 		SnapToTarget();
 	}
 
@@ -55,6 +55,25 @@ public partial class ScreenScroller : Camera2D
 		_room = RoomOf(Target.GlobalPosition);
 		GlobalPosition = RoomOrigin(_room);
 		EmitSignal(SignalName.RoomChanged, _room);
+	}
+
+	public void Warp(int roomX, int roomY, int? screenX = null, int? screenY = null) {
+		if (_scrolling)
+			return;
+
+		Vector2I room = new Vector2I(roomX, roomY);
+		if(!InBounds(room)) {
+			GD.PushWarning("Out of bounds. Cancelling warp.");
+			return;
+		}
+
+		Vector2 current = Target.GlobalPosition - RoomOrigin(_room);
+
+		Vector2 local = new Vector2(Mathf.Clamp(screenX ?? current.X, TargetHalfSize.X, RoomSize.X - TargetHalfSize.X), 
+			Mathf.Clamp(screenY ?? current.Y, TargetHalfSize.Y, RoomSize.Y - TargetHalfSize.Y));
+
+		Target.GlobalPosition = (RoomOrigin(room) + local).Round();
+		SnapToTarget();
 	}
 
 	public override void _PhysicsProcess(double delta)

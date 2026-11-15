@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://d3bpjpcxdd1w7"]
 
 [ext_resource type="Script" uid="uid://ohf67p5f2f46" path="res://autoload/Inventory.cs" id="1_nau8v"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_iol04"]
+[ext_resource type="Resource" uid="uid://15eu281tadqw" path="res://items/sword1.tres" id="3_wodvt"]
+[ext_resource type="Resource" uid="uid://b7u7bdfkntsk6" path="res://items/shield1.tres" id="4_wovjc"]
 
 [node name="Inventory" type="Node" unique_id=116274119]
 script = ExtResource("1_nau8v")
+StartingItems = Array[ExtResource("2_iol04")]([ExtResource("3_wodvt"), ExtResource("4_wovjc")])

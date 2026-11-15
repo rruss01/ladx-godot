@@ -8,7 +8,6 @@ public partial class Hud : CanvasLayer
 	[Export] public Texture2D HeartEmpty { get; set; }
  
 	[ExportGroup("Rupee digits")]
-	// Index 0 = the "0" glyph, index 9 = the "9" glyph.
 	[Export] public Godot.Collections.Array<Texture2D> DigitTextures { get; set; } = new();
 
 	private TextureRect _bIcon;
@@ -18,8 +17,7 @@ public partial class Hud : CanvasLayer
 	private Control _bar;
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
+	public override void _Ready() {
 		_bIcon = GetNode<TextureRect>("BottomBar/IconB");
 		_aIcon = GetNode<TextureRect>("BottomBar/IconA");
 		_hearts = GetNode<Control>("BottomBar/Hearts");
@@ -60,31 +58,17 @@ public partial class Hud : CanvasLayer
 		}
 	}
 
-		public void SetRupees(int amount)
-		{
-			if (DigitTextures.Count < 10)
-			{
-				GD.PushWarning("HUD: assign all 10 DigitTextures (0-9).");
-				return;
-			}
- 
+		public void SetRupees(int amount) { 
 			int digitCount = _rupeeDigits.GetChildCount();
 			int maxValue = 1;
 			for (int i = 0; i < digitCount; i++)
 				maxValue *= 10;
 			amount = Mathf.Clamp(amount, 0, maxValue - 1);
  
-		// Fill from the ones place (last child) leftwards.
 			for (int i = digitCount - 1; i >= 0; i--)
 			{
 				_rupeeDigits.GetChild<TextureRect>(i).Texture = DigitTextures[amount % 10];
 				amount /= 10;
 			}
 		}
-
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 }
