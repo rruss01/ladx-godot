@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqd8d6qlsr0x" path="res://ui/InventoryMenu.cs" id="1_vaigm"]
 [ext_resource type="Texture2D" uid="uid://bs8qwa13l5sm4" path="res://assets/hud/items/icon_empty.tres" id="2_cmdnq"]
-[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png" id="2_o13uu"]
+[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="2_o13uu"]
 [ext_resource type="Shader" uid="uid://c5t430wsawbbo" path="res://ui/cursor.gdshader" id="3_xink8"]
 [ext_resource type="Texture2D" uid="uid://b6ul30ara6sm2" path="res://assets/hud/items/icon_cursor.tres" id="4_cmdnq"]
 

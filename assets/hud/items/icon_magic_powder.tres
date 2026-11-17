@@ -1,6 +1,6 @@
 [gd_resource type="AtlasTexture" format=3 uid="uid://b1hdglfqygmvk"]
 
-[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png" id="1_puflc"]
+[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="1_puflc"]
 
 [resource]
 atlas = ExtResource("1_puflc")

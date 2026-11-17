@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://dtblt8g3o488a"]
+
+[ext_resource type="Script" uid="uid://csp3jdfinh4h6" path="res://engine/Game.cs" id="1_wc71s"]
+[ext_resource type="TileSet" uid="uid://djhvcdg1wnx27" path="res://assets/maps/collision/solid.tres" id="2_8ri5x"]
+[ext_resource type="PackedScene" uid="uid://20rjv10got0b" path="res://player/player.tscn" id="3_kavxk"]
+[ext_resource type="Script" uid="uid://dah5f1vnf3lhy" path="res://engine/ScreenScroller.cs" id="4_e35ml"]
+[ext_resource type="Script" uid="uid://dw7pfqatjxexr" path="res://engine/CollisionLoader.cs" id="5_kefuq"]
+[ext_resource type="Script" uid="uid://cs7m75wf7gqab" path="res://engine/InteractiveTiles.cs" id="6_ukri2"]
+[ext_resource type="Texture2D" uid="uid://h1y2esslh1fy" path="res://assets/maps/tiles/leaf.png" id="7_2p33s"]
+[ext_resource type="Texture2D" uid="uid://drrj7bxtlt7os" path="res://assets/maps/tiles/broken_rock.png" id="8_8ri5x"]
+[ext_resource type="Script" uid="uid://d153a7cscmntb" path="res://engine/MapManager.cs" id="9_8ri5x"]
+[ext_resource type="PackedScene" uid="uid://dnpdp3rpltjwe" path="res://ui/inventory_menu.tscn" id="9_lkvhd"]
+[ext_resource type="PackedScene" uid="uid://b1vcvh1qb7x2h" path="res://ui/hud.tscn" id="10_7530g"]
+[ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="11_rjwnk"]
+[ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/hearts/heart_full.tres" id="12_wsdf4"]
+[ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/hearts/heart_half.tres" id="13_4akcr"]
+[ext_resource type="Texture2D" uid="uid://8vgclhw0t58u" path="res://assets/hud/hearts/heart_empty.tres" id="14_h10dc"]
+[ext_resource type="Texture2D" uid="uid://cr4qq76gb2tfj" path="res://assets/hud/digits/digit_0.tres" id="15_vae2l"]
+[ext_resource type="Texture2D" uid="uid://now2ie3kqonn" path="res://assets/hud/digits/digit_1.tres" id="16_v0ycv"]
+[ext_resource type="Texture2D" uid="uid://c4yxmclw4s37v" path="res://assets/hud/digits/digit_2.tres" id="17_v2ahj"]
+[ext_resource type="Texture2D" uid="uid://cl6gidvm823bk" path="res://assets/hud/digits/digit_3.tres" id="18_l5u62"]
+[ext_resource type="Texture2D" uid="uid://dlge7ng5pjmpo" path="res://assets/hud/digits/digit_4.tres" id="19_vw3e5"]
+[ext_resource type="Texture2D" uid="uid://c87mspg6myvw2" path="res://assets/hud/digits/digit_5.tres" id="20_ouy2d"]
+[ext_resource type="Texture2D" uid="uid://b4phcu7hkkj4" path="res://assets/hud/digits/digit_6.tres" id="21_8s3fr"]
+[ext_resource type="Texture2D" uid="uid://estpmd2d3wn4" path="res://assets/hud/digits/digit_7.tres" id="22_vkxd7"]
+[ext_resource type="Texture2D" uid="uid://c3gdi2arn7ell" path="res://assets/hud/digits/digit_8.tres" id="23_rud78"]
+[ext_resource type="Texture2D" uid="uid://d0v337whncvmo" path="res://assets/hud/digits/digit_9.tres" id="24_35au3"]
+
+[node name="Game" type="Node2D" unique_id=1010168778]
+script = ExtResource("1_wc71s")
+
+[node name="CurrentMap" type="Node2D" parent="." unique_id=1877663766]
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=796517493]
+visible = false
+tile_set = ExtResource("2_8ri5x")
+collision_visibility_mode = 2
+
+[node name="Player" parent="." unique_id=1190535338 instance=ExtResource("3_kavxk")]
+position = Vector2(90, 91)
+motion_mode = 1
+
+[node name="ScreenScroller" type="Camera2D" parent="." unique_id=1437178914 node_paths=PackedStringArray("Target")]
+script = ExtResource("4_e35ml")
+Target = NodePath("../Player")
+
+[node name="CollisionLoader" type="Node" parent="." unique_id=730752753 node_paths=PackedStringArray("Scroller", "Collision")]
+script = ExtResource("5_kefuq")
+Scroller = NodePath("../ScreenScroller")
+Collision = NodePath("../Collision")
+
+[node name="InteractiveTiles" type="Node" parent="." unique_id=1736942907 node_paths=PackedStringArray("Loader", "Scroller")]
+script = ExtResource("6_ukri2")
+Loader = NodePath("../CollisionLoader")
+Scroller = NodePath("../ScreenScroller")
+LeafTexture = ExtResource("7_2p33s")
+RockTexture = ExtResource("8_8ri5x")
+
+[node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles")]
+script = ExtResource("9_8ri5x")
+MapRoot = NodePath("../CurrentMap")
+Scroller = NodePath("../ScreenScroller")
+Collision = NodePath("../CollisionLoader")
+Tiles = NodePath("../InteractiveTiles")
+StartMap = "uid://ffsh41po7lb3"
+StartRoom = Vector2i(2, 10)
+StartScreenPosition = Vector2i(80, 80)
+
+[node name="InventoryMenu" parent="." unique_id=376511760 node_paths=PackedStringArray("BottomBar") instance=ExtResource("9_lkvhd")]
+BottomBar = NodePath("../HUD")
+
+[node name="HUD" parent="." unique_id=2058347049 instance=ExtResource("10_7530g")]
+script = ExtResource("11_rjwnk")
+HeartFull = ExtResource("12_wsdf4")
+HeartHalf = ExtResource("13_4akcr")
+HeartEmpty = ExtResource("14_h10dc")
+DigitTextures = Array[Texture2D]([ExtResource("15_vae2l"), ExtResource("16_v0ycv"), ExtResource("17_v2ahj"), ExtResource("18_l5u62"), ExtResource("19_vw3e5"), ExtResource("20_ouy2d"), ExtResource("21_8s3fr"), ExtResource("22_vkxd7"), ExtResource("23_rud78"), ExtResource("24_35au3")])

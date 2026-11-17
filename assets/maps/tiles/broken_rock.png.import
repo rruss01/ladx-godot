@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h1y2esslh1fy"
-path="res://.godot/imported/leaf.png-9d341700a3057d7596f0e4d9dbfa78bf.ctex"
+uid="uid://drrj7bxtlt7os"
+path="res://.godot/imported/broken_rock.png-121869632f183715dbed71c20e52722d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/leaf.png"
-dest_files=["res://.godot/imported/leaf.png-9d341700a3057d7596f0e4d9dbfa78bf.ctex"]
+source_file="res://assets/maps/tiles/broken_rock.png"
+dest_files=["res://.godot/imported/broken_rock.png-121869632f183715dbed71c20e52722d.ctex"]
 
 [params]
 

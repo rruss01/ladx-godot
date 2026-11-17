@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dga1jvs3homyc"
-path="res://.godot/imported/overworld.png-18faab73aa2f92233cd80e3b9965fcec.ctex"
+uid="uid://bvtbjni5bqpof"
+path="res://.godot/imported/anglers_tunnel.png-b54692f47e1cdf11e3c59ab4bd8e18d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/overworld.png"
-dest_files=["res://.godot/imported/overworld.png-18faab73aa2f92233cd80e3b9965fcec.ctex"]
+source_file="res://maps/anglers_tunnel.png"
+dest_files=["res://.godot/imported/anglers_tunnel.png-b54692f47e1cdf11e3c59ab4bd8e18d2.ctex"]
 
 [params]
 

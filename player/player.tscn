@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://crq5h7jr3meoi" path="res://assets/player/roy_final.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://blacoso06ln75" path="res://player/Player.cs" id="1_onrkg"]
-[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png" id="3_g1dw6"]
+[ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="3_g1dw6"]
 [ext_resource type="Shader" uid="uid://bepauv4h7vvhn" path="res://items/swingable.gdshader" id="3_qjkh3"]
 [ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://player/SwordSprite.cs" id="4_yw30f"]
 [ext_resource type="Script" uid="uid://honpn3bhrqj4" path="res://player/WandSprite.cs" id="6_g6k8r"]
@@ -313,10 +313,6 @@ centered = false
 flip_h = true
 flip_v = true
 script = ExtResource("4_yw30f")
-OffsetDown = PackedVector2Array(6, 1, 6, 8, -7, 8)
-OffsetUp = PackedVector2Array(-22, 0, -22, -22, 0, -22)
-OffsetRight = PackedVector2Array(0, -22, 6, -22, 7, 0)
-OffsetLeft = PackedVector2Array(-8, -22, -22, -22, -22, 0)
 
 [node name="Wand" type="AnimatedSprite2D" parent="." unique_id=1872088591]
 material = SubResource("ShaderMaterial_gi7ib")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b600cls0ralc3"
-path="res://.godot/imported/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Tilesets - Overworld Tileset.png-109649199bee0fce8e0fc9c5613cde0b.ctex"
+uid="uid://h1y2esslh1fy"
+path="res://.godot/imported/leaf.png-7e2259285e80e9fedb30677b211b377c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Tilesets - Overworld Tileset.png"
-dest_files=["res://.godot/imported/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Tilesets - Overworld Tileset.png-109649199bee0fce8e0fc9c5613cde0b.ctex"]
+source_file="res://assets/maps/tiles/leaf.png"
+dest_files=["res://.godot/imported/leaf.png-7e2259285e80e9fedb30677b211b377c.ctex"]
 
 [params]
 

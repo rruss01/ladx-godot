@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dw6uj4h7wna7p"
-path="res://.godot/imported/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png-7cb8c86dd73e2f6d72e8822765b5b438.ctex"
+path="res://.godot/imported/weapons_items_hud.png-aff1d3457b0f4aefb8a74c98919ebc32.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hud/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png"
-dest_files=["res://.godot/imported/Game Boy _ GBC - The Legend of Zelda_ Link's Awakening _ DX - Miscellaneous - Weapons, Items & HUD.png-7cb8c86dd73e2f6d72e8822765b5b438.ctex"]
+source_file="res://assets/hud/weapons_items_hud.png"
+dest_files=["res://.godot/imported/weapons_items_hud.png-aff1d3457b0f4aefb8a74c98919ebc32.ctex"]
 
 [params]
 
