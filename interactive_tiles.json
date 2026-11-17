@@ -3,7 +3,8 @@
   "slash": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 2,
@@ -13,7 +14,8 @@
   "bomb": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  },
  "68": {
@@ -39,7 +41,8 @@
   "slash": {
    "r": 17,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 17,
@@ -49,7 +52,8 @@
   "bomb": {
    "r": 17,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  },
  "151": {
@@ -68,7 +72,8 @@
   "slash": {
    "r": 0,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 0,
@@ -78,7 +83,8 @@
   "bomb": {
    "r": 0,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  },
  "206": {
@@ -117,12 +123,14 @@
   "slash": {
    "r": 0,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "bomb": {
    "r": 0,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 0,
@@ -134,7 +142,8 @@
   "slash": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 2,
@@ -144,14 +153,16 @@
   "bomb": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  },
  "402": {
   "slash": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 2,
@@ -161,14 +172,16 @@
   "bomb": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  },
  "436": {
   "bomb": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   },
   "lift": {
    "r": 2,
@@ -178,7 +191,8 @@
   "slash": {
    "r": 2,
    "e": "random item (heart, rupee)",
-   "p": 0
+   "p": 0,
+   "fx": "leaves"
   }
  }
 }

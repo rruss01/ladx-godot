@@ -6,13 +6,16 @@ using Godot;
 public enum Interaction { Slash, Lift, Push, Bomb }
 
 // What happens when one kind of interaction hits a tile.
-public sealed class TileReaction {
+public sealed class TileReaction
+{
 	public int Result = -1;     // tile id swapped in; -1 = art unchanged
 	public string Spawns = "";  // free-text entity name, e.g. "random item (heart, rupee)"
+	public string Effect = "";  // named visual effect, e.g. "leaves"
 	public int Power;           // minimum power level the caller must have
 }
 
-public sealed class TileBehavior {
+public sealed class TileBehavior
+{
 	public readonly Dictionary<Interaction, TileReaction> Reactions = new();
 	public bool Permanent;      // stays changed after the player leaves the room
 }
@@ -45,8 +48,21 @@ public partial class InteractiveTiles : Node
 
 	[Export] public string LabelsPath { get; set; } = "res://interactive_tiles.json";
 
+	// Prints what every interaction attempt did, to the Output panel. For debugging.
+	[Export] public bool DebugLog { get; set; }
+
 	[Export] public int AtlasSourceId { get; set; } = 0;
 	[Export] public int AtlasColumns { get; set; } = 32; // tiles per row in tiles16_atlas.png
+
+	[ExportGroup("Leaf effect (bushes)")]
+	[Export] public Texture2D LeafTexture { get; set; } // optional; empty = built-in placeholder
+	[Export] public int LeafTicksPerFrame { get; set; } = 4; // original: 4 game frames per pose
+	[Export] public int LeafTotalTicks { get; set; } = 30;   // original: about 30 game frames
+
+	[ExportGroup("Rock effect (rocks, pots)")]
+	[Export] public Texture2D RockTexture { get; set; } // optional; empty = built-in placeholder
+	[Export] public int RockTicksPerFrame { get; set; } = 4;
+	[Export] public int RockTotalTicks { get; set; } = 14;
 
 	private readonly Dictionary<int, TileBehavior> _behaviors = new();
 	private readonly Dictionary<Vector2I, int> _current = new();   // this room: cell -> tile id (-1 = inert)
@@ -86,14 +102,27 @@ public partial class InteractiveTiles : Node
 			Mathf.FloorToInt(worldPoint.Y / CellSize));
 
 		if (!_current.TryGetValue(cell, out int id) || id < 0)
+		{
+			Log($"{kind} at {worldPoint} -> cell {cell}: nothing interactive there");
 			return false;
+		}
 		if (!_behaviors.TryGetValue(id, out TileBehavior behavior))
+		{
+			Log($"cell {cell}: tile #{id} has no behavior");
 			return false;
+		}
 		if (!behavior.Reactions.TryGetValue(kind, out TileReaction reaction))
+		{
+			Log($"cell {cell}: tile #{id} does not react to {kind}");
 			return false;
+		}
 		if (power < reaction.Power)
+		{
+			Log($"cell {cell}: tile #{id} needs power {reaction.Power}, caller has {power}");
 			return false;
+		}
 
+		Log($"cell {cell}: tile #{id} reacted to {kind}, becomes #{reaction.Result}");
 		ApplyResult(cell, reaction.Result);
 
 		if (behavior.Permanent)
@@ -102,10 +131,14 @@ public partial class InteractiveTiles : Node
 		if (reaction.Spawns != "")
 			EmitSignal(SignalName.EntitySpawnRequested, reaction.Spawns, CellCenter(cell));
 
+		if (reaction.Effect != "")
+			SpawnEffect(reaction.Effect, new Vector2(cell.X * CellSize, cell.Y * CellSize));
+
 		return true;
 	}
 
-	private void OnRoomLoaded(Vector2I room) {
+	private void OnRoomLoaded(Vector2I room)
+	{
 		Objects.Clear();
 		_current.Clear();
 
@@ -131,13 +164,16 @@ public partial class InteractiveTiles : Node
 			}
 		}
 
+		Log($"room {room}: {_current.Count} interactive cells");
+
 		// Re-apply changes that were marked permanent on earlier visits.
 		foreach (KeyValuePair<Vector2I, int> change in _permanent)
 			if (_current.ContainsKey(change.Key))
 				ApplyResult(change.Key, change.Value);
 	}
 
-	private void ApplyResult(Vector2I cell, int result) {
+	private void ApplyResult(Vector2I cell, int result)
+	{
 		if (result >= 0)
 			Objects.SetCell(cell, AtlasSourceId, AtlasCoords(result));
 
@@ -149,7 +185,8 @@ public partial class InteractiveTiles : Node
 	}
 
 	// A 16x16 cell covers 2x2 of the 8x8 collision cells.
-	private void SetCollision(Vector2I cell, bool solid) {
+	private void SetCollision(Vector2I cell, bool solid)
+	{
 		TileMapLayer collision = Loader.Collision;
 		int factor = CellSize / Loader.TileSize.X;
 
@@ -166,7 +203,50 @@ public partial class InteractiveTiles : Node
 		}
 	}
 
-	private int TileIdAt(Vector2I cell) {
+	// Plays a named effect. 'topLeft' is the top-left corner of the 16x16 object that broke
+	// (for a tile, its cell corner). Public so thrown objects can break anywhere.
+	public void SpawnEffect(string effect, Vector2 topLeft)
+	{
+		FxBurst burst;
+
+		switch (effect)
+		{
+			case "leaves":
+				burst = new LeafBurst
+				{
+					PieceTexture = LeafTexture,
+					TicksPerFrame = LeafTicksPerFrame,
+					TotalTicks = LeafTotalTicks,
+				};
+				break;
+
+			case "rocks":
+				burst = new RockBurst
+				{
+					PieceTexture = RockTexture,
+					TicksPerFrame = RockTicksPerFrame,
+					TotalTicks = RockTotalTicks,
+				};
+				break;
+
+			default:
+				GD.PushWarning($"InteractiveTiles: unknown effect \"{effect}\".");
+				return;
+		}
+
+		burst.ZIndex = 10; // above the player and the objects layer
+		Objects.GetParent().AddChild(burst);
+		burst.GlobalPosition = topLeft;
+	}
+
+	private void Log(string message)
+	{
+		if (DebugLog)
+			GD.Print("InteractiveTiles: " + message);
+	}
+
+	private int TileIdAt(Vector2I cell)
+	{
 		Vector2I rel = cell - Scroller.MinRoom * CellsPerRoom;
 		if (rel.X < 0 || rel.Y < 0 || rel.X >= _gridSize.X || rel.Y >= _gridSize.Y)
 			return -1;
@@ -178,7 +258,8 @@ public partial class InteractiveTiles : Node
 	private static Vector2 CellCenter(Vector2I cell) =>
 		new Vector2(cell.X * CellSize + CellSize / 2, cell.Y * CellSize + CellSize / 2);
 
-	private void LoadTileIds() {
+	private void LoadTileIds()
+	{
 		Image img = TileIds.GetImage();
 		if (img.IsCompressed())
 			img.Decompress();
@@ -196,7 +277,8 @@ public partial class InteractiveTiles : Node
 		}
 	}
 
-	private void LoadLabels() {
+	private void LoadLabels()
+	{
 		string text = Godot.FileAccess.GetFileAsString(LabelsPath);
 		if (string.IsNullOrEmpty(text))
 		{
@@ -224,6 +306,7 @@ public partial class InteractiveTiles : Node
 				if (entry.Value.TryGetProperty("r", out JsonElement r)) reaction.Result = r.GetInt32();
 				if (entry.Value.TryGetProperty("e", out JsonElement e)) reaction.Spawns = e.GetString() ?? "";
 				if (entry.Value.TryGetProperty("p", out JsonElement p)) reaction.Power = p.GetInt32();
+				if (entry.Value.TryGetProperty("fx", out JsonElement fx)) reaction.Effect = fx.GetString() ?? "";
 				behavior.Reactions[kind] = reaction;
 			}
 
