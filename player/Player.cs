@@ -258,6 +258,8 @@ public partial class Player : CharacterBody2D
 
 		// Walking animation = any d-pad direction held, even if blocked or cancelled
 		string state = dpad.Count > 0 ? "walk" : "idle";
+		if (Inventory.Instance.GetEquipped(ItemButton.B)?.DisplayName == "shield1" || Inventory.Instance.GetEquipped(ItemButton.A)?.DisplayName == "shield1")
+			state = $"shield{state}";
 		_sprite.Play($"{state}-{FacingDirection()}");
 		_sprite.FlipH = _facing.X < 0;
 	}

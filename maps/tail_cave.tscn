@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://csx03j8hjp546" path="res://maps/MapInfo.cs" id="1_71cdn"]
 [ext_resource type="Texture2D" uid="uid://bldx51xppb1r8" path="res://assets/maps/tail_cave.png" id="2_70vch"]
-[ext_resource type="Texture2D" uid="uid://cn5cbrn32uaxx" path="res://assets/maps/collision/tail_cave_collision.png" id="2_tjsqr"]
+[ext_resource type="Texture2D" uid="uid://khgcdym0tdtm" path="res://assets/maps/collision/tail_cave_collision.png" id="2_tjsqr"]
 [ext_resource type="Texture2D" uid="uid://8lr8cyxkhm24" path="res://assets/hud/tile_ids.png" id="3_0joyu"]
 [ext_resource type="Texture2D" uid="uid://dhibwovyuaco" path="res://assets/hud/tiles16_atlas.png" id="3_tjsqr"]
 
@@ -556,11 +556,13 @@ sources/0 = SubResource("TileSetAtlasSource_71nrd")
 
 [node name="TailCave" type="Node2D" unique_id=1774674637 node_paths=PackedStringArray("Objects")]
 script = ExtResource("1_71cdn")
+MapId = "tail_cave"
 MaxRoom = Vector2i(6, 5)
 CollisionMask = ExtResource("2_tjsqr")
 TileIds = ExtResource("3_0joyu")
 TileLabels = "res://engine/interactive_tiles.json"
 Objects = NodePath("Objects")
+Music = 11
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1234633269]
 tile_map_data = PackedByteArray("AAAEAAMAAAAAAAAAAAAOAAMAAAABAAAAAAAYAAMAAAACAAAAAAAiAAMAAAADAAAAAAAsAAMAAAAEAAAAAAA2AAMAAAAFAAAAAABAAAMAAAAGAAAAAABAAAsAAAAGAAEAAABAABMAAAAGAAIAAABAABsAAAAGAAMAAAA2ABMAAAAFAAIAAAA2ABsAAAAFAAMAAAAsABsAAAAEAAMAAAAiABsAAAADAAMAAAAYABsAAAACAAMAAAAOABsAAAABAAMAAAAEABsAAAAAAAMAAAAEABMAAAAAAAIAAAAOABMAAAABAAIAAAAEAAsAAAAAAAEAAAAOAAsAAAABAAEAAAAYAAsAAAACAAEAAAAiAAsAAAADAAEAAAAsAAsAAAAEAAEAAAA2AAsAAAAFAAEAAAAYABMAAAACAAIAAAAiABMAAAADAAIAAAAsABMAAAAEAAIAAAAsACMAAAAEAAQAAAAiACMAAAADAAQAAAAYACMAAAACAAQAAAAYACsAAAACAAUAAAAiACsAAAADAAUAAAAOACsAAAABAAUAAAAEACMAAAAAAAQAAAAOACMAAAABAAQAAAAEACsAAAABAAQAAAAsACsAAAABAAQAAAA2ACsAAAABAAQAAABAACsAAAABAAQAAABAACMAAAABAAQAAAA2ACMAAAABAAQAAAA=")

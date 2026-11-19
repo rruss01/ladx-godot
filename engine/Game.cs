@@ -8,9 +8,11 @@ public partial class Game : Node2D
 	{
 		var player = GetNode<Player>("Player");
 		var hud = GetNode<Hud>("HUD");
+		var audioPlayer = GetNode<MusicManager>("MusicManager");
 		
 		player.HealthChanged += hud.SetHearts;
 		player.RupeesChanged += hud.SetRupees;
+				
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

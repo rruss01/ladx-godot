@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dr8r8iipa2os1"]
 
-[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://Droppable.cs" id="1_17cav"]
+[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://items/Droppable.cs" id="1_17cav"]
 [ext_resource type="AudioStream" uid="uid://df6pletaft8mh" path="res://audio/sfx/player/events/get_rupee.wav" id="2_84k86"]
 [ext_resource type="Texture2D" uid="uid://cogp4741vkd" path="res://assets/hud/items/rupee1.png" id="2_ptbjj"]
 

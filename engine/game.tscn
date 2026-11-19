@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dnpdp3rpltjwe" path="res://ui/inventory_menu.tscn" id="9_lkvhd"]
 [ext_resource type="PackedScene" uid="uid://b1vcvh1qb7x2h" path="res://ui/hud.tscn" id="10_7530g"]
 [ext_resource type="AudioStream" uid="uid://b0p4l7bdp8i22" path="res://audio/sfx/interactive_tiles/rock_shatter.wav" id="10_kefuq"]
+[ext_resource type="Script" uid="uid://vi2t8mx56rf7" path="res://engine/WarpManager.cs" id="11_8s3fr"]
 [ext_resource type="Script" uid="uid://8vs2y5aumsoe" path="res://engine/ItemDrops.cs" id="11_kefuq"]
 [ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="11_rjwnk"]
 [ext_resource type="PackedScene" uid="uid://c57p7vxai6bkp" path="res://items/heart.tscn" id="12_2p33s"]
@@ -30,6 +31,85 @@
 [ext_resource type="Texture2D" uid="uid://estpmd2d3wn4" path="res://assets/hud/digits/digit_7.tres" id="22_vkxd7"]
 [ext_resource type="Texture2D" uid="uid://c3gdi2arn7ell" path="res://assets/hud/digits/digit_8.tres" id="23_rud78"]
 [ext_resource type="Texture2D" uid="uid://d0v337whncvmo" path="res://assets/hud/digits/digit_9.tres" id="24_35au3"]
+[ext_resource type="Script" uid="uid://deiyc2rnwjkyq" path="res://engine/music/MusicManager.cs" id="31_hpu6b"]
+[ext_resource type="Script" uid="uid://dsnadbfx2gjk4" path="res://engine/music/MusicEntry.cs" id="32_vae2l"]
+[ext_resource type="AudioStream" uid="uid://dwkc2rga5yomw" path="res://audio/music/overworld/sword_search.ogg" id="33_v0ycv"]
+[ext_resource type="AudioStream" uid="uid://kliu1pv5i6n2" path="res://audio/music/overworld/mabe_village.ogg" id="34_v2ahj"]
+[ext_resource type="AudioStream" uid="uid://d17gdjq5dhk41" path="res://audio/music/overworld/mysterious_woods.ogg" id="35_l5u62"]
+[ext_resource type="AudioStream" uid="uid://dhcko3ikm6h2o" path="res://audio/music/overworld/tal_tal_heights.ogg" id="36_vw3e5"]
+[ext_resource type="AudioStream" uid="uid://c4rm4hyet5ofl" path="res://audio/music/overworld/animal_kingdom.ogg" id="37_ouy2d"]
+[ext_resource type="AudioStream" uid="uid://dxvxxp8ei6bc2" path="res://audio/music/overworld/raft_ride_rapids.ogg" id="38_8s3fr"]
+[ext_resource type="AudioStream" uid="uid://vp1dp1x82sew" path="res://audio/music/overworld/overworld.ogg" id="39_v0ycv"]
+[ext_resource type="AudioStream" uid="uid://mal1ics2s8ag" path="res://audio/music/dungeon/tail_cave.ogg" id="40_ouy2d"]
+[ext_resource type="AudioStream" uid="uid://bu5ouyplp0k7" path="res://audio/music/dungeon/bottle_grotto.ogg" id="41_8s3fr"]
+[ext_resource type="AudioStream" uid="uid://bwq8gpp54753y" path="res://audio/music/dungeon/key_cavern.ogg" id="42_vkxd7"]
+[ext_resource type="AudioStream" uid="uid://dum5m2rytg4r0" path="res://audio/music/dungeon/anglers_tunnel.ogg" id="43_rud78"]
+
+[sub_resource type="Resource" id="Resource_7530g"]
+script = ExtResource("32_vae2l")
+Track = 3
+Stream = ExtResource("33_v0ycv")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_rjwnk"]
+script = ExtResource("32_vae2l")
+Track = 1
+Stream = ExtResource("34_v2ahj")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_wsdf4"]
+script = ExtResource("32_vae2l")
+Track = 5
+Stream = ExtResource("35_l5u62")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_4akcr"]
+script = ExtResource("32_vae2l")
+Track = 4
+Stream = ExtResource("36_vw3e5")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_h10dc"]
+script = ExtResource("32_vae2l")
+Track = 7
+Stream = ExtResource("37_ouy2d")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_vae2l"]
+script = ExtResource("32_vae2l")
+Track = 6
+Stream = ExtResource("38_8s3fr")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_v2ahj"]
+script = ExtResource("32_vae2l")
+Track = 2
+Stream = ExtResource("39_v0ycv")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_l5u62"]
+script = ExtResource("32_vae2l")
+Track = 11
+Stream = ExtResource("40_ouy2d")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_vw3e5"]
+script = ExtResource("32_vae2l")
+Track = 12
+Stream = ExtResource("41_8s3fr")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_ouy2d"]
+script = ExtResource("32_vae2l")
+Track = 13
+Stream = ExtResource("42_vkxd7")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
+
+[sub_resource type="Resource" id="Resource_8s3fr"]
+script = ExtResource("32_vae2l")
+Track = 14
+Stream = ExtResource("43_rud78")
+metadata/_custom_type_script = "uid://dsnadbfx2gjk4"
 
 [node name="Game" type="Node2D" unique_id=1010168778]
 script = ExtResource("1_wc71s")
@@ -63,6 +143,10 @@ LeafSound = ExtResource("8_e35ml")
 RockTexture = ExtResource("8_8ri5x")
 RockSound = ExtResource("10_kefuq")
 
+[node name="WarpManager" type="Node" parent="." unique_id=1702806432 node_paths=PackedStringArray("Scroller")]
+script = ExtResource("11_8s3fr")
+Scroller = NodePath("../ScreenScroller")
+
 [node name="ItemDrops" type="Node" parent="." unique_id=455307854 node_paths=PackedStringArray("Tiles", "Scroller")]
 script = ExtResource("11_kefuq")
 Tiles = NodePath("../InteractiveTiles")
@@ -70,14 +154,15 @@ Scroller = NodePath("../ScreenScroller")
 HeartScene = ExtResource("12_2p33s")
 RupeeScene = ExtResource("12_ukri2")
 
-[node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles")]
+[node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles", "Warps")]
 script = ExtResource("9_8ri5x")
 MapRoot = NodePath("../CurrentMap")
 Scroller = NodePath("../ScreenScroller")
 Collision = NodePath("../CollisionLoader")
 Tiles = NodePath("../InteractiveTiles")
+Warps = NodePath("../WarpManager")
 StartMap = "uid://ffsh41po7lb3"
-StartRoom = Vector2i(2, 10)
+StartRoom = Vector2i(2, 2)
 StartScreenPosition = Vector2i(80, 80)
 
 [node name="InventoryMenu" parent="." unique_id=376511760 node_paths=PackedStringArray("BottomBar") instance=ExtResource("9_lkvhd")]
@@ -89,3 +174,8 @@ HeartFull = ExtResource("12_wsdf4")
 HeartHalf = ExtResource("13_4akcr")
 HeartEmpty = ExtResource("14_h10dc")
 DigitTextures = Array[Texture2D]([ExtResource("15_vae2l"), ExtResource("16_v0ycv"), ExtResource("17_v2ahj"), ExtResource("18_l5u62"), ExtResource("19_vw3e5"), ExtResource("20_ouy2d"), ExtResource("21_8s3fr"), ExtResource("22_vkxd7"), ExtResource("23_rud78"), ExtResource("24_35au3")])
+
+[node name="MusicManager" type="Node" parent="." unique_id=681281925 node_paths=PackedStringArray("Scroller")]
+script = ExtResource("31_hpu6b")
+Tracks = Array[ExtResource("32_vae2l")]([SubResource("Resource_7530g"), SubResource("Resource_rjwnk"), SubResource("Resource_wsdf4"), SubResource("Resource_4akcr"), SubResource("Resource_h10dc"), SubResource("Resource_vae2l"), SubResource("Resource_v2ahj"), SubResource("Resource_l5u62"), SubResource("Resource_vw3e5"), SubResource("Resource_ouy2d"), SubResource("Resource_8s3fr")])
+Scroller = NodePath("../ScreenScroller")

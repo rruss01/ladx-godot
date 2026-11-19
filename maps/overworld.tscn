@@ -5,6 +5,16 @@
 [ext_resource type="Texture2D" uid="uid://binhs4oourp4r" path="res://assets/maps/collision/overworld_collision.png" id="2_tmk0e"]
 [ext_resource type="Texture2D" uid="uid://8lr8cyxkhm24" path="res://assets/hud/tile_ids.png" id="3_meoah"]
 [ext_resource type="Texture2D" uid="uid://dhibwovyuaco" path="res://assets/hud/tiles16_atlas.png" id="3_tmk0e"]
+[ext_resource type="Script" uid="uid://xmkhe5u77mt4" path="res://engine/WarpData.cs" id="4_meoah"]
+
+[sub_resource type="Resource" id="Resource_8s3fr"]
+script = ExtResource("4_meoah")
+Room = Vector2i(4, 2)
+Area = Rect2i(48, 16, 16, 8)
+DestinationMap = "uid://l283ft8lf15v"
+DestinationRoom = Vector2i(3, 5)
+DestinationScreenPosition = Vector2i(80, 88)
+metadata/_custom_type_script = "uid://xmkhe5u77mt4"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_meoah"]
 texture = ExtResource("2_57sj3")
@@ -624,7 +634,7 @@ texture_region_size = Vector2i(160, 128)
 resource_name = "world"
 sources/0 = SubResource("TileSetAtlasSource_meoah")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bpull"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v48ge"]
 texture = ExtResource("3_tmk0e")
 0:0/0 = 0
 1:0/0 = 0
@@ -1079,7 +1089,7 @@ texture = ExtResource("3_tmk0e")
 2:14/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_jexs8"]
-sources/0 = SubResource("TileSetAtlasSource_bpull")
+sources/0 = SubResource("TileSetAtlasSource_v48ge")
 
 [node name="Overworld" type="Node2D" unique_id=780234610 node_paths=PackedStringArray("Objects")]
 script = ExtResource("1_2yvwq")
@@ -1089,6 +1099,8 @@ CollisionMask = ExtResource("2_tmk0e")
 TileIds = ExtResource("3_meoah")
 TileLabels = "res://engine/interactive_tiles.json"
 Objects = NodePath("Objects")
+RegionMusic = true
+Warps = Array[ExtResource("4_meoah")]([SubResource("Resource_8s3fr")])
 
 [node name="Background" type="TileMapLayer" parent="." unique_id=920117589]
 z_index = -4

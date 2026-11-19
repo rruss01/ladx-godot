@@ -18,6 +18,7 @@ public partial class MapManager : Node
 	[Export] public ScreenScroller Scroller { get; set; }
 	[Export] public CollisionLoader Collision { get; set; }
 	[Export] public InteractiveTiles Tiles { get; set; }
+	[Export] public WarpManager Warps { get; set; }
 
 	[ExportGroup("Starting point")]
 	[Export(PropertyHint.File, "*.tscn")] public string StartMap { get; set; } = "";
@@ -168,6 +169,17 @@ public partial class MapManager : Node
 			Scroller.SetBounds(_current.MinRoom, _current.MaxRoom, _current.RoomSize);
 			Collision.SetMap(_current);
 			Tiles.SetMap(_current);
+			Warps?.SetMap(_current);
+
+			// Music: a region map picks by room, any other map has one song. Play() ignores a
+			// song that is already playing, so e.g. two caves in a row don't restart it.
+			if (MusicManager.Instance != null)
+			{
+				if (_current.RegionMusic)
+					MusicManager.Instance.EnterOverworld(room);
+				else
+					MusicManager.Instance.EnterMap(_current.Music);
+			}
 		}
 
 		// Moves the player, snaps the camera, and (through RoomChanged) loads the room's
