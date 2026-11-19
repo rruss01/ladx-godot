@@ -8,10 +8,15 @@
 [ext_resource type="Script" uid="uid://cs7m75wf7gqab" path="res://engine/InteractiveTiles.cs" id="6_ukri2"]
 [ext_resource type="Texture2D" uid="uid://h1y2esslh1fy" path="res://assets/maps/tiles/leaf.png" id="7_2p33s"]
 [ext_resource type="Texture2D" uid="uid://drrj7bxtlt7os" path="res://assets/maps/tiles/broken_rock.png" id="8_8ri5x"]
+[ext_resource type="AudioStream" uid="uid://c3om3tls0itqm" path="res://audio/sfx/interactive_tiles/bush_cut.wav" id="8_e35ml"]
 [ext_resource type="Script" uid="uid://d153a7cscmntb" path="res://engine/MapManager.cs" id="9_8ri5x"]
 [ext_resource type="PackedScene" uid="uid://dnpdp3rpltjwe" path="res://ui/inventory_menu.tscn" id="9_lkvhd"]
 [ext_resource type="PackedScene" uid="uid://b1vcvh1qb7x2h" path="res://ui/hud.tscn" id="10_7530g"]
+[ext_resource type="AudioStream" uid="uid://b0p4l7bdp8i22" path="res://audio/sfx/interactive_tiles/rock_shatter.wav" id="10_kefuq"]
+[ext_resource type="Script" uid="uid://8vs2y5aumsoe" path="res://engine/ItemDrops.cs" id="11_kefuq"]
 [ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="11_rjwnk"]
+[ext_resource type="PackedScene" uid="uid://c57p7vxai6bkp" path="res://items/heart.tscn" id="12_2p33s"]
+[ext_resource type="PackedScene" uid="uid://dr8r8iipa2os1" path="res://items/rupee.tscn" id="12_ukri2"]
 [ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/hearts/heart_full.tres" id="12_wsdf4"]
 [ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/hearts/heart_half.tres" id="13_4akcr"]
 [ext_resource type="Texture2D" uid="uid://8vgclhw0t58u" path="res://assets/hud/hearts/heart_empty.tres" id="14_h10dc"]
@@ -54,7 +59,16 @@ script = ExtResource("6_ukri2")
 Loader = NodePath("../CollisionLoader")
 Scroller = NodePath("../ScreenScroller")
 LeafTexture = ExtResource("7_2p33s")
+LeafSound = ExtResource("8_e35ml")
 RockTexture = ExtResource("8_8ri5x")
+RockSound = ExtResource("10_kefuq")
+
+[node name="ItemDrops" type="Node" parent="." unique_id=455307854 node_paths=PackedStringArray("Tiles", "Scroller")]
+script = ExtResource("11_kefuq")
+Tiles = NodePath("../InteractiveTiles")
+Scroller = NodePath("../ScreenScroller")
+HeartScene = ExtResource("12_2p33s")
+RupeeScene = ExtResource("12_ukri2")
 
 [node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles")]
 script = ExtResource("9_8ri5x")

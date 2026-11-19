@@ -1,5 +1,24 @@
 {
- "15": {
+"4": {
+  "slash": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0,
+   "fx": "leaves"
+  },
+  "lift": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0
+  },
+  "bomb": {
+   "r": 2,
+   "e": "random item (heart, rupee)",
+   "p": 0,
+   "fx": "leaves"
+  }
+ },
+"15": {
   "slash": {
    "r": 2,
    "e": "random item (heart, rupee)",

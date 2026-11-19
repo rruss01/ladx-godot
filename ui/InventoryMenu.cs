@@ -5,11 +5,16 @@ public partial class InventoryMenu : CanvasLayer
 {
 	[Export] public GridContainer Grid { get; set; }
 	[Export] public Control Cursor { get; set; }
-
 	[Export] public Vector2 CursorOffset { get; set; } = Vector2.Zero;
-
 	[Export] public Hud BottomBar { get; set; }
 	[Export] public Texture2D EmptySlotTexture { get; set; }
+
+	[ExportGroup("Sound Effects")]
+	[Export] public AudioStream MenuOpen { get; set; }
+	[Export] public AudioStream MenuClose { get; set; }
+	[Export] public AudioStream CursorMove { get; set; }
+	[Export] public AudioStream CursorSelect { get; set; }
+	[Export] public StringName Bus { get; set; } = "Master";
 
 	[ExportGroup("Fade to white (frames)")]
 	[Export] public int FadeOutFrames { get; set; } = 16;  // screen -> white
@@ -55,6 +60,16 @@ public partial class InventoryMenu : CanvasLayer
 		fadeLayer.AddChild(_fade);
 		GetParent().CallDeferred(Node.MethodName.AddChild, fadeLayer);
 	}
+	
+	private void PlaySound(AudioStream stream) {
+		if (stream == null)
+			return;
+ 
+		AudioStreamPlayer player = new AudioStreamPlayer { Stream = stream, Bus = Bus };
+		player.Finished += player.QueueFree;
+		AddChild(player);
+		player.Play();
+	}
 
 	public override void _Process(double delta)
 	{
@@ -68,20 +83,22 @@ public partial class InventoryMenu : CanvasLayer
 
 		if (!_open) {
 			// Don't open mid-screen-scroll: the camera has the tree paused then.
-			if (Input.IsActionJustPressed("start") && !GetTree().Paused)
+			if (Input.IsActionJustPressed("start") && !GetTree().Paused) {
 				BeginTransition(opening: true);
+				PlaySound(MenuOpen);
+			}
 			return;
 		}
 
-		if (Input.IsActionJustPressed("start")) { BeginTransition(opening: false); return; }
+		if (Input.IsActionJustPressed("start")) { BeginTransition(opening: false); PlaySound(MenuClose); return; }
 
-		if (Input.IsActionJustPressed("ui_right")) Move(1, 0);
-		if (Input.IsActionJustPressed("ui_left")) Move(-1, 0);
-		if (Input.IsActionJustPressed("ui_down")) Move(0, 1);
-		if (Input.IsActionJustPressed("ui_up")) Move(0, -1);
+		if (Input.IsActionJustPressed("ui_right")) { Move(1, 0); PlaySound(CursorMove); }
+		if (Input.IsActionJustPressed("ui_left")) { Move(-1, 0); PlaySound(CursorMove); }
+		if (Input.IsActionJustPressed("ui_down")) { Move(0, 1); PlaySound(CursorMove); }
+		if (Input.IsActionJustPressed("ui_up")) { Move(0, -1); PlaySound(CursorMove); }
 
-		if (Input.IsActionJustPressed("button_b")) EquipSelected(ItemButton.B);
-		if (Input.IsActionJustPressed("button_a")) EquipSelected(ItemButton.A);
+		if (Input.IsActionJustPressed("button_b")) { EquipSelected(ItemButton.B); PlaySound(CursorSelect); }
+		if (Input.IsActionJustPressed("button_a")) { EquipSelected(ItemButton.A); PlaySound(CursorSelect); }
 	}
 
 	// The fade is counted in fixed physics ticks so its length doesn't depend on frame rate.
@@ -201,8 +218,7 @@ public partial class InventoryMenu : CanvasLayer
 
 	private void Refresh()
 	{
-		for (int i = 0; i < _icons.Count && i < Inventory.ItemSlots
-	; i++)
+		for (int i = 0; i < _icons.Count && i < Inventory.ItemSlots; i++)
 			_icons[i].Texture = Inventory.Instance.GetSlot(i)?.Icon ?? EmptySlotTexture;
 	}
 }

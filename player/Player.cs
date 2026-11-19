@@ -5,7 +5,6 @@ public partial class Player : CharacterBody2D
 	[Signal] public delegate void HealthChangedEventHandler(int health, int maxHealth);
 	[Signal] public delegate void RupeesChangedEventHandler(int amount);
 
-	// PLAYER SHOULD NOT BE HANDLING THIS
 	private int _health;
 	private int _rupees;
 
@@ -16,7 +15,7 @@ public partial class Player : CharacterBody2D
 	// debug value
 	[Export] public int MaxHealth { get; set; } = 6;
 
-	// --- Movement (1/16 px per tick; values from LADX disassembly) ---
+	// --- Movement (values from LADX disassembly) ---
 	private const int StraightSpeed = 16; // $10
 	private const int DiagonalSpeed = 12; // $0C per axis
 	private Vector2I _facing = Vector2I.Down;
@@ -31,10 +30,23 @@ public partial class Player : CharacterBody2D
 	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
 	private int _charge = 0;
+	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
+	public bool ShowSwordHitbox { get; set; } = false;
 
+	// --- Roc's Feather ---
+	private const int JumpVelocity = 32; // $20
+	private const int Gravity = 2;
+	private int _z;
+	private int _vz;
+	private int _airTicks;
+	private Vector2 _spriteBase, _swordBase;
+	public bool InAir { get; private set; }
+	public float Height => _z / 16f;
+	
 	private AnimatedSprite2D _sprite;
 	private bool _swordOut;
 	private SwordSprite _sword;
+	private SwordAudio _swordAudio;
 
 	public Vector2I Facing => _facing;
 
@@ -60,28 +72,65 @@ public partial class Player : CharacterBody2D
 		GlobalPosition = GlobalPosition.Round();
 		CallDeferred(MethodName.EquipStartingItems);
 		_sword = GetNode<SwordSprite>("Sword");
+		_swordAudio = GetNode<SwordAudio>("SwordAudio");
+		_spriteBase = _sprite.Offset;
+		_swordBase = _sword.Offset;
+	}
+	
+	public void Jump(AudioStream sound = null) {
+		if (InAir)
+			return;
+			
+		InAir = true;
+		_z = 0;
+		_vz = JumpVelocity;
+		_airTicks = 0;
+		
+		if (sound != null) {
+			AudioStreamPlayer p = new AudioStreamPlayer { Stream = sound };
+			p.Finished += p.QueueFree;
+			AddChild(p);
+			p.Play();
+		}
+	}
+	
+	private void UpdateAir() {
+		if (!InAir)
+			return;
+		
+		_airTicks++;
+		_z += _vz;
+		_vz -= Gravity;
+		
+		if (_z <= 0) {
+			_z = 0;
+			InAir = false;
+		}
+		
+		Vector2 lift = new Vector2(0, -Mathf.Round(_z / 16f));
+		_sprite.Offset = _spriteBase + lift;
+		_sword.Offset = _swordBase + lift;
 	}
 	
 	private void EquipStartingItems()
 	{
-		SetHealth(MaxHealth);
+		SetHealth(6);
 		AddRupees(0);
 	}
+	
+	public void AddHealth(int halfHearts) { _health = Mathf.Min(_health + halfHearts, MaxHealth); EmitSignal(SignalName.HealthChanged, _health, MaxHealth); }
+	public void AddRupees(int amount) { _rupees = Mathf.Min(_rupees + amount, 999); EmitSignal(SignalName.RupeesChanged, _rupees); }
 
 	private void SetHealth(int value)
 	{
 		_health = Mathf.Clamp(value, 0, MaxHealth);
 		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
 	}
-
-	public void AddRupees(int amount)
-	{
-		_rupees = Mathf.Clamp(_rupees + amount, 0, 999);
-		EmitSignal(SignalName.RupeesChanged, _rupees);
-	}
-
+	
 	public override void _PhysicsProcess(double delta)
 	{
+		UpdateAir();
+		
 		// 1. Swing in progress: movement fully blocked, only the swing runs
 		if (_swingFrame >= 0)
 		{
@@ -104,13 +153,16 @@ public partial class Player : CharacterBody2D
 		// 3. Charging spin attack (swords only)
 		if (_swordOut && Input.IsActionPressed(ActionFor(_swordButton)))
 		{
+			int before = _charge;
 			_charge = Mathf.Min(_charge + 1, SpinAtkMaxCharge);
+			if (before < SpinAtkMaxCharge && _charge == SpinAtkMaxCharge)
+				_swordAudio.PlayCharged();
 		}
 		else
 		{
 			if (_charge >= SpinAtkMaxCharge) 
 			{
-				// TODO: spin attack
+				_swordAudio.PlaySpinAttack();
 			}
 			_charge = 0;
 			_swordOut = false;
@@ -143,6 +195,22 @@ public partial class Player : CharacterBody2D
 		if (_facing.X != 0)
 			return "right";
 		return _facing.Y < 0 ? "up" : "down";
+	}
+	
+	private bool ShowJumpPose() {
+		string animation = "jump-" + FacingDirection();
+		if (!_sprite.SpriteFrames.HasAnimation(animation))
+			return false;
+
+		// The original steps to the next jump frame every 8 ticks and holds the last one.
+		int frame = Mathf.Min(_airTicks / 8, 2);
+		frame = Mathf.Min(frame, _sprite.SpriteFrames.GetFrameCount(animation) - 1);
+
+		_sprite.Animation = animation;
+		_sprite.Frame = frame;
+		_sprite.Pause();
+		_sprite.FlipH = _facing.X < 0;
+		return true;
 	}
 
 	private void UpdateMovement()
@@ -184,6 +252,9 @@ public partial class Player : CharacterBody2D
 					break;
 			}
 		}
+		
+		if (InAir && ShowJumpPose())
+			return;
 
 		// Walking animation = any d-pad direction held, even if blocked or cancelled
 		string state = dpad.Count > 0 ? "walk" : "idle";
@@ -200,6 +271,7 @@ public partial class Player : CharacterBody2D
 		_charge = 0;
 		_swingFrame = 0;
 		UpdateSwing();
+		_swordAudio.PlaySwing();
 	}
 
 	private void UpdateSwing()
@@ -215,8 +287,7 @@ public partial class Player : CharacterBody2D
 		_sprite.Pause();
 		_sprite.FlipH = _facing.X < 0;
 		_sword.ShowPose(_facing, pose);
-		if (pose >= 1)
-			ProbeSword();
+		ProbeSword();
 
 		_swingFrame++;
 		if (_swingFrame >= SwordSwingFrames) {
@@ -225,13 +296,21 @@ public partial class Player : CharacterBody2D
 				_sword.HideSword();
 		}
 	}
+	
+	private int SwordState() {
+		if (_swingFrame >= 0) {
+			if (_swingFrame < SwordSwingSteps[0]) return SwordHitbox.StateDraw;
+			if (_swingFrame < SwordSwingSteps[0] + SwordSwingSteps[1]) return SwordHitbox.StateSwingStart;
+			return SwordHitbox.StateSwingMiddle;
+		}
+		return _swordOut ? SwordHitbox.StateHolding : SwordHitbox.StateNone;
+	}
+
+	public bool TryGetSwordHitbox(out Rect2 hitbox) =>
+		SwordHitbox.TryGetBox(_facing, SwordState(), GlobalPosition + SpriteTopLeftOffset, out hitbox);
 
 	private void ProbeSword() {
-		Vector2 forward = new Vector2(_facing.X, _facing.Y);
-		Vector2 side = new Vector2(Mathf.Abs(forward.Y), Mathf.Abs(forward.X));
-
-		// Three points across the blade, so a slash can hit a tile on either side.
-		foreach (float spread in new[] { -7f, 0f, 7f })
-			InteractiveTiles.Instance?.TryInteract(GlobalPosition + forward * SwordReach + side * spread, Interaction.Slash);
+		Vector2 probe = SwordHitbox.TileProbePoint(_facing, GlobalPosition + SpriteTopLeftOffset);
+		InteractiveTiles.Instance?.TryInteract(probe, Interaction.Slash);
 	}
 }

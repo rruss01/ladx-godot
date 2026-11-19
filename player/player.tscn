@@ -2,10 +2,20 @@
 
 [ext_resource type="Texture2D" uid="uid://crq5h7jr3meoi" path="res://assets/player/roy_final.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://blacoso06ln75" path="res://player/Player.cs" id="1_onrkg"]
+[ext_resource type="Texture2D" uid="uid://bicihcsqyqxwm" path="res://assets/player/jump_right_0.png" id="3_32hag"]
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="3_g1dw6"]
 [ext_resource type="Shader" uid="uid://bepauv4h7vvhn" path="res://items/swingable.gdshader" id="3_qjkh3"]
+[ext_resource type="Texture2D" uid="uid://5g1fxogvp5ng" path="res://assets/player/jump_right_1.png" id="4_tqiix"]
 [ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://player/SwordSprite.cs" id="4_yw30f"]
+[ext_resource type="Texture2D" uid="uid://2rkhcijbgo4x" path="res://assets/player/jump_right_2.png" id="5_e7oew"]
 [ext_resource type="Script" uid="uid://honpn3bhrqj4" path="res://player/WandSprite.cs" id="6_g6k8r"]
+[ext_resource type="Script" uid="uid://bwkt506kx88bi" path="res://items/SwordAudio.cs" id="7_yllr7"]
+[ext_resource type="AudioStream" uid="uid://bt4274cidynqw" path="res://audio/sfx/player/items/sword/sword_slash1.wav" id="8_kb6p2"]
+[ext_resource type="AudioStream" uid="uid://dfrkuag33g7a" path="res://audio/sfx/player/items/sword/sword_slash2.wav" id="9_wodsf"]
+[ext_resource type="AudioStream" uid="uid://c4stre3n21m8k" path="res://audio/sfx/player/items/sword/sword_slash3.wav" id="10_32hag"]
+[ext_resource type="AudioStream" uid="uid://ictk4oigbahq" path="res://audio/sfx/player/items/sword/sword_slash4.wav" id="11_tqiix"]
+[ext_resource type="AudioStream" uid="uid://p3bk8sy24irh" path="res://audio/sfx/player/items/sword/sword_charge.wav" id="12_e7oew"]
+[ext_resource type="AudioStream" uid="uid://b4830qxdie0ul" path="res://audio/sfx/player/items/sword/sword_spin.wav" id="13_c35mf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nvl01"]
 atlas = ExtResource("1_4flbx")
@@ -54,6 +64,10 @@ region = Rect2(32, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
 atlas = ExtResource("1_4flbx")
 region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32hag"]
+atlas = ExtResource("1_4flbx")
+region = Rect2(48, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
 atlas = ExtResource("1_4flbx")
@@ -146,6 +160,23 @@ animations = [{
 "loop": 1,
 "name": &"idle-up",
 "speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_32hag")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tqiix")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_e7oew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32hag")
+}],
+"loop": 1,
+"name": &"jump-right",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -293,15 +324,16 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgjww"]
-size = Vector2(14, 5)
+size = Vector2(9, 5)
 
 [node name="Player" type="CharacterBody2D" unique_id=1190535338]
 disable_mode = 2
 script = ExtResource("1_onrkg")
+MaxHealth = 20
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1967307610]
 sprite_frames = SubResource("SpriteFrames_i3pqv")
-animation = &"attack-up"
+animation = &"jump-right"
 
 [node name="Sword" type="AnimatedSprite2D" parent="." unique_id=1581256795]
 z_index = -1
@@ -326,3 +358,9 @@ physics_interpolation_mode = 1
 visible = false
 position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_vgjww")
+
+[node name="SwordAudio" type="Node" parent="." unique_id=757369722]
+script = ExtResource("7_yllr7")
+SwingSounds = [ExtResource("8_kb6p2"), ExtResource("9_wodsf"), ExtResource("10_32hag"), ExtResource("11_tqiix")]
+ChargedSound = ExtResource("12_e7oew")
+SpinAttackSound = ExtResource("13_c35mf")

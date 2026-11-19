@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://cb2to6cln3x0a"]
+
+[ext_resource type="Script" uid="uid://c8comuml2ayeb" path="res://items/Boomerang.cs" id="1_kgckv"]
+[ext_resource type="Texture2D" uid="uid://b68hl3ng62wkm" path="res://assets/hud/items/boomerang.png" id="2_7u5we"]
+[ext_resource type="AudioStream" uid="uid://dh0ltk7prq6ub" path="res://audio/sfx/player/items/sword/sword_tap.wav" id="2_ei6yw"]
+[ext_resource type="AudioStream" uid="uid://b7nbku6uhbhcw" path="res://audio/sfx/player/items/boomerang.wav" id="2_yjgco"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vgjww"]
+size = Vector2(6, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ei6yw"]
+atlas = ExtResource("2_7u5we")
+region = Rect2(0, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vf4xm"]
+atlas = ExtResource("2_7u5we")
+region = Rect2(12, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbbvc"]
+atlas = ExtResource("2_7u5we")
+region = Rect2(0, 12, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4pn1"]
+atlas = ExtResource("2_7u5we")
+region = Rect2(12, 12, 12, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7u5we"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ei6yw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vf4xm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbbvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4pn1")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Boomerang" type="CharacterBody2D" unique_id=1574988816]
+motion_mode = 1
+script = ExtResource("1_kgckv")
+ClinkSound = ExtResource("2_ei6yw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1332586471]
+visible = false
+shape = SubResource("RectangleShape2D_vgjww")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1294651082]
+sprite_frames = SubResource("SpriteFrames_7u5we")
+
+[node name="Sound" type="AudioStreamPlayer" parent="." unique_id=788784010]
+stream = ExtResource("2_yjgco")

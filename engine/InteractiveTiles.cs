@@ -52,11 +52,16 @@ public partial class InteractiveTiles : Node
 	[Export] public Texture2D LeafTexture { get; set; } // optional; empty = built-in placeholder
 	[Export] public int LeafTicksPerFrame { get; set; } = 4; // original: 4 game frames per pose
 	[Export] public int LeafTotalTicks { get; set; } = 30;   // original: about 30 game frames
+	[Export] public AudioStream LeafSound { get; set; }      // original: NOISE_SFX_CUT_GRASS
 
 	[ExportGroup("Rock effect (rocks, pots)")]
 	[Export] public Texture2D RockTexture { get; set; } // optional; empty = built-in placeholder
 	[Export] public int RockTicksPerFrame { get; set; } = 4;
 	[Export] public int RockTotalTicks { get; set; } = 14;
+	[Export] public AudioStream RockSound { get; set; }      // original: NOISE_SFX_POT_SMASHED
+
+	// Audio bus the effect sounds play on.
+	[Export] public StringName SoundBus { get; set; } = "Master";
 
 	private readonly Dictionary<int, TileBehavior> _behaviors = new();
 	private readonly Dictionary<Vector2I, int> _current = new();   // this room: cell -> tile id (-1 = inert)
@@ -115,7 +120,7 @@ public partial class InteractiveTiles : Node
 
 	// The one entry point. Returns true if the point hit a tile that reacted.
 	// 'power' is the caller's strength (e.g. power bracelet level); reactions can demand more.
-	public bool TryInteract(Vector2 worldPoint, Interaction kind, int power = 0)
+	public bool TryInteract(Vector2 worldPoint, Interaction kind, int power = 0, bool allowSpawns = true)
 	{
 		Vector2I cell = new Vector2I(
 			Mathf.FloorToInt(worldPoint.X / CellSize),
@@ -148,13 +153,24 @@ public partial class InteractiveTiles : Node
 		if (behavior.Permanent)
 			_permanent[cell] = reaction.Result;
 
-		if (reaction.Spawns != "")
+		if (allowSpawns && reaction.Spawns != "")
 			EmitSignal(SignalName.EntitySpawnRequested, reaction.Spawns, CellCenter(cell));
 
 		if (reaction.Effect != "")
 			SpawnEffect(reaction.Effect, new Vector2(cell.X * CellSize, cell.Y * CellSize));
 
 		return true;
+	}
+
+	// True if the point is on a tile that is still interactive (a rock, a pot, a bush that
+	// hasn't been cut...), as opposed to a plain wall. Does not trigger any reaction.
+	public bool IsInteractiveAt(Vector2 worldPoint)
+	{
+		Vector2I cell = new Vector2I(
+			Mathf.FloorToInt(worldPoint.X / CellSize),
+			Mathf.FloorToInt(worldPoint.Y / CellSize));
+
+		return _current.TryGetValue(cell, out int id) && id >= 0;
 	}
 
 	private void OnRoomLoaded(Vector2I room)
@@ -183,7 +199,8 @@ public partial class InteractiveTiles : Node
 
 				// Interactive objects (bushes, rocks, signs...) block movement until they react,
 				// whether or not the collision mask happened to mark them solid.
-				SetCollision(cell, true);
+				if (id != 4)
+					SetCollision(cell, true);
 			}
 		}
 
@@ -257,10 +274,30 @@ public partial class InteractiveTiles : Node
 				return;
 		}
 
+		PlaySound(effect == "leaves" ? LeafSound : RockSound);
+
 		burst.ZIndex = 10; // above the player and the objects layer
 		Node parent = Objects != null ? Objects.GetParent() : GetParent();
 		parent.AddChild(burst);
 		burst.GlobalPosition = topLeft;
+	}
+
+	// One short-lived player per sound. It's a child of this node (not of the burst), so the
+	// sound can outlast the visual effect, and it keeps playing while the game is paused.
+	private void PlaySound(AudioStream stream)
+	{
+		if (stream == null)
+			return;
+
+		AudioStreamPlayer player = new AudioStreamPlayer
+		{
+			Stream = stream,
+			Bus = SoundBus,
+			ProcessMode = ProcessModeEnum.Always,
+		};
+		player.Finished += player.QueueFree;
+		AddChild(player);
+		player.Play();
 	}
 
 	private void Log(string message)

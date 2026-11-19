@@ -3,7 +3,7 @@ using Godot;
 
 // Data from CutLeavesSpriteRect in LADX-Disassembly (src/code/entities/bank19.asm)
 public partial class LeafBurst : FxBurst
-{
+{	
 	public LeafBurst()
 	{
 		TotalTicks = 30;
