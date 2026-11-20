@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ttryefivr0wb"]
+[gd_resource type="Resource" script_class="ItemPowerBracelet" format=3 uid="uid://ttryefivr0wb"]
 
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="1_be6di"]
-[ext_resource type="Texture2D" uid="uid://d1l6ae2bnw12v" path="res://assets/hud/items/icon_bracelet2.tres" id="1_wn2ll"]
+[ext_resource type="Texture2D" uid="uid://d1l6ae2bnw12v" path="res://assets/hud/items/icon_bracelet2.tres" id="1_icon"]
+[ext_resource type="Script" path="res://items/ItemPowerBracelet.cs" id="2_script"]
 
 [resource]
-script = ExtResource("1_be6di")
+script = ExtResource("2_script")
+Power = 1
+LiftStageTicks = 4
 DisplayName = "bracelet2"
-Icon = ExtResource("1_wn2ll")
-metadata/_custom_type_script = "uid://77rcrk7c21yd"
+Icon = ExtResource("1_icon")

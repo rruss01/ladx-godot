@@ -31,6 +31,12 @@ public partial class Player : CharacterBody2D
 	private int _swingFrame = -1; // -1 = not swinging
 	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, like the original's wIsUsingSpinAttack
 	public bool IsSpinning => _spinCounter > 0;
+
+	// --- Power bracelet ---
+	private int _pullTicks;                    // how long you have been pulling on a liftable object
+	private CarriedObject _carried;            // what Link is lifting or carrying; null = empty-handed
+	private ItemPowerBracelet _liftedWith;     // the bracelet that lifted it (power, sounds)
+	public bool IsCarrying => _carried != null && IsInstanceValid(_carried);
 	private int _charge = 0;
 	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
 	public bool ShowSwordHitbox { get; set; } = false;
@@ -147,16 +153,24 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		// 2. Use item if item button pressed.
-		foreach (ItemButton button in Buttons) {
-			if (!Input.IsActionJustPressed(ActionFor(button)))
-				continue;
+		// 1b. Power bracelet: grab, pull, lift, carry, throw. True = Link is busy this tick.
+		if (UpdateBracelet())
+			return;
 
-			_useButton = button;
-			Inventory.Instance.GetEquipped(button)?.Use(this);
+		// 2. Use item if item button pressed. (Nothing can be used while carrying: the bracelet's
+		//    button throws instead, see UpdateBracelet.)
+		if (!IsCarrying)
+		{
+			foreach (ItemButton button in Buttons) {
+				if (!Input.IsActionJustPressed(ActionFor(button)))
+					continue;
 
-			if (_swingFrame >= 0)
-				return;
+				_useButton = button;
+				Inventory.Instance.GetEquipped(button)?.Use(this);
+
+				if (_swingFrame >= 0)
+					return;
+			}
 		}
 
 		// 3. Charging spin attack (swords only)
@@ -275,7 +289,9 @@ public partial class Player : CharacterBody2D
 
 		// Walking animation = any d-pad direction held, even if blocked or cancelled
 		string state = dpad.Count > 0 ? "walk" : "idle";
-		if (Inventory.Instance.GetEquipped(ItemButton.B)?.DisplayName == "shield1" || Inventory.Instance.GetEquipped(ItemButton.A)?.DisplayName == "shield1")
+		if (IsCarrying)
+			state = $"carry-{state}"; // both hands are busy, so no shield
+		else if (Inventory.Instance.GetEquipped(ItemButton.B)?.DisplayName == "shield1" || Inventory.Instance.GetEquipped(ItemButton.A)?.DisplayName == "shield1")
 			state = $"shield{state}";
 		_sprite.Play($"{state}-{FacingDirection()}");
 		_sprite.FlipH = _facing.X < 0;
@@ -390,5 +406,156 @@ public partial class Player : CharacterBody2D
 			_spinCounter = 0;
 			_sword.HideSword();
 		}
+	}
+
+	// ---- Power bracelet ----
+	// How it works in the original (label_1F69 in bank0.asm, EntityLiftedHandler in bank3.asm):
+	//
+	//   1. HOLD the bracelet's button. Link stops and holds his arms out; he can't walk or turn.
+	//   2. Face the object and PULL: hold the d-pad AWAY from it for 8 ticks.
+	//   3. The object slides into Link's hands and up over his head (Link is frozen for about
+	//      17 ticks, or 9 with bracelet 2). The tile it sat on turns into its "lift" result.
+	//   4. Link walks around carrying it. Items can't be used.
+	//   5. PRESS the bracelet's button again to throw it where you are facing.
+	//
+	// Returns true when Link is busy and normal movement should be skipped this tick.
+	private bool UpdateBracelet()
+	{
+		// --- Already holding something ---
+		if (_carried != null)
+		{
+			if (!IsInstanceValid(_carried))
+			{
+				_carried = null; // it broke, or the screen scrolled and it was lost
+			}
+			else if (!_carried.IsLifted)
+			{
+				ShowBraceletPose("grab", 1, "idle"); // frozen in the leaning-back pose while it goes up
+				return true;
+			}
+			else if (ThrowPressed())
+			{
+				_carried.Throw(_facing);
+				PlayOneShot(_liftedWith?.ThrowSound);
+				_carried = null;
+				return true;
+			}
+			else
+			{
+				return false; // carrying: walk as normal (UpdateMovement picks the carry animation)
+			}
+		}
+
+		// --- Empty-handed: is the bracelet button held? ---
+		ItemPowerBracelet bracelet = FindBracelet(out ItemButton button);
+		if (bracelet == null || InAir || _swordOut || !Input.IsActionPressed(ActionFor(button)))
+		{
+			_pullTicks = 0;
+			return false;
+		}
+
+		// Holding the button: Link grabs. From here on he can't move or turn.
+		Vector2 probe = LiftProbePoint();
+		bool liftable = InteractiveTiles.Instance != null
+			&& InteractiveTiles.Instance.CanInteract(probe, Interaction.Lift, bracelet.Power);
+		bool pulling = Input.IsActionPressed(PullAction());
+
+		// Only a pull on something liftable counts. Pulling on air or a wall starts over.
+		if (!liftable || !pulling)
+		{
+			_pullTicks = 0;
+			ShowBraceletPose("grab", 0, "idle");
+			return true;
+		}
+
+		_pullTicks++;
+		ShowBraceletPose("grab", 1, "idle"); // the leaning-back frame
+
+		if (_pullTicks < bracelet.PullTicks)
+			return true;
+
+		if (InteractiveTiles.Instance.TryLift(probe, bracelet.Power, out LiftedTile tile))
+		{
+			_carried = CarriedObject.Create(this, tile, SwordHitbox.DirectionIndex(_facing), bracelet.LiftStageTicks);
+			_liftedWith = bracelet;
+			GetParent().AddChild(_carried);
+			PlayOneShot(bracelet.LiftSound);
+		}
+
+		_pullTicks = 0;
+		return true;
+	}
+
+	// Which equipped item is the bracelet, and on which button? Null if neither is.
+	private ItemPowerBracelet FindBracelet(out ItemButton button)
+	{
+		foreach (ItemButton b in Buttons)
+		{
+			if (Inventory.Instance.GetEquipped(b) is ItemPowerBracelet bracelet)
+			{
+				button = b;
+				return bracelet;
+			}
+		}
+
+		button = ItemButton.B;
+		return null;
+	}
+
+	// Throw on a fresh press of the bracelet's button, as in the original. If the bracelet has been
+	// unequipped in the meantime, either button throws (the original does the same).
+	private bool ThrowPressed()
+	{
+		if (FindBracelet(out ItemButton button) != null)
+			return Input.IsActionJustPressed(ActionFor(button));
+
+		return Input.IsActionJustPressed(ActionFor(ItemButton.A)) || Input.IsActionJustPressed(ActionFor(ItemButton.B));
+	}
+
+	// The d-pad direction opposite to the way Link faces: the one you hold to pull.
+	private string PullAction()
+	{
+		if (_facing.X > 0) return "ui_left";
+		if (_facing.X < 0) return "ui_right";
+		return _facing.Y < 0 ? "ui_down" : "ui_up";
+	}
+
+	// The one spot in front of Link that is checked for something to lift, from the original's
+	// SwordAreaXForDirection / SwordAreaYForDirection. Offsets are from the CENTER of Link's sprite.
+	// Right is 5 where the original says 4, because our collision box is half a pixel wider
+	// and would otherwise stop Link just short of the tile.
+	private static readonly Vector2[] LiftProbe =
+	{
+		new Vector2(5, 2),   // right
+		new Vector2(-5, 2),  // left
+		new Vector2(0, -3),  // up
+		new Vector2(0, 8),   // down
+	};
+
+	private Vector2 LiftProbePoint() => GlobalPosition + LiftProbe[SwordHitbox.DirectionIndex(_facing)];
+
+	// Shows "name-direction" (e.g. grab-right) if the sprite sheet has it, otherwise the fallback
+	// animation, so the code works before every pose has been drawn.
+	private void ShowBraceletPose(string name, int frame, string fallback)
+	{
+		string animation = $"{name}-{FacingDirection()}";
+		if (!_sprite.SpriteFrames.HasAnimation(animation))
+			animation = $"{fallback}-{FacingDirection()}";
+
+		_sprite.Animation = animation;
+		_sprite.Frame = Mathf.Min(frame, _sprite.SpriteFrames.GetFrameCount(animation) - 1);
+		_sprite.Pause();
+		_sprite.FlipH = _facing.X < 0;
+	}
+
+	private void PlayOneShot(AudioStream sound)
+	{
+		if (sound == null)
+			return;
+
+		AudioStreamPlayer p = new AudioStreamPlayer { Stream = sound };
+		p.Finished += p.QueueFree;
+		AddChild(p);
+		p.Play();
 	}
 }

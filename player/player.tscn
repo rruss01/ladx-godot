@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="3_g1dw6"]
 [ext_resource type="Shader" uid="uid://bepauv4h7vvhn" path="res://items/swingable.gdshader" id="3_qjkh3"]
 [ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://player/SwordSprite.cs" id="4_yw30f"]
+[ext_resource type="Texture2D" uid="uid://dhfx76s3eo3qq" path="res://assets/player/roy_push_pull.png" id="5_e7oew"]
 [ext_resource type="Texture2D" uid="uid://deo4c7j3n1cye" path="res://assets/player/roy_jump.png" id="5_tqiix"]
 [ext_resource type="Script" uid="uid://honpn3bhrqj4" path="res://player/WandSprite.cs" id="6_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://ddfc3mghqa30b" path="res://assets/player/roy_sheet2.png" id="6_tqiix"]
@@ -76,6 +77,30 @@ region = Rect2(48, 64, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_r7pn3"]
 atlas = ExtResource("3_32hag")
 region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjxoa"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gswnw"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcnuv"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j55il"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjies"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmwog"]
+atlas = ExtResource("5_e7oew")
+region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_onrkg"]
 atlas = ExtResource("1_4flbx")
@@ -292,6 +317,39 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_fjxoa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gswnw")
+}],
+"loop": 1,
+"name": &"grab-down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcnuv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j55il")
+}],
+"loop": 1,
+"name": &"grab-right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjies")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mmwog")
+}],
+"loop": 1,
+"name": &"grab-up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_onrkg")
 }],
 "loop": 1,
@@ -354,6 +412,21 @@ animations = [{
 }],
 "loop": 1,
 "name": &"jump-up",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"push-down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"push-right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"push-up",
 "speed": 5.0
 }, {
 "frames": [{
@@ -672,7 +745,7 @@ MaxHealth = 20
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1967307610]
 sprite_frames = SubResource("SpriteFrames_i3pqv")
-animation = &"spin-attack-left"
+animation = &"grab-up"
 
 [node name="Sword" type="AnimatedSprite2D" parent="." unique_id=1581256795]
 z_index = -1

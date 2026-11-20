@@ -5,6 +5,9 @@ using Godot;
 
 public enum Interaction { Slash, Lift, Push, Bomb }
 
+// What the player is now holding after lifting a tile: enough to draw it and to break it later.
+public readonly record struct LiftedTile(int TileId, Vector2I Cell, Texture2D Art, string BreakEffect);
+
 // What happens when one kind of interaction hits a tile.
 public sealed class TileReaction
 {
@@ -95,6 +98,8 @@ public partial class InteractiveTiles : Node
 		_behaviors.Clear();
 		_ids = null;
 		Objects = null;
+		_atlasImage = null;   // a different map may use a different atlas
+		_liftArt.Clear();
 
 		if (!_permanentByMap.TryGetValue(map.MapId, out Dictionary<Vector2I, int> remembered))
 		{
@@ -160,6 +165,142 @@ public partial class InteractiveTiles : Node
 			SpawnEffect(reaction.Effect, new Vector2(cell.X * CellSize, cell.Y * CellSize));
 
 		return true;
+	}
+
+	// Like TryInteract, but only ASKS: would this point react to 'kind' for a caller of this
+	// strength? Nothing changes. Used to decide whether a pull should count towards a lift.
+	public bool CanInteract(Vector2 worldPoint, Interaction kind, int power = 0)
+	{
+		Vector2I cell = new Vector2I(
+			Mathf.FloorToInt(worldPoint.X / CellSize),
+			Mathf.FloorToInt(worldPoint.Y / CellSize));
+
+		return _current.TryGetValue(cell, out int id) && id >= 0
+			&& _behaviors.TryGetValue(id, out TileBehavior behavior)
+			&& behavior.Reactions.TryGetValue(kind, out TileReaction reaction)
+			&& power >= reaction.Power;
+	}
+
+	// Lifts the tile at the point: the tile turns into whatever its "lift" reaction says
+	// (the copy that stays behind), and 'lifted' describes the object now in the player's hands.
+	public bool TryLift(Vector2 worldPoint, int power, out LiftedTile lifted)
+	{
+		lifted = default;
+
+		Vector2I cell = new Vector2I(
+			Mathf.FloorToInt(worldPoint.X / CellSize),
+			Mathf.FloorToInt(worldPoint.Y / CellSize));
+
+		if (!_current.TryGetValue(cell, out int id) || id < 0)
+			return false;
+
+		// Grab the art and the kind BEFORE reacting: the reaction replaces the tile.
+		// The tile that is left behind tells us what the object's background looks like (see LiftArtFor).
+		int resultId = -1;
+		string breakEffect = "rocks";
+		if (_behaviors.TryGetValue(id, out TileBehavior behavior)
+			&& behavior.Reactions.TryGetValue(Interaction.Lift, out TileReaction lift))
+		{
+			resultId = lift.Result;
+		}
+		Texture2D art = LiftArtFor(id, resultId);
+
+		if (_behaviors.TryGetValue(id, out behavior)
+			&& behavior.Reactions.TryGetValue(Interaction.Slash, out TileReaction slash)
+			&& slash.Effect != "")
+		{
+			// Anything a sword can also cut is a bush, and a bush breaks into leaves.
+			breakEffect = slash.Effect;
+		}
+
+		if (!TryInteract(worldPoint, Interaction.Lift, power))
+			return false;
+
+		lifted = new LiftedTile(id, cell, art, breakEffect);
+		return true;
+	}
+
+	// The atlas as an image, and the carried-object pictures made from it so far.
+	private Image _atlasImage;
+	private readonly Dictionary<(int, int), Texture2D> _liftArt = new();
+
+	// The picture of a lifted object: the tile's art with its BACKGROUND made transparent.
+	//
+	// Why: every tile in the atlas is a full 16x16 square, background included (the grass around
+	// a bush, the floor around a pot). That is right for tiles, but a carried object must show
+	// only the object. The tile it leaves behind ('resultId') is exactly the background without
+	// the object, so any pixel that matches it AND is connected to the tile's edge is background.
+	private Texture2D LiftArtFor(int id, int resultId)
+	{
+		if (_liftArt.TryGetValue((id, resultId), out Texture2D cached))
+			return cached;
+
+		Texture2D art = BuildLiftArt(id, resultId);
+		_liftArt[(id, resultId)] = art;
+		return art;
+	}
+
+	private Texture2D BuildLiftArt(int id, int resultId)
+	{
+		if (Objects?.TileSet?.GetSource(AtlasSourceId) is not TileSetAtlasSource atlas || atlas.Texture == null)
+			return null;
+
+		if (_atlasImage == null)
+		{
+			_atlasImage = atlas.Texture.GetImage();
+			if (_atlasImage.IsCompressed())
+				_atlasImage.Decompress();
+			_atlasImage.Convert(Image.Format.Rgba8); // needs an alpha channel to hold transparency
+		}
+
+		Image art = _atlasImage.GetRegion(atlas.GetTileTextureRegion(AtlasCoords(id)));
+
+		// -1 means the tile doesn't change when lifted, so there is no background to compare against.
+		if (resultId >= 0)
+		{
+			Image under = _atlasImage.GetRegion(atlas.GetTileTextureRegion(AtlasCoords(resultId)));
+			RemoveBackground(art, under);
+		}
+
+		return ImageTexture.CreateFromImage(art);
+	}
+
+	// Flood fill: start at every pixel on the tile's border that matches the tile underneath,
+	// make it transparent, and keep spreading to neighbours that match too. Stopping at pixels
+	// that differ is what keeps the object's own outline (and its insides) intact. A plain
+	// "make every matching pixel transparent" would punch holes wherever the object happens
+	// to contain the same colour as the ground.
+	private static void RemoveBackground(Image art, Image under)
+	{
+		int w = art.GetWidth();
+		int h = art.GetHeight();
+		bool[,] seen = new bool[w, h];
+		Stack<Vector2I> todo = new Stack<Vector2I>();
+
+		void Visit(int x, int y)
+		{
+			if (x < 0 || y < 0 || x >= w || y >= h || seen[x, y])
+				return;
+
+			seen[x, y] = true;
+			if (art.GetPixel(x, y) != under.GetPixel(x, y))
+				return; // part of the object: stop here
+
+			art.SetPixel(x, y, new Color(0, 0, 0, 0));
+			todo.Push(new Vector2I(x, y));
+		}
+
+		for (int x = 0; x < w; x++) { Visit(x, 0); Visit(x, h - 1); }
+		for (int y = 0; y < h; y++) { Visit(0, y); Visit(w - 1, y); }
+
+		while (todo.Count > 0)
+		{
+			Vector2I p = todo.Pop();
+			Visit(p.X + 1, p.Y);
+			Visit(p.X - 1, p.Y);
+			Visit(p.X, p.Y + 1);
+			Visit(p.X, p.Y - 1);
+		}
 	}
 
 	// True if the point is on a tile that is still interactive (a rock, a pot, a bush that
