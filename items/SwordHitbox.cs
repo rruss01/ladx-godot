@@ -27,7 +27,7 @@ public static class SwordHitbox
 	{
 		new Vector2(22, 8),  // right
 		new Vector2(-6, 8),  // left
-		new Vector2(8, -6),  // up
+		new Vector2(8, -5),  // up
 		new Vector2(8, 22),  // down
 	};
 

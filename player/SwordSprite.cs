@@ -31,30 +31,20 @@ public partial class SwordSprite : AnimatedSprite2D
 		new(new Vector2I(6, 0), true, false), // 2
 		new(new Vector2I(6, 0), true, false) // 3
 	};
-	
-	private static readonly SwingAdjustment[] SpinAtk = {
-		new(new Vector2I(6, 8), true, true), // 0
-		new(new Vector2I(6, 0), true, false), // 1
-		new(new Vector2I(6, -22), true, false), // 2
-		new(new Vector2I(0, -22), false, true), // 3
-		new(new Vector2I(-22, -22), false, false), // 4
-		new(new Vector2I(-22, 0), false, false), // 5
-		new(new Vector2I(-22, 22), false, true), // 6
-		new(new Vector2I(-7, 8), false, false) // 7
-	};
-	
-	private static readonly SwingAdjustment[] SpinAtkLeft = {
-		new(new Vector2I(6, 8), true, true), // 0
-		new(new Vector2I(-22, 0), false, false), // 1
-		new(new Vector2I(-22, 22), false, true), // 2
-		new(new Vector2I(0, -22), false, true), // 3
-		new(new Vector2I(-22, -22), false, false), // 4
-		new(new Vector2I(6, 0), true, false), // 5
-		new(new Vector2I(6, -22), true, false), // 6
-		new(new Vector2I(-7, 8), false, false) // 7
-	};
 
+	private static readonly SwingAdjustment[] SpinAtk = {
+		new(new Vector2I(6, 8), true, true), // 0 (DR)
+		new(new Vector2I(6, 0), true, false), // 1 (R)
+		new(new Vector2I(6, -22), true, false), // 2 (UR)
+		new(new Vector2I(0, -22), false, true), // 3 (U)
+		new(new Vector2I(-22, -22), false, false), // 4 (UL)
+		new(new Vector2I(-22, 0), false, false), // 5 (L)
+		new(new Vector2I(-22, 8), false, true), // 6 (DL)
+		new(new Vector2I(-7, 8), false, false) // 7 (D)
+	};
+	
 	public int HoldPose = 2;
+	public int GlowPose = 3;
 		
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -77,6 +67,23 @@ public partial class SwordSprite : AnimatedSprite2D
 		Position = adjustment.Offset;
 		Animation = animation;
 		Frame = pose;
+		Pause();
+		FlipH = adjustment.FlipH;
+		FlipV = adjustment.FlipV;
+		Visible = true;
+	}
+
+	// Shows the sword for one step of the spin attack.
+	// swordDirection uses the original's numbering, so:
+	// 0 = right, then clockwise: 1 = right-bottom, 2 = bottom, ... 7 = right-top.
+	public void ShowSpinPose(int swordDirection) {
+		// Maps my internal settings to LADX
+		int frame = ((1 - swordDirection) % 8 + 8) % 8;
+		SwingAdjustment adjustment = SpinAtk[frame];
+
+		Position = adjustment.Offset;
+		Animation = "sword-spin-attack";
+		Frame = frame;
 		Pause();
 		FlipH = adjustment.FlipH;
 		FlipV = adjustment.FlipV;

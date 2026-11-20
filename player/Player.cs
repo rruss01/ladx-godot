@@ -29,6 +29,8 @@ public partial class Player : CharacterBody2D
 	private const int SpinAtkMaxCharge = 40; // $28 frames to fully charge
 	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
+	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, like the original's wIsUsingSpinAttack
+	public bool IsSpinning => _spinCounter > 0;
 	private int _charge = 0;
 	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
 	public bool ShowSwordHitbox { get; set; } = false;
@@ -131,6 +133,13 @@ public partial class Player : CharacterBody2D
 	{
 		UpdateAir();
 		
+		// 0. Spin attack in progress: movement fully blocked, only the spin runs
+		if (_spinCounter > 0)
+		{
+			UpdateSpin();
+			return;
+		}
+
 		// 1. Swing in progress: movement fully blocked, only the swing runs
 		if (_swingFrame >= 0)
 		{
@@ -160,12 +169,17 @@ public partial class Player : CharacterBody2D
 		}
 		else
 		{
-			if (_charge >= SpinAtkMaxCharge) 
-			{
-				_swordAudio.PlaySpinAttack();
-			}
+			// Button let go (or the sword was never out). A full charge turns into a spin.
+			bool charged = _charge >= SpinAtkMaxCharge;
 			_charge = 0;
 			_swordOut = false;
+
+			if (charged)
+			{
+				StartSpin();
+				return; // the spin draws itself from the next tick on
+			}
+
 			_sword.HideSword();
 		}
 
@@ -239,7 +253,10 @@ public partial class Player : CharacterBody2D
 		UpdateFacing(dpad);
 
 		if (_swordOut) {
-			_sword.ShowPose(_facing, _sword.HoldPose);
+			// Fully charged: the sword flashes between its normal and glowing frames.
+			// The original flips its palette whenever bit 2 of the frame counter changes, i.e. every 4 ticks.
+			bool glow = _charge >= SpinAtkMaxCharge && (Engine.GetPhysicsFrames() & 4) != 0;
+			_sword.ShowPose(_facing, glow ? _sword.GlowPose : _sword.HoldPose);
 			switch (FacingDirection()) {
 				case "up":
 					_sword.Position += new Vector2(0, 3);
@@ -308,11 +325,70 @@ public partial class Player : CharacterBody2D
 		return _swordOut ? SwordHitbox.StateHolding : SwordHitbox.StateNone;
 	}
 
-	public bool TryGetSwordHitbox(out Rect2 hitbox) =>
-		SwordHitbox.TryGetBox(_facing, SwordState(), GlobalPosition + SpriteTopLeftOffset, out hitbox);
+	public bool TryGetSwordHitbox(out Rect2 hitbox)
+	{
+		// While spinning, the sword hurts everything in a 48x48 box around Link.
+		if (_spinCounter > 0)
+		{
+			hitbox = SwordHitbox.SpinBox(GlobalPosition + SpriteTopLeftOffset);
+			return true;
+		}
+
+		return SwordHitbox.TryGetBox(_facing, SwordState(), GlobalPosition + SpriteTopLeftOffset, out hitbox);
+	}
 
 	private void ProbeSword() {
 		Vector2 probe = SwordHitbox.TileProbePoint(_facing, GlobalPosition + SpriteTopLeftOffset);
 		InteractiveTiles.Instance?.TryInteract(probe, Interaction.Slash);
+	}
+
+	// ---- Spin attack ----
+	// Ported from UpdateSpinAttackAnimation (bank2.asm). The whole thing is driven by ONE counter:
+	//
+	//   * it starts at 32 when you let go of a fully charged sword
+	//   * every tick it drops by 1, and on every 4th tick it drops by an extra 1
+	//   * "counter / 4" (0-7) says which of the 8 poses to show; it counts 7, 6, ... 0, so the
+	//     spin looks the same speed throughout, about 3 ticks per pose
+	//   * when it reaches 0 the spin is over: 25 or 26 ticks in total
+	private void StartSpin()
+	{
+		_spinCounter = SpinAttack.StartCounter;
+		_swordAudio.PlaySpinAttack();
+	}
+
+	private void UpdateSpin()
+	{
+		_spinCounter--;
+
+		// Pose number 7..0 becomes step 0..7 of the table, which is written in time order.
+		int pose = _spinCounter >> 2;
+		int step = 7 - pose;
+		int facing = SwordHitbox.DirectionIndex(_facing);
+
+		int bodyDirection = SpinAttack.BodyDirection[facing][step];
+		int swordDirection = SpinAttack.SwordDirection[facing][step];
+
+		// Link's body has its own frame for every direction, so it never needs flipping here.
+		_sprite.Animation = "spin-attack";
+		_sprite.Frame = SpinAttack.BodyFrame(bodyDirection);
+		_sprite.Pause();
+		_sprite.FlipH = false;
+
+		_sword.ShowSpinPose(swordDirection);
+
+		// Cut whatever is in the tile the sword tip is touching, every tick, like a normal swing.
+		Vector2 probe = GlobalPosition + SpriteTopLeftOffset + SpinAttack.TileProbe[swordDirection];
+		InteractiveTiles.Instance?.TryInteract(probe, Interaction.Slash);
+
+		// The extra drop. The original uses its free-running frame counter (hFrameCounter & 3);
+		// Godot's physics frame count is the same idea, a counter that never resets.
+		if ((Engine.GetPhysicsFrames() & 3) == 0)
+			_spinCounter--;
+
+		if (_spinCounter <= 0)
+		{
+			_spinCounter = 0;
+			_sword.HideSword();
+		}
 	}
 }

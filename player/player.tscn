@@ -597,35 +597,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qjkh3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yw30f")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qjkh3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g6k8r")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qjkh3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yw30f")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qjkh3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g6k8r")
-}],
-"loop": 1,
-"name": &"sword-spin-attack-left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_yw30f")
 }, {
 "duration": 1.0,
@@ -708,7 +679,7 @@ z_index = -1
 material = SubResource("ShaderMaterial_qjkh3")
 position = Vector2(7, 0)
 sprite_frames = SubResource("SpriteFrames_vgjww")
-animation = &"sword-up"
+animation = &"sword-down"
 centered = false
 flip_h = true
 flip_v = true
