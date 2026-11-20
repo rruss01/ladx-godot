@@ -7,25 +7,51 @@ public partial class SwordSprite : AnimatedSprite2D
 	private static readonly SwingAdjustment[] Up = {
 		new(new Vector2I(-22, 0), false, false), // 0
 		new(new Vector2I(-22, -22), false, false), // 1
-		new(new Vector2I(0, -22), false, true) // 2
+		new(new Vector2I(0, -22), false, true), // 2
+		new(new Vector2I(0, -22), false, true) // 3
 	};
 
 	private static readonly SwingAdjustment[] Down = {
 		new(new Vector2I(6, 1), true, false), // 0
 		new(new Vector2I(6, 8), true, true), // 1
-		new(new Vector2I(-7, 8), false, false) // 2
+		new(new Vector2I(-7, 8), false, false), // 2
+		new(new Vector2I(-7, 8), false, false) // 3
 	};
 
 	private static readonly SwingAdjustment[] Left = {
 		new(new Vector2I(-8, -22), true, true), // 0
 		new(new Vector2I(-22, -22), false, false), // 1
-		new(new Vector2I(-22, 0), false, false) // 2
+		new(new Vector2I(-22, 0), false, false), // 2
+		new(new Vector2I(-22, 0), false, false) // 3
 	};
 
 	private static readonly SwingAdjustment[] Right = {
 		new(new Vector2I(0, -22), false, true), // 0
 		new(new Vector2I(6, -22), true, false), // 1
-		new(new Vector2I(6, 0), true, false) // 2
+		new(new Vector2I(6, 0), true, false), // 2
+		new(new Vector2I(6, 0), true, false) // 3
+	};
+	
+	private static readonly SwingAdjustment[] SpinAtk = {
+		new(new Vector2I(6, 8), true, true), // 0
+		new(new Vector2I(6, 0), true, false), // 1
+		new(new Vector2I(6, -22), true, false), // 2
+		new(new Vector2I(0, -22), false, true), // 3
+		new(new Vector2I(-22, -22), false, false), // 4
+		new(new Vector2I(-22, 0), false, false), // 5
+		new(new Vector2I(-22, 22), false, true), // 6
+		new(new Vector2I(-7, 8), false, false) // 7
+	};
+	
+	private static readonly SwingAdjustment[] SpinAtkLeft = {
+		new(new Vector2I(6, 8), true, true), // 0
+		new(new Vector2I(-22, 0), false, false), // 1
+		new(new Vector2I(-22, 22), false, true), // 2
+		new(new Vector2I(0, -22), false, true), // 3
+		new(new Vector2I(-22, -22), false, false), // 4
+		new(new Vector2I(6, 0), true, false), // 5
+		new(new Vector2I(6, -22), true, false), // 6
+		new(new Vector2I(-7, 8), false, false) // 7
 	};
 
 	public int HoldPose = 2;
