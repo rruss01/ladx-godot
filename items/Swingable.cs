@@ -6,7 +6,7 @@ public partial class Swingable : ItemData
 {
 	[Export] public bool Chargeable { get; set; } = true;
 	public int ChargeTicks = 40;
-	public override void Use(Player player)
+	public override void OnPress(Player player, ItemButton button)
 	{
 		if (player.SwordOut) { return; }
 		player.StartSwing(Chargeable);

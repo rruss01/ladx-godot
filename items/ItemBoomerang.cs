@@ -11,7 +11,7 @@ public partial class ItemBoomerang : ItemData
 
 	private const string Group = "boomerang";
 
-	public override void Use(Player player)
+	public override void OnPress(Player player, ItemButton button)
 	{
 		if (BoomerangScene == null)
 			return;

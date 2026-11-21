@@ -4,10 +4,6 @@ using System;
 public partial class ItemRocsFeather : ItemData
 {
 		[Export] public AudioStream JumpSound { get; set; }
-		
-		public override void Use(Player player) {
-			player.Jump(JumpSound);
-		}
 		public override void OnPress(Player player, ItemButton button) {
 			player.Jump(JumpSound);
 		}

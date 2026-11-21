@@ -8,40 +8,44 @@ public partial class Player : CharacterBody2D
 	private int _health;
 	private int _rupees;
 
-	private readonly bool[] _wasHeld = new bool[2];
-
-	// health mgmt; should emit as signal
+	// health/rupee mgmt
 	public void TakeDamage(int amount) => SetHealth(_health - amount);
 	public void Heal(int amount) => SetHealth(_health + amount);
+	public void AddHealth(int halfHearts) { _health = Mathf.Min(_health + halfHearts, MaxHealth); EmitSignal(SignalName.HealthChanged, _health, MaxHealth); }
+	public void AddRupees(int amount) { _rupees = Mathf.Min(_rupees + amount, 999); EmitSignal(SignalName.RupeesChanged, _rupees); }
 
 	// debug value
 	[Export] public int MaxHealth { get; set; } = 6;
 
 	// --- Movement (values from LADX disassembly) ---
 	private const int StraightSpeed = 16; // $10
-	private const int DiagonalSpeed = 12; // $0C per axis
+	private const int DiagonalSpeed = 12; // $0C
 	private Vector2I _facing = Vector2I.Down;
 	// Y starts at 8 so the axes don't pause on the same frame (fixes diagonal jitter).
 	private Vector2I _subpixel = new Vector2I(0, 8);
+	public Vector2I Facing => _facing;
 
 	// --- Sword ---
-	// Arrays can't be const in C#, so use static readonly.
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
 	private const int SwordSwingFrames = 14; // sum of SwordSwingSteps
 	private const int SpinAtkMaxCharge = 40; // $28 frames to fully charge
 	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
-	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, like the original's wIsUsingSpinAttack
+	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, from LADX's wIsUsingSpinAttack
+	private AnimatedSprite2D _sprite;
+	private SwordSprite _sword;
+	private SwordAudio _swordAudio;
 	public bool IsSpinning => _spinCounter > 0;
+	public int Charge { get; set; } = 0;
+	public bool ShowSwordHitbox { get; set; } = false;
+	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
+	public bool SwordOut { get; private set; }
 
 	// --- Power bracelet ---
 	private int _pullTicks;                    // how long you have been pulling on a liftable object
 	private CarriedObject _carried;            // what Link is lifting or carrying; null = empty-handed
 	private ItemPowerBracelet _liftedWith;     // the bracelet that lifted it (power, sounds)
 	public bool IsCarrying => _carried != null && IsInstanceValid(_carried);
-	public int Charge { get; set; } = 0;
-	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
-	public bool ShowSwordHitbox { get; set; } = false;
 
 	// --- Roc's Feather ---
 	private const int JumpVelocity = 32; // $20
@@ -53,17 +57,13 @@ public partial class Player : CharacterBody2D
 	public bool InAir { get; private set; }
 	public float Height => _z / 16f;
 	
-	private AnimatedSprite2D _sprite;
-	public bool SwordOut { get; private set; }
-	private SwordSprite _sword;
-	private SwordAudio _swordAudio;
-
-	public Vector2I Facing => _facing;
-
+	// buttons; input handling
 	private static readonly ItemButton[] Buttons = { ItemButton.B, ItemButton.A };
 	private static string ActionFor(ItemButton b) => b == ItemButton.B ? "button_b" : "button_a";
 	private ItemButton _useButton;
 	public ItemButton SwordButton { get; private set; }
+	private readonly bool[] _wasHeld = new bool[2];
+
 
 	// dpad struct to handle movement
 	private readonly record struct DPad(bool Right, bool Left, bool Up, bool Down)
@@ -127,15 +127,13 @@ public partial class Player : CharacterBody2D
 		SetHealth(6);
 		AddRupees(0);
 	}
-	
-	public void AddHealth(int halfHearts) { _health = Mathf.Min(_health + halfHearts, MaxHealth); EmitSignal(SignalName.HealthChanged, _health, MaxHealth); }
-	public void AddRupees(int amount) { _rupees = Mathf.Min(_rupees + amount, 999); EmitSignal(SignalName.RupeesChanged, _rupees); }
 
 	private void SetHealth(int value)
 	{
 		_health = Mathf.Clamp(value, 0, MaxHealth);
 		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
 	}
+
 	private void UpdateButtonEdges() {
 		foreach (ItemButton button in Buttons)
 		{
@@ -182,7 +180,7 @@ public partial class Player : CharacterBody2D
 					continue;
 
 				_useButton = button;
-				Inventory.Instance.GetEquipped(button)?.Use(this);
+				Inventory.Instance.GetEquipped(button)?.OnPress(this, button);
 
 				if (_swingFrame >= 0)
 					return;
@@ -193,7 +191,6 @@ public partial class Player : CharacterBody2D
 			if (Input.IsActionPressed(ActionFor(button)))
 				Inventory.Instance.GetEquipped(button)?.OnHeld(this, button);
 		
-
 		// otherwise move normally
 		UpdateMovement();
 	}
@@ -367,14 +364,6 @@ public partial class Player : CharacterBody2D
 		InteractiveTiles.Instance?.TryInteract(probe, Interaction.Slash);
 	}
 
-	// ---- Spin attack ----
-	// Ported from UpdateSpinAttackAnimation (bank2.asm). The whole thing is driven by ONE counter:
-	//
-	//   * it starts at 32 when you let go of a fully charged sword
-	//   * every tick it drops by 1, and on every 4th tick it drops by an extra 1
-	//   * "counter / 4" (0-7) says which of the 8 poses to show; it counts 7, 6, ... 0, so the
-	//     spin looks the same speed throughout, about 3 ticks per pose
-	//   * when it reaches 0 the spin is over: 25 or 26 ticks in total
 	public void StartSpin()
 	{
 		_spinCounter = SpinAttack.StartCounter;
