@@ -8,4 +8,7 @@ public partial class ItemRocsFeather : ItemData
 		public override void Use(Player player) {
 			player.Jump(JumpSound);
 		}
+		public override void OnPress(Player player, ItemButton button) {
+			player.Jump(JumpSound);
+		}
 }

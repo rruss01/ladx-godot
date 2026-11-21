@@ -8,6 +8,8 @@ public partial class Player : CharacterBody2D
 	private int _health;
 	private int _rupees;
 
+	private readonly bool[] _wasHeld = new bool[2];
+
 	// health mgmt; should emit as signal
 	public void TakeDamage(int amount) => SetHealth(_health - amount);
 	public void Heal(int amount) => SetHealth(_health + amount);
@@ -37,7 +39,7 @@ public partial class Player : CharacterBody2D
 	private CarriedObject _carried;            // what Link is lifting or carrying; null = empty-handed
 	private ItemPowerBracelet _liftedWith;     // the bracelet that lifted it (power, sounds)
 	public bool IsCarrying => _carried != null && IsInstanceValid(_carried);
-	private int _charge = 0;
+	public int Charge { get; set; } = 0;
 	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
 	public bool ShowSwordHitbox { get; set; } = false;
 
@@ -52,7 +54,7 @@ public partial class Player : CharacterBody2D
 	public float Height => _z / 16f;
 	
 	private AnimatedSprite2D _sprite;
-	private bool _swordOut;
+	public bool SwordOut { get; private set; }
 	private SwordSprite _sword;
 	private SwordAudio _swordAudio;
 
@@ -61,7 +63,7 @@ public partial class Player : CharacterBody2D
 	private static readonly ItemButton[] Buttons = { ItemButton.B, ItemButton.A };
 	private static string ActionFor(ItemButton b) => b == ItemButton.B ? "button_b" : "button_a";
 	private ItemButton _useButton;
-	private ItemButton _swordButton;
+	public ItemButton SwordButton { get; private set; }
 
 	// dpad struct to handle movement
 	private readonly record struct DPad(bool Right, bool Left, bool Up, bool Down)
@@ -134,9 +136,23 @@ public partial class Player : CharacterBody2D
 		_health = Mathf.Clamp(value, 0, MaxHealth);
 		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
 	}
-	
+	private void UpdateButtonEdges() {
+		foreach (ItemButton button in Buttons)
+		{
+			bool held = Input.IsActionPressed(ActionFor(button));
+			if (_wasHeld[(int)button] && !held) {
+				Inventory.Instance.GetEquipped(button)?.OnRelease(this, button);
+				
+				if (button == SwordButton && SwordOut)
+					EndSwordHold();
+			}
+			_wasHeld[(int)button] = held;
+		}
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
+		UpdateButtonEdges();
 		UpdateAir();
 		
 		// 0. Spin attack in progress: movement fully blocked, only the spin runs
@@ -173,32 +189,25 @@ public partial class Player : CharacterBody2D
 			}
 		}
 
-		// 3. Charging spin attack (swords only)
-		if (_swordOut && Input.IsActionPressed(ActionFor(_swordButton)))
-		{
-			int before = _charge;
-			_charge = Mathf.Min(_charge + 1, SpinAtkMaxCharge);
-			if (before < SpinAtkMaxCharge && _charge == SpinAtkMaxCharge)
-				_swordAudio.PlayCharged();
-		}
-		else
-		{
-			// Button let go (or the sword was never out). A full charge turns into a spin.
-			bool charged = _charge >= SpinAtkMaxCharge;
-			_charge = 0;
-			_swordOut = false;
-
-			if (charged)
-			{
-				StartSpin();
-				return; // the spin draws itself from the next tick on
-			}
-
-			_sword.HideSword();
-		}
+		foreach (ItemButton button in Buttons)
+			if (Input.IsActionPressed(ActionFor(button)))
+				Inventory.Instance.GetEquipped(button)?.OnHeld(this, button);
+		
 
 		// otherwise move normally
 		UpdateMovement();
+	}
+
+	public void EndSwordHold()
+	{
+		Charge = 0;
+		SwordOut = false;
+		_sword.HideSword();
+	}
+
+	public void PlayChargedSound()
+	{
+		_swordAudio.PlayCharged();
 	}
 
 	private DPad ReadDpad()
@@ -214,7 +223,7 @@ public partial class Player : CharacterBody2D
 	// Facing only changes when exactly one direction is held (otherwise it's kept)
 	private void UpdateFacing(DPad dpad)
 	{
-		if (dpad.Count == 1 && !_swordOut)
+		if (dpad.Count == 1 && !SwordOut)
 			_facing = new Vector2I(dpad.X, dpad.Y);
 	}
 
@@ -266,10 +275,10 @@ public partial class Player : CharacterBody2D
 
 		UpdateFacing(dpad);
 
-		if (_swordOut) {
+		if (SwordOut) {
 			// Fully charged: the sword flashes between its normal and glowing frames.
 			// The original flips its palette whenever bit 2 of the frame counter changes, i.e. every 4 ticks.
-			bool glow = _charge >= SpinAtkMaxCharge && (Engine.GetPhysicsFrames() & 4) != 0;
+			bool glow = Charge >= SpinAtkMaxCharge && (Engine.GetPhysicsFrames() & 4) != 0;
 			_sword.ShowPose(_facing, glow ? _sword.GlowPose : _sword.HoldPose);
 			switch (FacingDirection()) {
 				case "up":
@@ -299,11 +308,11 @@ public partial class Player : CharacterBody2D
 
 	public void StartSwing(bool chargeable = true)
 	{
-		_swordButton = _useButton;
-		_swordOut = chargeable;
+		SwordButton = _useButton;
+		SwordOut = chargeable;
 		UpdateFacing(ReadDpad());
 		Velocity = Vector2.Zero;
-		_charge = 0;
+		Charge = 0;
 		_swingFrame = 0;
 		UpdateSwing();
 		_swordAudio.PlaySwing();
@@ -327,7 +336,7 @@ public partial class Player : CharacterBody2D
 		_swingFrame++;
 		if (_swingFrame >= SwordSwingFrames) {
 			_swingFrame = -1;
-			if (!_swordOut)
+			if (!SwordOut)
 				_sword.HideSword();
 		}
 	}
@@ -338,7 +347,7 @@ public partial class Player : CharacterBody2D
 			if (_swingFrame < SwordSwingSteps[0] + SwordSwingSteps[1]) return SwordHitbox.StateSwingStart;
 			return SwordHitbox.StateSwingMiddle;
 		}
-		return _swordOut ? SwordHitbox.StateHolding : SwordHitbox.StateNone;
+		return SwordOut ? SwordHitbox.StateHolding : SwordHitbox.StateNone;
 	}
 
 	public bool TryGetSwordHitbox(out Rect2 hitbox)
@@ -366,7 +375,7 @@ public partial class Player : CharacterBody2D
 	//   * "counter / 4" (0-7) says which of the 8 poses to show; it counts 7, 6, ... 0, so the
 	//     spin looks the same speed throughout, about 3 ticks per pose
 	//   * when it reaches 0 the spin is over: 25 or 26 ticks in total
-	private void StartSpin()
+	public void StartSpin()
 	{
 		_spinCounter = SpinAttack.StartCounter;
 		_swordAudio.PlaySpinAttack();
@@ -448,7 +457,7 @@ public partial class Player : CharacterBody2D
 
 		// --- Empty-handed: is the bracelet button held? ---
 		ItemPowerBracelet bracelet = FindBracelet(out ItemButton button);
-		if (bracelet == null || InAir || _swordOut || !Input.IsActionPressed(ActionFor(button)))
+		if (bracelet == null || InAir || SwordOut || !Input.IsActionPressed(ActionFor(button)))
 		{
 			_pullTicks = 0;
 			return false;
