@@ -39,8 +39,8 @@ public partial class ItemDrops : Node
 
 	private void OnSpawnRequested(string entityName, Vector2 position)
 	{
-		// interactive_tiles.json says "random item (heart, rupee)" for bushes.
-		if (!entityName.StartsWith("random item"))
+		// interactive_tiles.json says "hr" (heart or rupee) for bushes.
+		if (entityName != "hr")
 			return;
 
 		// 1 in 8 drops anything.

@@ -74,6 +74,7 @@ public partial class CarriedObject : CharacterBody2D
 		{
 			Shape = new RectangleShape2D { Size = new Vector2(8, 5) },
 			Position = new Vector2(0, 5),
+			Visible = false
 		});
 		CollisionLayer = 0;
 		CollisionMask = 0;
@@ -166,6 +167,9 @@ public partial class CarriedObject : CharacterBody2D
 		// The effect starts at the top-left corner of the 16x16 object, wherever it is drawn now.
 		Vector2 topLeft = GlobalPosition + _sprite.Position - new Vector2(8, 8);
 		InteractiveTiles.Instance?.SpawnEffect(_tile.BreakEffect, topLeft.Round());
+
+		// The drop appears where the object broke: the centre of the 16x16 it occupied.
+		InteractiveTiles.Instance?.RequestSpawn(_tile.Spawns, (topLeft + new Vector2(8, 8)).Round());
 		QueueFree();
 	}
 }

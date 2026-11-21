@@ -2,18 +2,13 @@
 "4": {
   "slash": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
-  "lift": {
-   "r": 2,
-   "e": "random item (heart, rupee)",
-   "p": 0
-  },
   "bomb": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -21,18 +16,33 @@
 "15": {
   "slash": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 2,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "bomb": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
+   "p": 0,
+   "fx": "leaves"
+  }
+ },
+ "50": {
+  "slash": {
+   "r": 17,
+   "e": "hr",
+   "p": 0,
+   "fx": "leaves"
+  },
+  "bomb": {
+   "r": 17,
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -41,7 +51,8 @@
   "lift": {
    "r": 87,
    "e": "",
-   "p": 1
+   "p": 1,
+   "s": [1, 1]
   },
   "push": {
    "r": 2,
@@ -53,24 +64,26 @@
   "lift": {
    "r": 45,
    "e": "",
-   "p": 0
+   "p": 0,
+   "s": [2, 0]
   }
  },
  "103": {
   "slash": {
    "r": 17,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 17,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "bomb": {
    "r": 17,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -79,7 +92,8 @@
   "lift": {
    "r": 45,
    "e": "",
-   "p": 0
+   "p": 0,
+   "s": [1, 1]
   },
   "push": {
    "r": 45,
@@ -90,18 +104,19 @@
  "152": {
   "slash": {
    "r": 0,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 0,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "bomb": {
    "r": 0,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -123,14 +138,16 @@
   "lift": {
    "r": 7,
    "e": "",
-   "p": 1
+   "p": 1,
+   "s": [1, 1]
   }
  },
  "236": {
   "lift": {
    "r": 202,
    "e": "",
-   "p": 1
+   "p": 1,
+   "s": [1, 1]
   },
   "push": {
    "r": 202,
@@ -138,40 +155,56 @@
    "p": 1
   }
  },
+ "259": {
+  "slash": {
+   "r": 108,
+   "e": "hr",
+   "p": 0,
+   "fx": "leaves"
+  },
+  "bomb": {
+   "r": 108,
+   "e": "hr",
+   "p": 0,
+   "fx": "leaves"
+  }
+ },
  "336": {
   "slash": {
    "r": 0,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "bomb": {
    "r": 0,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 0,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   }
  },
  "401": {
   "slash": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 2,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "bomb": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -179,18 +212,19 @@
  "402": {
   "slash": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 2,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "bomb": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }
@@ -198,18 +232,19 @@
  "436": {
   "bomb": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   },
   "lift": {
    "r": 2,
-   "e": "random item (heart, rupee)",
-   "p": 0
+   "e": "hr",
+   "p": 0,
+   "s": [0, 0]
   },
   "slash": {
    "r": 2,
-   "e": "random item (heart, rupee)",
+   "e": "hr",
    "p": 0,
    "fx": "leaves"
   }

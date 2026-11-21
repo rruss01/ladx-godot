@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
@@ -6,7 +7,7 @@ using Godot;
 public enum Interaction { Slash, Lift, Push, Bomb }
 
 // What the player is now holding after lifting a tile: enough to draw it and to break it later.
-public readonly record struct LiftedTile(int TileId, Vector2I Cell, Texture2D Art, string BreakEffect);
+public readonly record struct LiftedTile(int TileId, Vector2I Cell, Texture2D Art, string BreakEffect, string Spawns);
 
 // What happens when one kind of interaction hits a tile.
 public sealed class TileReaction
@@ -15,6 +16,7 @@ public sealed class TileReaction
 	public string Spawns = "";  // free-text entity name, e.g. "random item (heart, rupee)"
 	public string Effect = "";  // named visual effect, e.g. "leaves"
 	public int Power;           // minimum power level the caller must have
+	public Vector2I Sprite = new(-1, -1); // Lift only: cell in the throwables sheet; (-1,-1) = none
 }
 
 public sealed class TileBehavior
@@ -51,6 +53,10 @@ public partial class InteractiveTiles : Node
 	[Export] public int AtlasSourceId { get; set; } = 0;
 	[Export] public int AtlasColumns { get; set; } = 32; // tiles per row in tiles16_atlas.png
 
+	[ExportGroup("Carried objects")]
+	[Export(PropertyHint.File, "*.png")] public string LiftSheetPath { get; set; } = "res://assets/maps/tiles/throwables.png";
+	[Export] public int LiftCellSize { get; set; } = 16;
+
 	[ExportGroup("Leaf effect (bushes)")]
 	[Export] public Texture2D LeafTexture { get; set; } // optional; empty = built-in placeholder
 	[Export] public int LeafTicksPerFrame { get; set; } = 4; // original: 4 game frames per pose
@@ -70,6 +76,7 @@ public partial class InteractiveTiles : Node
 	private readonly Dictionary<Vector2I, int> _current = new();   // this room: cell -> tile id (-1 = inert)
 	private Dictionary<Vector2I, int> _permanent = new();          // this map: cell -> result tile id
 	private readonly Dictionary<string, Dictionary<Vector2I, int>> _permanentByMap = new(); // kept per map
+	private int[] _noCollision = { 4, 50, 259 };
 
 	// From the current map's MapInfo. Null when the map has no image-based interactive tiles.
 	private TileMapLayer Objects;
@@ -98,8 +105,7 @@ public partial class InteractiveTiles : Node
 		_behaviors.Clear();
 		_ids = null;
 		Objects = null;
-		_atlasImage = null;   // a different map may use a different atlas
-		_liftArt.Clear();
+		_liftArt.Clear();     // fallback art depends on the map's atlas
 
 		if (!_permanentByMap.TryGetValue(map.MapId, out Dictionary<Vector2I, int> remembered))
 		{
@@ -195,112 +201,86 @@ public partial class InteractiveTiles : Node
 			return false;
 
 		// Grab the art and the kind BEFORE reacting: the reaction replaces the tile.
-		// The tile that is left behind tells us what the object's background looks like (see LiftArtFor).
-		int resultId = -1;
+		Vector2I sprite = new(-1, -1);
 		string breakEffect = "rocks";
-		if (_behaviors.TryGetValue(id, out TileBehavior behavior)
-			&& behavior.Reactions.TryGetValue(Interaction.Lift, out TileReaction lift))
+		string spawns = "";
+		if (_behaviors.TryGetValue(id, out TileBehavior behavior))
 		{
-			resultId = lift.Result;
-		}
-		Texture2D art = LiftArtFor(id, resultId);
+			if (behavior.Reactions.TryGetValue(Interaction.Lift, out TileReaction lift))
+			{
+				sprite = lift.Sprite;
+				spawns = lift.Spawns; // saved for when the object breaks
+			}
 
-		if (_behaviors.TryGetValue(id, out behavior)
-			&& behavior.Reactions.TryGetValue(Interaction.Slash, out TileReaction slash)
-			&& slash.Effect != "")
-		{
 			// Anything a sword can also cut is a bush, and a bush breaks into leaves.
-			breakEffect = slash.Effect;
+			if (behavior.Reactions.TryGetValue(Interaction.Slash, out TileReaction slash) && slash.Effect != "")
+				breakEffect = slash.Effect;
 		}
+		Texture2D art = LiftArtFor(id, sprite);
 
-		if (!TryInteract(worldPoint, Interaction.Lift, power))
+		// allowSpawns: false. In the original, a bush's drop appears when the thrown bush BREAKS,
+		// not when it is picked up, so CarriedObject asks for the drop itself (RequestSpawn).
+		if (!TryInteract(worldPoint, Interaction.Lift, power, allowSpawns: false))
 			return false;
 
-		lifted = new LiftedTile(id, cell, art, breakEffect);
+		lifted = new LiftedTile(id, cell, art, breakEffect, spawns);
 		return true;
 	}
 
-	// The atlas as an image, and the carried-object pictures made from it so far.
-	private Image _atlasImage;
-	private readonly Dictionary<(int, int), Texture2D> _liftArt = new();
+	private Texture2D _liftSheet;
+	private bool _liftSheetTried;
+	private readonly Dictionary<int, Texture2D> _liftArt = new(); // tile id -> picture, built once
 
-	// The picture of a lifted object: the tile's art with its BACKGROUND made transparent.
+	// The picture of a lifted object, found by tile id and cached.
 	//
-	// Why: every tile in the atlas is a full 16x16 square, background included (the grass around
-	// a bush, the floor around a pot). That is right for tiles, but a carried object must show
-	// only the object. The tile it leaves behind ('resultId') is exactly the background without
-	// the object, so any pixel that matches it AND is connected to the tile's edge is background.
-	private Texture2D LiftArtFor(int id, int resultId)
+	// Normally it is the cell of the throwables sheet the tile's JSON entry names. The tile's own
+	// art can't be used directly: it is a full square including its background. If a tile has no
+	// sprite yet we fall back to that tile art so the game still works, and warn once so a
+	// missing entry is easy to spot.
+	private Texture2D LiftArtFor(int id, Vector2I sprite)
 	{
-		if (_liftArt.TryGetValue((id, resultId), out Texture2D cached))
+		if (_liftArt.TryGetValue(id, out Texture2D cached))
 			return cached;
 
-		Texture2D art = BuildLiftArt(id, resultId);
-		_liftArt[(id, resultId)] = art;
+		Texture2D art = null;
+
+		if (sprite.X >= 0 && sprite.Y >= 0)
+		{
+			if (!_liftSheetTried)
+			{
+				_liftSheetTried = true;
+				_liftSheet = GD.Load<Texture2D>(LiftSheetPath);
+				if (_liftSheet == null)
+					GD.PushError($"InteractiveTiles: could not load the throwables sheet '{LiftSheetPath}'.");
+			}
+
+			if (_liftSheet != null)
+			{
+				// An AtlasTexture is a window onto part of another texture: no pixels are copied.
+				art = new AtlasTexture
+				{
+					Atlas = _liftSheet,
+					Region = new Rect2(sprite.X * LiftCellSize, sprite.Y * LiftCellSize, LiftCellSize, LiftCellSize),
+				};
+			}
+		}
+		else
+		{
+			GD.PushWarning($"InteractiveTiles: tile {id} has no \"s\" sprite on its lift reaction; showing its tile art.");
+		}
+
+		art ??= TileArt(id);
+		_liftArt[id] = art;
 		return art;
 	}
 
-	private Texture2D BuildLiftArt(int id, int resultId)
+	// Fallback: the tile's own 16x16 picture from the atlas the Objects layer draws from.
+	private Texture2D TileArt(int id)
 	{
 		if (Objects?.TileSet?.GetSource(AtlasSourceId) is not TileSetAtlasSource atlas || atlas.Texture == null)
 			return null;
 
-		if (_atlasImage == null)
-		{
-			_atlasImage = atlas.Texture.GetImage();
-			if (_atlasImage.IsCompressed())
-				_atlasImage.Decompress();
-			_atlasImage.Convert(Image.Format.Rgba8); // needs an alpha channel to hold transparency
-		}
-
-		Image art = _atlasImage.GetRegion(atlas.GetTileTextureRegion(AtlasCoords(id)));
-
-		// -1 means the tile doesn't change when lifted, so there is no background to compare against.
-		if (resultId >= 0)
-		{
-			Image under = _atlasImage.GetRegion(atlas.GetTileTextureRegion(AtlasCoords(resultId)));
-			RemoveBackground(art, under);
-		}
-
-		return ImageTexture.CreateFromImage(art);
-	}
-
-	// Flood fill: start at every pixel on the tile's border that matches the tile underneath,
-	// make it transparent, and keep spreading to neighbours that match too. Stopping at pixels
-	// that differ is what keeps the object's own outline (and its insides) intact. A plain
-	// "make every matching pixel transparent" would punch holes wherever the object happens
-	// to contain the same colour as the ground.
-	private static void RemoveBackground(Image art, Image under)
-	{
-		int w = art.GetWidth();
-		int h = art.GetHeight();
-		bool[,] seen = new bool[w, h];
-		Stack<Vector2I> todo = new Stack<Vector2I>();
-
-		void Visit(int x, int y)
-		{
-			if (x < 0 || y < 0 || x >= w || y >= h || seen[x, y])
-				return;
-
-			seen[x, y] = true;
-			if (art.GetPixel(x, y) != under.GetPixel(x, y))
-				return; // part of the object: stop here
-
-			art.SetPixel(x, y, new Color(0, 0, 0, 0));
-			todo.Push(new Vector2I(x, y));
-		}
-
-		for (int x = 0; x < w; x++) { Visit(x, 0); Visit(x, h - 1); }
-		for (int y = 0; y < h; y++) { Visit(0, y); Visit(w - 1, y); }
-
-		while (todo.Count > 0)
-		{
-			Vector2I p = todo.Pop();
-			Visit(p.X + 1, p.Y);
-			Visit(p.X - 1, p.Y);
-			Visit(p.X, p.Y + 1);
-			Visit(p.X, p.Y - 1);
-		}
+		return new AtlasTexture { Atlas = atlas.Texture, Region = atlas.GetTileTextureRegion(AtlasCoords(id)) };
 	}
 
 	// True if the point is on a tile that is still interactive (a rock, a pot, a bush that
@@ -340,7 +320,7 @@ public partial class InteractiveTiles : Node
 
 				// Interactive objects (bushes, rocks, signs...) block movement until they react,
 				// whether or not the collision mask happened to mark them solid.
-				if (id != 4)
+				if (!_noCollision.Contains(id))
 					SetCollision(cell, true);
 			}
 		}
@@ -386,6 +366,14 @@ public partial class InteractiveTiles : Node
 
 	// Plays a named effect. 'topLeft' is the top-left corner of the 16x16 object that broke
 	// (for a tile, its cell corner). Public so thrown objects can break anywhere.
+	// Asks whoever listens (ItemDrops) to spawn something, exactly as a normal reaction would.
+	// A carried object calls this when it breaks.
+	public void RequestSpawn(string entityName, Vector2 position)
+	{
+		if (entityName != "")
+			EmitSignal(SignalName.EntitySpawnRequested, entityName, position);
+	}
+
 	public void SpawnEffect(string effect, Vector2 topLeft)
 	{
 		FxBurst burst;
@@ -509,6 +497,8 @@ public partial class InteractiveTiles : Node
 				if (entry.Value.TryGetProperty("e", out JsonElement e)) reaction.Spawns = e.GetString() ?? "";
 				if (entry.Value.TryGetProperty("p", out JsonElement p)) reaction.Power = p.GetInt32();
 				if (entry.Value.TryGetProperty("fx", out JsonElement fx)) reaction.Effect = fx.GetString() ?? "";
+				if (entry.Value.TryGetProperty("s", out JsonElement sp) && sp.GetArrayLength() == 2)
+					reaction.Sprite = new Vector2I(sp[0].GetInt32(), sp[1].GetInt32());
 				behavior.Reactions[kind] = reaction;
 			}
 
