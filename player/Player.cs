@@ -24,11 +24,12 @@ public partial class Player : CharacterBody2D
 	// Y starts at 8 so the axes don't pause on the same frame (fixes diagonal jitter).
 	private Vector2I _subpixel = new Vector2I(0, 8);
 	public Vector2I Facing => _facing;
+	private bool _canMove = true;
+	public void LockMovement() => _canMove = false;
 
 	// --- Sword ---
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
 	private const int SwordSwingFrames = 14; // sum of SwordSwingSteps
-	private const int SpinAtkMaxCharge = 40; // $28 frames to fully charge
 	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
 	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, from LADX's wIsUsingSpinAttack
@@ -37,15 +38,18 @@ public partial class Player : CharacterBody2D
 	private SwordAudio _swordAudio;
 	public bool IsSpinning => _spinCounter > 0;
 	public int Charge { get; set; } = 0;
+	public bool Charged { get; set; }
 	public bool ShowSwordHitbox { get; set; } = false;
 	public Vector2 SpriteTopLeftOffset { get; set; } = new Vector2(-8, -8);
 	public bool SwordOut { get; private set; }
 
 	// --- Power bracelet ---
-	private int _pullTicks;                    // how long you have been pulling on a liftable object
 	private CarriedObject _carried;            // what Link is lifting or carrying; null = empty-handed
 	private ItemPowerBracelet _liftedWith;     // the bracelet that lifted it (power, sounds)
 	public bool IsCarrying => _carried != null && IsInstanceValid(_carried);
+	public int PullProgress { get; private set; }
+	public int AdvancePull() => ++PullProgress;
+	public void ResetPull() => PullProgress = 0;
 
 	// --- Roc's Feather ---
 	private const int JumpVelocity = 32; // $20
@@ -60,10 +64,8 @@ public partial class Player : CharacterBody2D
 	// buttons; input handling
 	private static readonly ItemButton[] Buttons = { ItemButton.B, ItemButton.A };
 	private static string ActionFor(ItemButton b) => b == ItemButton.B ? "button_b" : "button_a";
-	private ItemButton _useButton;
 	public ItemButton SwordButton { get; private set; }
 	private readonly bool[] _wasHeld = new bool[2];
-
 
 	// dpad struct to handle movement
 	private readonly record struct DPad(bool Right, bool Left, bool Up, bool Down)
@@ -105,8 +107,7 @@ public partial class Player : CharacterBody2D
 	}
 	
 	private void UpdateAir() {
-		if (!InAir)
-			return;
+		if (!InAir) { return; }
 		
 		_airTicks++;
 		_z += _vz;
@@ -150,6 +151,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		_canMove = true;
 		UpdateButtonEdges();
 		UpdateAir();
 		
@@ -159,7 +161,6 @@ public partial class Player : CharacterBody2D
 			UpdateSpin();
 			return;
 		}
-
 		// 1. Swing in progress: movement fully blocked, only the swing runs
 		if (_swingFrame >= 0)
 		{
@@ -167,23 +168,16 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		// 1b. Power bracelet: grab, pull, lift, carry, throw. True = Link is busy this tick.
 		if (UpdateBracelet())
 			return;
 
-		// 2. Use item if item button pressed. (Nothing can be used while carrying: the bracelet's
-		//    button throws instead, see UpdateBracelet.)
+		// 2. Use item if item button pressed, as long as nothing is being carried.
 		if (!IsCarrying)
 		{
 			foreach (ItemButton button in Buttons) {
-				if (!Input.IsActionJustPressed(ActionFor(button)))
-					continue;
-
-				_useButton = button;
+				if (!Input.IsActionJustPressed(ActionFor(button))) { continue; }
 				Inventory.Instance.GetEquipped(button)?.OnPress(this, button);
-
-				if (_swingFrame >= 0)
-					return;
+				if (_swingFrame >= 0) { return; }
 			}
 		}
 
@@ -191,6 +185,8 @@ public partial class Player : CharacterBody2D
 			if (Input.IsActionPressed(ActionFor(button)))
 				Inventory.Instance.GetEquipped(button)?.OnHeld(this, button);
 		
+		if (!_canMove) { return; }
+
 		// otherwise move normally
 		UpdateMovement();
 	}
@@ -198,6 +194,7 @@ public partial class Player : CharacterBody2D
 	public void EndSwordHold()
 	{
 		Charge = 0;
+		Charged = false;
 		SwordOut = false;
 		_sword.HideSword();
 	}
@@ -275,7 +272,7 @@ public partial class Player : CharacterBody2D
 		if (SwordOut) {
 			// Fully charged: the sword flashes between its normal and glowing frames.
 			// The original flips its palette whenever bit 2 of the frame counter changes, i.e. every 4 ticks.
-			bool glow = Charge >= SpinAtkMaxCharge && (Engine.GetPhysicsFrames() & 4) != 0;
+			bool glow = Charged && (Engine.GetPhysicsFrames() & 4) != 0;
 			_sword.ShowPose(_facing, glow ? _sword.GlowPose : _sword.HoldPose);
 			switch (FacingDirection()) {
 				case "up":
@@ -303,9 +300,9 @@ public partial class Player : CharacterBody2D
 		_sprite.FlipH = _facing.X < 0;
 	}
 
-	public void StartSwing(bool chargeable = true)
+	public void StartSwing(bool chargeable, ItemButton button)
 	{
-		SwordButton = _useButton;
+		SwordButton = button;
 		SwordOut = chargeable;
 		UpdateFacing(ReadDpad());
 		Velocity = Vector2.Zero;
@@ -407,81 +404,40 @@ public partial class Player : CharacterBody2D
 	}
 
 	// ---- Power bracelet ----
-	// How it works in the original (label_1F69 in bank0.asm, EntityLiftedHandler in bank3.asm):
-	//
-	//   1. HOLD the bracelet's button. Link stops and holds his arms out; he can't walk or turn.
-	//   2. Face the object and PULL: hold the d-pad AWAY from it for 8 ticks.
-	//   3. The object slides into Link's hands and up over his head (Link is frozen for about
-	//      17 ticks, or 9 with bracelet 2). The tile it sat on turns into its "lift" result.
-	//   4. Link walks around carrying it. Items can't be used.
-	//   5. PRESS the bracelet's button again to throw it where you are facing.
-	//
-	// Returns true when Link is busy and normal movement should be skipped this tick.
 	private bool UpdateBracelet()
 	{
 		// --- Already holding something ---
-		if (_carried != null)
+		if (_carried == null)
+			return false;
+		
+		if (!IsInstanceValid(_carried))
 		{
-			if (!IsInstanceValid(_carried))
-			{
-				_carried = null; // it broke, or the screen scrolled and it was lost
-			}
-			else if (!_carried.IsLifted)
-			{
-				ShowBraceletPose("grab", 1, "idle"); // frozen in the leaning-back pose while it goes up
-				return true;
-			}
-			else if (ThrowPressed())
-			{
-				_carried.Throw(_facing);
-				PlayOneShot(_liftedWith?.ThrowSound);
-				_carried = null;
-				return true;
-			}
-			else
-			{
-				return false; // carrying: walk as normal (UpdateMovement picks the carry animation)
-			}
-		}
-
-		// --- Empty-handed: is the bracelet button held? ---
-		ItemPowerBracelet bracelet = FindBracelet(out ItemButton button);
-		if (bracelet == null || InAir || SwordOut || !Input.IsActionPressed(ActionFor(button)))
-		{
-			_pullTicks = 0;
+			_carried = null;
 			return false;
 		}
 
-		// Holding the button: Link grabs. From here on he can't move or turn.
-		Vector2 probe = LiftProbePoint();
-		bool liftable = InteractiveTiles.Instance != null
-			&& InteractiveTiles.Instance.CanInteract(probe, Interaction.Lift, bracelet.Power);
-		bool pulling = Input.IsActionPressed(PullAction());
-
-		// Only a pull on something liftable counts. Pulling on air or a wall starts over.
-		if (!liftable || !pulling)
+		if (!_carried.IsLifted)
 		{
-			_pullTicks = 0;
-			ShowBraceletPose("grab", 0, "idle");
+			ShowPose("grab", 1, "idle");
 			return true;
 		}
 
-		_pullTicks++;
-		ShowBraceletPose("grab", 1, "idle"); // the leaning-back frame
-
-		if (_pullTicks < bracelet.PullTicks)
-			return true;
-
-		if (InteractiveTiles.Instance.TryLift(probe, bracelet.Power, out LiftedTile tile))
+		if (ThrowPressed())
 		{
-			_carried = CarriedObject.Create(this, tile, SwordHitbox.DirectionIndex(_facing), bracelet.LiftStageTicks);
-			_liftedWith = bracelet;
-			GetParent().AddChild(_carried);
-			PlayOneShot(bracelet.LiftSound);
+			_carried.Throw(_facing);
+			PlayOneShot(_liftedWith?.ThrowSound);
+			_carried = null;
+			return true;
 		}
 
-		_pullTicks = 0;
-		return true;
+		return false;
+	}
+
+	public void BeginCarrying(CarriedObject carried, ItemPowerBracelet bracelet)
+	{
+		_carried = carried;
+		_liftedWith = bracelet;
+		GetParent().AddChild(carried);
 	}
 
 	// Which equipped item is the bracelet, and on which button? Null if neither is.
@@ -500,8 +456,8 @@ public partial class Player : CharacterBody2D
 		return null;
 	}
 
-	// Throw on a fresh press of the bracelet's button, as in the original. If the bracelet has been
-	// unequipped in the meantime, either button throws (the original does the same).
+	// Throw on a fresh press of the bracelet's button. If the bracelet has been
+	// unequipped in the meantime, either button throws.
 	private bool ThrowPressed()
 	{
 		if (FindBracelet(out ItemButton button) != null)
@@ -510,31 +466,9 @@ public partial class Player : CharacterBody2D
 		return Input.IsActionJustPressed(ActionFor(ItemButton.A)) || Input.IsActionJustPressed(ActionFor(ItemButton.B));
 	}
 
-	// The d-pad direction opposite to the way Link faces: the one you hold to pull.
-	private string PullAction()
-	{
-		if (_facing.X > 0) return "ui_left";
-		if (_facing.X < 0) return "ui_right";
-		return _facing.Y < 0 ? "ui_down" : "ui_up";
-	}
-
-	// The one spot in front of Link that is checked for something to lift, from the original's
-	// SwordAreaXForDirection / SwordAreaYForDirection. Offsets are from the CENTER of Link's sprite.
-	// Right is 5 where the original says 4, because our collision box is half a pixel wider
-	// and would otherwise stop Link just short of the tile.
-	private static readonly Vector2[] LiftProbe =
-	{
-		new Vector2(5, 2),   // right
-		new Vector2(-5, 2),  // left
-		new Vector2(0, -3),  // up
-		new Vector2(0, 8),   // down
-	};
-
-	private Vector2 LiftProbePoint() => GlobalPosition + LiftProbe[SwordHitbox.DirectionIndex(_facing)];
-
 	// Shows "name-direction" (e.g. grab-right) if the sprite sheet has it, otherwise the fallback
 	// animation, so the code works before every pose has been drawn.
-	private void ShowBraceletPose(string name, int frame, string fallback)
+	public void ShowPose(string name, int frame, string fallback)
 	{
 		string animation = $"{name}-{FacingDirection()}";
 		if (!_sprite.SpriteFrames.HasAnimation(animation))
@@ -546,7 +480,7 @@ public partial class Player : CharacterBody2D
 		_sprite.FlipH = _facing.X < 0;
 	}
 
-	private void PlayOneShot(AudioStream sound)
+	public void PlayOneShot(AudioStream sound)
 	{
 		if (sound == null)
 			return;

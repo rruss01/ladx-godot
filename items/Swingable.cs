@@ -5,11 +5,11 @@ using Godot;
 public partial class Swingable : ItemData
 {
 	[Export] public bool Chargeable { get; set; } = true;
-	public int ChargeTicks = 40;
+	[Export] public int ChargeTicks = 40;
 	public override void OnPress(Player player, ItemButton button)
 	{
 		if (player.SwordOut) { return; }
-		player.StartSwing(Chargeable);
+		player.StartSwing(Chargeable, button);
 	}
 
 	public override void OnHeld(Player player, ItemButton button) {
@@ -18,15 +18,17 @@ public partial class Swingable : ItemData
 
 		int before = player.Charge;
 		player.Charge = Mathf.Min(before + 1, ChargeTicks);
-		if (before < ChargeTicks && player.Charge == ChargeTicks)
+		if (before < ChargeTicks && player.Charge == ChargeTicks) {
 			player.PlayChargedSound();
+			player.Charged = true;
+		}
 	}
 
 	public override void OnRelease(Player player, ItemButton button) {
 		if (!player.SwordOut || button != player.SwordButton) return;
 
 		bool charged = player.Charge >= ChargeTicks;
-   		player.EndSwordHold();           // Charge = 0, SwordOut = false
-		if (charged) player.StartSpin(); // make this public
+   		player.EndSwordHold();
+		if (charged) player.StartSpin(); 
 	}
 }
