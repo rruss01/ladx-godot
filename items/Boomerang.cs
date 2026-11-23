@@ -41,7 +41,7 @@ public partial class Boomerang : CharacterBody2D
 		_velocity = velocity16;
 
 		// The boomerang spawns on top of Link. Without this, its first step into Link's own
-		// collision shape (e.g. when thrown down, if his shape sits low) counts as a wall hit.
+		// collision shape (e.g. when thrown down) counts as a wall hit.
 		if (thrower is PhysicsBody2D body)
 			AddCollisionExceptionWith(body);
 	}

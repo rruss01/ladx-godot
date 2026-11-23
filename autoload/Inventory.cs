@@ -18,6 +18,19 @@ public partial class Inventory : Node
 	private readonly ItemData[] _slots = new ItemData[ItemSlots];
 	private readonly ItemData[] _equipped = new ItemData[2];
 	
+	public int BombCount = 20;
+	public int MaxBombs = 20;
+	
+	public void AddBomb() {
+		BombCount++;
+		if (BombCount > MaxBombs)
+			BombCount = MaxBombs;
+	}
+	
+	public bool TryPlaceBomb() {
+		return BombCount > 0 ? true : false;
+	}
+	
 	public override void _EnterTree() {
 		Instance = this;
 	}
