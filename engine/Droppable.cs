@@ -23,7 +23,7 @@ public partial class Droppable : Area2D
 
 	// --- The original's timings (60 ticks per second) ---
 	private const int HopSpeed = 16;          // $10: starting upward speed, 1/16 px per tick
-	private const int Gravity = 2;            // speed drops by 2 every tick
+	private const int GravitySpeed = 2;            // speed drops by 2 every tick
 	private const int MinBounceSpeed = 7;     // a bounce slower than this and it just rests
 	private const int PickupDelayTicks = 24;  // $18: can't be grabbed right away
 	private const int LifetimeSteps = 128;    // $80: counts down once every 4 ticks (about 8.5 s)
@@ -59,7 +59,7 @@ public partial class Droppable : Area2D
 			return;
 
 		_z16 += _speedZ;
-		_speedZ -= Gravity;
+		_speedZ -= GravitySpeed;
 
 		if (_z16 < 0)
 		{

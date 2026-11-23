@@ -1,6 +1,6 @@
 [gd_resource type="Resource" format=3 uid="uid://x3lvfx7vsr3y"]
 
-[ext_resource type="Script" uid="uid://bottdxf7q0t5l" path="res://items/ItemRocsFeather.cs" id="1_hr3ml"]
+[ext_resource type="Script" uid="uid://bottdxf7q0t5l" path="res://items/data/src/ItemRocsFeather.cs" id="1_hr3ml"]
 [ext_resource type="Texture2D" uid="uid://cbrgnjqwjqwx2" path="res://assets/hud/items/icon_rocs_feather.tres" id="1_rg5vh"]
 [ext_resource type="AudioStream" uid="uid://b6hqa5sxjwucy" path="res://audio/sfx/player/player_jump.wav" id="2_104pd"]
 

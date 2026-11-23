@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cep3bcvu5qiuj"]
 
 [ext_resource type="Texture2D" uid="uid://ccb3viisiqyuv" path="res://assets/hud/items/icon_pegasus_boots.tres" id="1_bhrqs"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_ipyym"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_ipyym"]
 
 [resource]
 script = ExtResource("2_ipyym")

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b7lkcew1qdsuf"]
 
-[ext_resource type="Script" uid="uid://bj5l2otsgclyo" path="res://Bomb.cs" id="1_amjlg"]
+[ext_resource type="Script" uid="uid://bj5l2otsgclyo" path="res://items/Bomb.cs" id="1_amjlg"]
 [ext_resource type="AudioStream" uid="uid://bb24sy7mcf5g0" path="res://audio/sfx/player/player_bounce.wav" id="2_tqfld"]
 [ext_resource type="Texture2D" uid="uid://vvfg1oaflwq0" path="res://assets/maps/tiles/throwables.png" id="3_6uah4"]
 

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemPowerBracelet" format=3 uid="uid://cvfgwmowqihff"]
 
 [ext_resource type="Texture2D" uid="uid://bad0ujx18g3ho" path="res://assets/hud/items/icon_bracelet1.tres" id="1_icon"]
-[ext_resource type="Script" uid="uid://dbpukeoupfiao" path="res://items/ItemPowerBracelet.cs" id="2_script"]
+[ext_resource type="Script" uid="uid://dbpukeoupfiao" path="res://items/data/src/ItemPowerBracelet.cs" id="2_script"]
 [ext_resource type="AudioStream" uid="uid://gc4p882q5d7y" path="res://audio/sfx/player/player_pickup.wav" id="2_wxtok"]
 [ext_resource type="AudioStream" uid="uid://baxp36rpe8vwq" path="res://audio/sfx/player/player_throw.wav" id="3_wxtok"]
 

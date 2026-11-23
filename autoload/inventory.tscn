@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://d3bpjpcxdd1w7"]
 
 [ext_resource type="Script" uid="uid://ohf67p5f2f46" path="res://autoload/Inventory.cs" id="1_nau8v"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_iol04"]
-[ext_resource type="Resource" uid="uid://15eu281tadqw" path="res://items/sword1.tres" id="3_wodvt"]
-[ext_resource type="Resource" uid="uid://b7u7bdfkntsk6" path="res://items/shield1.tres" id="4_wovjc"]
-[ext_resource type="Resource" uid="uid://x3lvfx7vsr3y" path="res://items/rocs_feather.tres" id="5_wovjc"]
-[ext_resource type="Resource" uid="uid://brm5go51akvw1" path="res://items/boomerang.tres" id="6_et3c8"]
-[ext_resource type="Resource" uid="uid://cvfgwmowqihff" path="res://items/bracelet1.tres" id="7_8ptv1"]
-[ext_resource type="Resource" uid="uid://c66lsps70847l" path="res://items/bombs.tres" id="8_g75bh"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_iol04"]
+[ext_resource type="Resource" uid="uid://15eu281tadqw" path="res://items/data/sword1.tres" id="3_wodvt"]
+[ext_resource type="Resource" uid="uid://b7u7bdfkntsk6" path="res://items/data/shield1.tres" id="4_wovjc"]
+[ext_resource type="Resource" uid="uid://x3lvfx7vsr3y" path="res://items/data/rocs_feather.tres" id="5_wovjc"]
+[ext_resource type="Resource" uid="uid://brm5go51akvw1" path="res://items/data/boomerang.tres" id="6_et3c8"]
+[ext_resource type="Resource" uid="uid://cvfgwmowqihff" path="res://items/data/bracelet1.tres" id="7_8ptv1"]
+[ext_resource type="Resource" uid="uid://c66lsps70847l" path="res://items/data/bombs.tres" id="8_g75bh"]
 
 [node name="Inventory" type="Node" unique_id=116274119]
 script = ExtResource("1_nau8v")

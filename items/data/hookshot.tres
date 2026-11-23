@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bffmkuoe48qs"]
 
 [ext_resource type="Texture2D" uid="uid://heh6r3rqtsbw" path="res://assets/hud/items/icon_hookshot.tres" id="1_5xrki"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/ItemData.cs" id="2_oloel"]
+[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_oloel"]
 
 [resource]
 script = ExtResource("2_oloel")
