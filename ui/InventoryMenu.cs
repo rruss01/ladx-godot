@@ -26,6 +26,7 @@ public partial class InventoryMenu : CanvasLayer
 	private enum Phase { None, FadeOut, Hold, FadeIn }
 
 	private readonly List<TextureRect> _icons = new();
+	private readonly List<AmmoDigits> _digits = new();
 	private bool _open;
 	private int _selected;
 
@@ -41,8 +42,11 @@ public partial class InventoryMenu : CanvasLayer
 		Visible = false;
 
 		foreach (Node child in Grid.GetChildren())
-			if (child is TextureRect icon)
+			if (child is TextureRect icon) {
 				_icons.Add(icon);
+				_digits.Add(icon.GetNodeOrNull<AmmoDigits>("AmmoDigits"));
+			}
+				
 
 		// Only DIRECT children of Grid that are TextureRects count as slots.
 		if (_icons.Count < Inventory.ItemSlots)
@@ -218,7 +222,10 @@ public partial class InventoryMenu : CanvasLayer
 
 	private void Refresh()
 	{
-		for (int i = 0; i < _icons.Count && i < Inventory.ItemSlots; i++)
-			_icons[i].Texture = Inventory.Instance.GetSlot(i)?.Icon ?? EmptySlotTexture;
+		for (int i = 0; i < _icons.Count && i < Inventory.ItemSlots; i++) {
+			ItemData item = Inventory.Instance.GetSlot(i);
+			_icons[i].Texture = item?.Icon ?? EmptySlotTexture;
+			_digits[i].SetCount(item?.GetCount() ?? -1);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://b1vcvh1qb7x2h"]
 
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="1_37p78"]
+[ext_resource type="PackedScene" uid="uid://c7t2c3b8khbsa" path="res://ui/ammo_digits.tscn" id="2_276te"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_64ctp"]
 texture = ExtResource("1_37p78")
@@ -4277,11 +4278,39 @@ offset_left = 8.0
 offset_right = 32.0
 offset_bottom = 16.0
 
+[node name="AmmoDigits" parent="BottomBar/IconB" unique_id=970271489 instance=ExtResource("2_276te")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="IconA" type="TextureRect" parent="BottomBar" unique_id=480508522]
 layout_mode = 0
 offset_left = 48.0
 offset_right = 72.0
 offset_bottom = 16.0
+
+[node name="AmmoDigits" parent="BottomBar/IconA" unique_id=108231211 instance=ExtResource("2_276te")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="RupeeIcon" type="TextureRect" parent="BottomBar" unique_id=1191017842]
 layout_mode = 0

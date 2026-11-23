@@ -3,18 +3,15 @@ using System;
 
 public partial class Bomb : CharacterBody2D
 {
+	[Export] public AudioStream BombSound { get; set; }
 	
 	public const int FuseTicks = 136;
-	public const int BlueFrames = 88;
-	public const int RedFrames = 38;
 	public const int PreExplosionFrames = 10;
 	public const int TicksPerFlash = 4;
 
-	private enum Phase { Placed, Flashing, Exploding }
+	private enum Phase { Placed, Flashing, PreExplosion }
 	private Phase _phase = Phase.Placed;
 	
-	private Vector2I _velocity;             // 1/16 px per tick
-	private Vector2I _subpixel = Vector2I.Zero;
 	private int _fuse; // frames into the fuse
 	private bool _isHeld = false;
 	
@@ -32,6 +29,7 @@ public partial class Bomb : CharacterBody2D
 	
 	private void StartFuse() {
 		_fuse = FuseTicks;
+		PlayBombPlacedSound();
 	}
 	
 	private void UpdateFuse() {
@@ -45,7 +43,7 @@ public partial class Bomb : CharacterBody2D
 			_phase = Phase.Flashing;
 			_sprite.Frame = (_fuse / TicksPerFlash) % 2;
 		} else {
-			_phase = Phase.Exploding;
+			_phase = Phase.PreExplosion;
 			_sprite.Frame = 2; // pre-explode frame
 		}
 	}
@@ -66,5 +64,27 @@ public partial class Bomb : CharacterBody2D
 	public override void _PhysicsProcess(double delta) {
 		if (!_isHeld)
 			UpdateFuse();
+			
+		if (_fuse <= 0)
+			Explode();
+	}
+	
+	private void Explode() {
+		SetPhysicsProcess(false);
+		
+		// Explosion explosion = ExplosionScene.Instantiate<Explosion>();
+		// explosion.AddToGroup("bomb");
+		// explosion.GlobalPosition = GlobalPosition;
+		// GetParent().AddChild(explosion);
+		
+		QueueFree();
+	}
+	
+	private void PlayBombPlacedSound()
+	{
+		AudioStreamPlayer sound = new AudioStreamPlayer { Stream = BombSound };
+		sound.Finished += sound.QueueFree;
+		GetParent().AddChild(sound);
+		sound.Play();
 	}
 }

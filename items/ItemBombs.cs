@@ -8,6 +8,8 @@ public partial class ItemBombs : ItemData
 
 	private const string Group = "bomb";
 	
+	public override int GetCount() => Inventory.Instance.BombCount;
+	
 	public override void OnPress(Player player, ItemButton button)
 	{
 		if (BombScene == null)

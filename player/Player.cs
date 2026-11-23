@@ -60,8 +60,6 @@ public partial class Player : CharacterBody2D
 	private Vector2 _spriteBase, _swordBase;
 	public bool InAir { get; private set; }
 	public float Height => _z / 16f;
-
-	public bool BombPlaced = false;
 	
 	// buttons; input handling
 	private static readonly ItemButton[] Buttons = { ItemButton.B, ItemButton.A };

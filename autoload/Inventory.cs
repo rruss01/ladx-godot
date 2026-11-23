@@ -9,6 +9,7 @@ public partial class Inventory : Node
 	
 	[Signal] public delegate void SlotChangedEventHandler(int slot, ItemData item);
 	[Signal] public delegate void EquippedChangedEventHandler(int button, ItemData item);
+	[Signal] public delegate void AmmoChangedEventHandler();
 	
 	// DEBUG
 	[Export] public ItemData StartingB { get; set; }
@@ -23,12 +24,16 @@ public partial class Inventory : Node
 	
 	public void AddBomb() {
 		BombCount++;
+		EmitSignal(SignalName.AmmoChanged);
 		if (BombCount > MaxBombs)
 			BombCount = MaxBombs;
 	}
 	
 	public bool TryPlaceBomb() {
-		return BombCount > 0 ? true : false;
+		if (BombCount <= 0) return false;
+		BombCount--;
+		EmitSignal(SignalName.AmmoChanged);
+		return true;
 	}
 	
 	public override void _EnterTree() {

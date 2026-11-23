@@ -11,4 +11,5 @@ public partial class ItemData : Resource
 	public virtual void OnHeld(Player player, ItemButton button) {}
 	public virtual void OnRelease(Player player, ItemButton button) {}
 	public virtual void Cancel(Player player) {}
+	public virtual int GetCount() => -1;
 }

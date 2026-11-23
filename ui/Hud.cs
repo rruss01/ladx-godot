@@ -15,6 +15,8 @@ public partial class Hud : CanvasLayer
 	private Control _hearts;
 	private Control _rupeeDigits;
 	private Control _bar;
+	private Control _bDigits;
+	private Control _aDigits;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -23,10 +25,14 @@ public partial class Hud : CanvasLayer
 		_hearts = GetNode<Control>("BottomBar/Hearts");
 		_rupeeDigits = GetNode<Control>("BottomBar/RupeeDigits");
 		_bar = GetNode<Control>("BottomBar");
+		_bDigits = GetNode<Control>("BottomBar/IconB/AmmoDigits");
+		_aDigits = GetNode<Control>("BottomBar/IconA/AmmoDigits");
 		
 		Inventory.Instance.EquippedChanged += OnEquippedChanged;
+		Inventory.Instance.AmmoChanged += RefreshAmmo;
 		SetItemB(Inventory.Instance.GetEquipped(ItemButton.B));
 		SetItemA(Inventory.Instance.GetEquipped(ItemButton.A));
+		RefreshAmmo();
 	}
 
 	public void SetItemB(ItemData item) => _bIcon.Texture = item?.Icon;
@@ -38,6 +44,23 @@ public partial class Hud : CanvasLayer
 	
 	private void OnEquippedChanged(int button, ItemData item) {
 		if (button == (int)ItemButton.B) SetItemB(item); else SetItemA(item);
+		RefreshAmmo();
+	}
+	
+	private void RefreshAmmo()
+	{
+		RefreshAmmoFor(ItemButton.B, _bDigits);
+		RefreshAmmoFor(ItemButton.A, _aDigits);
+	}
+	
+	private void RefreshAmmoFor(ItemButton button, Control digits)
+	{
+		ItemData item = Inventory.Instance.GetEquipped(button);
+		int count = item?.GetCount() ?? -1;    // no item in the slot also means no digits
+
+		digits.Visible = count >= 0;
+		if (count >= 0)
+			SetDigits(digits, count);
 	}
 
 	public void SetHearts(int currentHealth, int maxHealth)
@@ -57,18 +80,20 @@ public partial class Hud : CanvasLayer
 				heart.Texture = HeartEmpty;
 		}
 	}
-
-		public void SetRupees(int amount) { 
-			int digitCount = _rupeeDigits.GetChildCount();
-			int maxValue = 1;
-			for (int i = 0; i < digitCount; i++)
-				maxValue *= 10;
-			amount = Mathf.Clamp(amount, 0, maxValue - 1);
+	
+	private void SetDigits(Control digits, int amount) {
+		int digitCount = digits.GetChildCount();
+		int maxValue = 1;
+		for (int i = 0; i < digitCount; i++)
+			maxValue *= 10;
+		amount = Mathf.Clamp(amount, 0, maxValue - 1);
  
-			for (int i = digitCount - 1; i >= 0; i--)
-			{
-				_rupeeDigits.GetChild<TextureRect>(i).Texture = DigitTextures[amount % 10];
-				amount /= 10;
-			}
+		for (int i = digitCount - 1; i >= 0; i--)
+		{
+			digits.GetChild<TextureRect>(i).Texture = DigitTextures[amount % 10];
+			amount /= 10;
 		}
+	}
+
+	public void SetRupees(int amount) => SetDigits(_rupeeDigits, amount);
 }

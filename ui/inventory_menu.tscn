@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b6ul30ara6sm2" path="res://assets/hud/items/icon_cursor.tres" id="4_cmdnq"]
 [ext_resource type="AudioStream" uid="uid://b0s4qchngvc0s" path="res://audio/sfx/engine/menu_cursor.wav" id="4_icpjr"]
 [ext_resource type="AudioStream" uid="uid://b2ebrpw24jnfa" path="res://audio/sfx/engine/menu_select.wav" id="5_abxa4"]
+[ext_resource type="PackedScene" uid="uid://c7t2c3b8khbsa" path="res://ui/ammo_digits.tscn" id="8_8278m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_st1da"]
 texture = ExtResource("2_o13uu")
@@ -141,11 +142,39 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
 
+[node name="AmmoDigits" parent="Panel/Grid/Slot0" unique_id=970271489 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="Slot1" type="TextureRect" parent="Panel/Grid" unique_id=1328680678]
 custom_minimum_size = Vector2(24, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
+
+[node name="AmmoDigits" parent="Panel/Grid/Slot1" unique_id=766524571 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="Slot2" type="TextureRect" parent="Panel/Grid" unique_id=1826542920]
 custom_minimum_size = Vector2(24, 16)
@@ -153,11 +182,39 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
 
+[node name="AmmoDigits" parent="Panel/Grid/Slot2" unique_id=1078953634 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="Slot3" type="TextureRect" parent="Panel/Grid" unique_id=965778819]
 custom_minimum_size = Vector2(24, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
+
+[node name="AmmoDigits" parent="Panel/Grid/Slot3" unique_id=705007952 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="Slot4" type="TextureRect" parent="Panel/Grid" unique_id=952789661]
 custom_minimum_size = Vector2(24, 16)
@@ -165,11 +222,39 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
 
+[node name="AmmoDigits" parent="Panel/Grid/Slot4" unique_id=477904173 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="Slot5" type="TextureRect" parent="Panel/Grid" unique_id=26360137]
 custom_minimum_size = Vector2(24, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
+
+[node name="AmmoDigits" parent="Panel/Grid/Slot5" unique_id=294653323 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="Slot6" type="TextureRect" parent="Panel/Grid" unique_id=1494562511]
 custom_minimum_size = Vector2(24, 16)
@@ -177,11 +262,39 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
 
+[node name="AmmoDigits" parent="Panel/Grid/Slot6" unique_id=1540931576 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="Slot7" type="TextureRect" parent="Panel/Grid" unique_id=308106571]
 custom_minimum_size = Vector2(24, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
+
+[node name="AmmoDigits" parent="Panel/Grid/Slot7" unique_id=461738693 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="Slot8" type="TextureRect" parent="Panel/Grid" unique_id=2023785870]
 custom_minimum_size = Vector2(24, 16)
@@ -189,11 +302,39 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
 
+[node name="AmmoDigits" parent="Panel/Grid/Slot8" unique_id=1668129872 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="Slot9" type="TextureRect" parent="Panel/Grid" unique_id=461984190]
 custom_minimum_size = Vector2(24, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 2
+
+[node name="AmmoDigits" parent="Panel/Grid/Slot9" unique_id=670875873 instance=ExtResource("8_8278m")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -8.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="Cursor" type="Control" parent="Panel" unique_id=828864353]
 custom_minimum_size = Vector2(28, 16)
