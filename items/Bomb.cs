@@ -4,6 +4,7 @@ using System;
 public partial class Bomb : CharacterBody2D
 {
 	[Export] public AudioStream BombSound { get; set; }
+	[Export] public PackedScene ExplosionScene { get; set; }
 	
 	public const int FuseTicks = 136;
 	public const int PreExplosionFrames = 10;
@@ -72,10 +73,10 @@ public partial class Bomb : CharacterBody2D
 	private void Explode() {
 		SetPhysicsProcess(false);
 		
-		// Explosion explosion = ExplosionScene.Instantiate<Explosion>();
-		// explosion.AddToGroup("bomb");
-		// explosion.GlobalPosition = GlobalPosition;
-		// GetParent().AddChild(explosion);
+		Explosion explosion = ExplosionScene.Instantiate<Explosion>();
+		explosion.AddToGroup("bomb");
+		explosion.GlobalPosition = GlobalPosition;
+		GetParent().AddChild(explosion);
 		
 		QueueFree();
 	}

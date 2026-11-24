@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cjqtsw5r6132j"]
+
+[ext_resource type="Script" uid="uid://b82x1j4hnxy7" path="res://engine/fx/Explosion.cs" id="1_t66tp"]
+[ext_resource type="AudioStream" uid="uid://bjmdqrotvx7o3" path="res://audio/sfx/player/items/bomb_explode.wav" id="2_jyhjq"]
+[ext_resource type="Texture2D" uid="uid://dxqq82714ch3d" path="res://assets/maps/tiles/explosion.png" id="2_rebeq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jyhjq"]
+atlas = ExtResource("2_rebeq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vbnf"]
+atlas = ExtResource("2_rebeq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34xp6"]
+atlas = ExtResource("2_rebeq")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vgjww"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jyhjq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vbnf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_34xp6")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Explosion" type="Node2D" unique_id=1652653417]
+script = ExtResource("1_t66tp")
+ExplosionSound = ExtResource("2_jyhjq")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=686898360]
+sprite_frames = SubResource("SpriteFrames_vgjww")

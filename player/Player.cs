@@ -230,7 +230,7 @@ public partial class Player : CharacterBody2D
 	
 	private bool ShowJumpPose() {
 		string animation = "jump-" + FacingDirection();
-		if (!_sprite.SpriteFrames.HasAnimation(animation))
+		if (SwordOut) // i think this is how the game does it
 			return false;
 
 		// The original steps to the next jump frame every 8 ticks and holds the last one.
@@ -270,8 +270,6 @@ public partial class Player : CharacterBody2D
 		UpdateFacing(dpad);
 
 		if (SwordOut) {
-			// Fully charged: the sword flashes between its normal and glowing frames.
-			// The original flips its palette whenever bit 2 of the frame counter changes, i.e. every 4 ticks.
 			bool glow = Charged && (Engine.GetPhysicsFrames() & 4) != 0;
 			_sword.ShowPose(_facing, glow ? _sword.GlowPose : _sword.HoldPose);
 			switch (FacingDirection()) {
@@ -433,6 +431,7 @@ public partial class Player : CharacterBody2D
 		return false;
 	}
 
+	// need to change: bombs can do the same thing
 	public void BeginCarrying(CarriedObject carried, ItemPowerBracelet bracelet)
 	{
 		_carried = carried;
