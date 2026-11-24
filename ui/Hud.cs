@@ -22,16 +22,20 @@ public partial class Hud : CanvasLayer
 	public override void _Ready() {
 		_bIcon = GetNode<TextureRect>("BottomBar/IconB");
 		_aIcon = GetNode<TextureRect>("BottomBar/IconA");
+		_bDigits = GetNode<Control>("BottomBar/IconB/AmmoDigits");
+		_aDigits = GetNode<Control>("BottomBar/IconA/AmmoDigits");
 		_hearts = GetNode<Control>("BottomBar/Hearts");
 		_rupeeDigits = GetNode<Control>("BottomBar/RupeeDigits");
 		_bar = GetNode<Control>("BottomBar");
-		_bDigits = GetNode<Control>("BottomBar/IconB/AmmoDigits");
-		_aDigits = GetNode<Control>("BottomBar/IconA/AmmoDigits");
 		
 		Inventory.Instance.EquippedChanged += OnEquippedChanged;
 		Inventory.Instance.AmmoChanged += RefreshAmmo;
+		Inventory.Instance.RupeesChanged += SetRupees;
+		Inventory.Instance.HealthChanged += SetHearts;
 		SetItemB(Inventory.Instance.GetEquipped(ItemButton.B));
 		SetItemA(Inventory.Instance.GetEquipped(ItemButton.A));
+		SetHearts(Inventory.Instance.CurrentHealth, Inventory.Instance.MaxHealth);
+		SetRupees(Inventory.Instance.RupeeCount);
 		RefreshAmmo();
 	}
 

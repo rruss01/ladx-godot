@@ -18,12 +18,11 @@ public partial class Droppable : Area2D
 	// Rupee: 1.
 	[Export] public int Amount { get; set; } = 2;
 
-	// Original: JINGLE_GOT_HEART for hearts, WAVE_SFX_SEASHELL for rupees.
 	[Export] public AudioStream PickupSound { get; set; }
 
-	// --- The original's timings (60 ticks per second) ---
+	// --- The original's timings (60 fps) ---
 	private const int HopSpeed = 16;          // $10: starting upward speed, 1/16 px per tick
-	private const int GravitySpeed = 2;            // speed drops by 2 every tick
+	private const int GravitySpeed = 2;       // speed drops by 2 every tick
 	private const int MinBounceSpeed = 7;     // a bounce slower than this and it just rests
 	private const int PickupDelayTicks = 24;  // $18: can't be grabbed right away
 	private const int LifetimeSteps = 128;    // $80: counts down once every 4 ticks (about 8.5 s)
@@ -116,10 +115,10 @@ public partial class Droppable : Area2D
 		switch (Kind)
 		{
 			case DropKind.Heart:
-				player.AddHealth(Amount);
+				Inventory.Instance.AddHealth(Amount);
 				break;
 			case DropKind.Rupee:
-				player.AddRupees(Amount);
+				Inventory.Instance.AddRupees(Amount);
 				break;
 		}
 
@@ -132,7 +131,6 @@ public partial class Droppable : Area2D
 		if (PickupSound == null)
 			return;
 
-		// Parent it to our parent so the sound isn't cut off when this node is freed.
 		AudioStreamPlayer sound = new AudioStreamPlayer { Stream = PickupSound };
 		sound.Finished += sound.QueueFree;
 		GetParent().AddChild(sound);

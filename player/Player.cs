@@ -2,21 +2,6 @@ using Godot;
 
 public partial class Player : CharacterBody2D
 {
-	[Signal] public delegate void HealthChangedEventHandler(int health, int maxHealth);
-	[Signal] public delegate void RupeesChangedEventHandler(int amount);
-
-	private int _health;
-	private int _rupees;
-
-	// health/rupee mgmt
-	public void TakeDamage(int amount) => SetHealth(_health - amount);
-	public void Heal(int amount) => SetHealth(_health + amount);
-	public void AddHealth(int halfHearts) { _health = Mathf.Min(_health + halfHearts, MaxHealth); EmitSignal(SignalName.HealthChanged, _health, MaxHealth); }
-	public void AddRupees(int amount) { _rupees = Mathf.Min(_rupees + amount, 999); EmitSignal(SignalName.RupeesChanged, _rupees); }
-
-	// debug value
-	[Export] public int MaxHealth { get; set; } = 6;
-
 	// --- Movement (values from LADX disassembly) ---
 	private const int StraightSpeed = 16; // $10
 	private const int DiagonalSpeed = 12; // $0C
@@ -80,9 +65,8 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		GlobalPosition = GlobalPosition.Round();
-		CallDeferred(MethodName.EquipStartingItems);
 		_sword = GetNode<SwordSprite>("Sword");
 		_swordAudio = GetNode<SwordAudio>("SwordAudio");
 		_spriteBase = _sprite.Offset;
@@ -121,18 +105,6 @@ public partial class Player : CharacterBody2D
 		Vector2 lift = new Vector2(0, -Mathf.Round(_z / 16f));
 		_sprite.Offset = _spriteBase + lift;
 		_sword.Offset = _swordBase + lift;
-	}
-	
-	private void EquipStartingItems()
-	{
-		SetHealth(6);
-		AddRupees(0);
-	}
-
-	private void SetHealth(int value)
-	{
-		_health = Mathf.Clamp(value, 0, MaxHealth);
-		EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
 	}
 
 	private void UpdateButtonEdges() {

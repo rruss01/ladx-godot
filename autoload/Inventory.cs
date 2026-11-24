@@ -10,7 +10,9 @@ public partial class Inventory : Node
 	[Signal] public delegate void SlotChangedEventHandler(int slot, ItemData item);
 	[Signal] public delegate void EquippedChangedEventHandler(int button, ItemData item);
 	[Signal] public delegate void AmmoChangedEventHandler();
-	
+	[Signal] public delegate void RupeesChangedEventHandler(int amount);
+	[Signal] public delegate void HealthChangedEventHandler(int health, int maxHealth);
+
 	// DEBUG
 	[Export] public ItemData StartingB { get; set; }
 	[Export] public ItemData StartingA { get; set; }
@@ -20,15 +22,34 @@ public partial class Inventory : Node
 	private readonly ItemData[] _equipped = new ItemData[2];
 	
 	public int BombCount = 20;
-	public int MaxBombs = 20;
+	public int BombBagLevel = 0;
+	public int[] MaxBombs = [20, 30, 40];
+	public int RupeeCount = 0;
+	public int CurrentHealth = 6;
+	public int MaxHealth = 6;
+	private readonly int _maxRupees = 999;
 	
-	public void AddBomb() {
-		BombCount++;
+	public void AddBomb(int amount = 1) {
+		BombCount = Mathf.Min(BombCount + amount, MaxBombs[BombBagLevel]);
 		EmitSignal(SignalName.AmmoChanged);
-		if (BombCount > MaxBombs)
-			BombCount = MaxBombs;
 	}
 	
+	public void AddRupees(int amount) { 
+		RupeeCount = Mathf.Min(RupeeCount + amount, _maxRupees); 
+		EmitSignal(SignalName.RupeesChanged, RupeeCount); 
+	}
+
+	public void AddHealth(int halfHearts) { 
+		CurrentHealth = Mathf.Min(CurrentHealth + halfHearts, MaxHealth); 
+		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaxHealth);
+	}
+
+	private void SetHealth(int value)
+	{
+		CurrentHealth = Mathf.Clamp(value, 0, MaxHealth);
+		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaxHealth);
+	}
+
 	public bool TryPlaceBomb() {
 		if (BombCount <= 0) return false;
 		BombCount--;
@@ -43,6 +64,8 @@ public partial class Inventory : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		SetHealth(6);
+		AddRupees(0);
 		_equipped[(int)ItemButton.B] = StartingB;
 		_equipped[(int)ItemButton.A] = StartingA;
 		for (int i = 0; i < StartingItems.Count && i < ItemSlots; i++)
