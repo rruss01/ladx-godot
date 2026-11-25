@@ -1,11 +1,18 @@
 [gd_resource type="Resource" script_class="ItemPowerBracelet" format=3 uid="uid://ttryefivr0wb"]
 
 [ext_resource type="Texture2D" uid="uid://d1l6ae2bnw12v" path="res://assets/hud/items/icon_bracelet2.tres" id="1_icon"]
-[ext_resource type="Script" path="res://items/ItemPowerBracelet.cs" id="2_script"]
+[ext_resource type="AudioStream" uid="uid://gc4p882q5d7y" path="res://audio/sfx/player/player_pickup.wav" id="2_33fjw"]
+[ext_resource type="Resource" uid="uid://cvfgwmowqihff" path="res://items/data/bracelet1.tres" id="3_id8v5"]
+[ext_resource type="AudioStream" uid="uid://baxp36rpe8vwq" path="res://audio/sfx/player/player_throw.wav" id="4_wdvjp"]
+[ext_resource type="Script" uid="uid://dbpukeoupfiao" path="res://items/data/src/ItemPowerBracelet.cs" id="5_dsq5x"]
 
 [resource]
-script = ExtResource("2_script")
+script = ExtResource("5_dsq5x")
 Power = 1
+PullTicks = 4
 LiftStageTicks = 4
+LiftSound = ExtResource("2_33fjw")
+ThrowSound = ExtResource("4_wdvjp")
 DisplayName = "bracelet2"
 Icon = ExtResource("1_icon")
+Replaces = ExtResource("3_id8v5")

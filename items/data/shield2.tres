@@ -2,9 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://bssdxwo1jler5" path="res://assets/hud/items/icon_shield2.tres" id="1_hv7os"]
 [ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_n70dk"]
+[ext_resource type="Resource" uid="uid://b7u7bdfkntsk6" path="res://items/data/shield1.tres" id="2_y1si3"]
 
 [resource]
 script = ExtResource("2_n70dk")
 DisplayName = "shield2"
 Icon = ExtResource("1_hv7os")
+Replaces = ExtResource("2_y1si3")
 metadata/_custom_type_script = "uid://77rcrk7c21yd"
