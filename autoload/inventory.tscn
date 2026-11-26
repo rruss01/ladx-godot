@@ -8,7 +8,8 @@
 [ext_resource type="Resource" uid="uid://brm5go51akvw1" path="res://items/data/boomerang.tres" id="6_et3c8"]
 [ext_resource type="Resource" uid="uid://cvfgwmowqihff" path="res://items/data/bracelet1.tres" id="7_8ptv1"]
 [ext_resource type="Resource" uid="uid://c66lsps70847l" path="res://items/data/bombs.tres" id="8_g75bh"]
+[ext_resource type="Resource" uid="uid://2l3kocqiw7lw" path="res://items/data/bow.tres" id="9_8y30e"]
 
 [node name="Inventory" type="Node" unique_id=116274119]
 script = ExtResource("1_nau8v")
-StartingItems = Array[ExtResource("2_iol04")]([ExtResource("3_wodvt"), ExtResource("4_wovjc"), ExtResource("5_wovjc"), ExtResource("6_et3c8"), ExtResource("7_8ptv1"), ExtResource("8_g75bh")])
+StartingItems = Array[ExtResource("2_iol04")]([ExtResource("3_wodvt"), ExtResource("4_wovjc"), ExtResource("5_wovjc"), ExtResource("6_et3c8"), ExtResource("7_8ptv1"), ExtResource("8_g75bh"), ExtResource("9_8y30e")])

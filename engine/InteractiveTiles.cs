@@ -68,6 +68,10 @@ public partial class InteractiveTiles : Node
 	[Export] public int RockTicksPerFrame { get; set; } = 4;
 	[Export] public int RockTotalTicks { get; set; } = 14;
 	[Export] public AudioStream RockSound { get; set; }      // original: NOISE_SFX_POT_SMASHED
+	
+	[ExportGroup("Poof effect")]
+	[Export] public PackedScene PoofScene { get; set; }
+	[Export] public AudioStream PoofSound { get; set; }
 
 	// Audio bus the effect sounds play on.
 	[Export] public StringName SoundBus { get; set; } = "Master";
@@ -376,39 +380,46 @@ public partial class InteractiveTiles : Node
 
 	public void SpawnEffect(string effect, Vector2 topLeft)
 	{
-		FxBurst burst;
-
+		Node2D fx;
+		AudioStream sound;
 		switch (effect)
 		{
 			case "leaves":
-				burst = new LeafBurst
+				fx = new LeafBurst
 				{
 					PieceTexture = LeafTexture,
 					TicksPerFrame = LeafTicksPerFrame,
 					TotalTicks = LeafTotalTicks,
 				};
+				sound = LeafSound;
 				break;
 
 			case "rocks":
-				burst = new RockBurst
+				fx = new RockBurst
 				{
 					PieceTexture = RockTexture,
 					TicksPerFrame = RockTicksPerFrame,
 					TotalTicks = RockTotalTicks,
 				};
+				sound = RockSound;
 				break;
-
+				
+			case "poof":
+				fx = PoofScene.Instantiate<Node2D>();
+				sound = PoofSound;
+				break;
+			
 			default:
 				GD.PushWarning($"InteractiveTiles: unknown effect \"{effect}\".");
 				return;
 		}
 
-		PlaySound(effect == "leaves" ? LeafSound : RockSound);
+		PlaySound(sound);
 
-		burst.ZIndex = 10; // above the player and the objects layer
+		fx.ZIndex = 10; // above the player and the objects layer
 		Node parent = Objects != null ? Objects.GetParent() : GetParent();
-		parent.AddChild(burst);
-		burst.GlobalPosition = topLeft;
+		parent.AddChild(fx);
+		fx.GlobalPosition = topLeft;
 	}
 
 	// One short-lived player per sound. It's a child of this node (not of the burst), so the

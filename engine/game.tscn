@@ -16,7 +16,9 @@
 [ext_resource type="Script" uid="uid://vi2t8mx56rf7" path="res://engine/WarpManager.cs" id="11_8s3fr"]
 [ext_resource type="Script" uid="uid://8vs2y5aumsoe" path="res://engine/ItemDrops.cs" id="11_kefuq"]
 [ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="11_rjwnk"]
+[ext_resource type="PackedScene" uid="uid://c848mm3nipgso" path="res://engine/poof.tscn" id="11_rud78"]
 [ext_resource type="PackedScene" uid="uid://c57p7vxai6bkp" path="res://engine/heart.tscn" id="12_2p33s"]
+[ext_resource type="AudioStream" uid="uid://b0aja348qb83s" path="res://audio/sfx/engine/poof.wav" id="12_35au3"]
 [ext_resource type="PackedScene" uid="uid://dr8r8iipa2os1" path="res://engine/rupee.tscn" id="12_ukri2"]
 [ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/hearts/heart_full.tres" id="12_wsdf4"]
 [ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/hearts/heart_half.tres" id="13_4akcr"]
@@ -142,6 +144,8 @@ LeafTexture = ExtResource("7_2p33s")
 LeafSound = ExtResource("8_e35ml")
 RockTexture = ExtResource("8_8ri5x")
 RockSound = ExtResource("10_kefuq")
+PoofScene = ExtResource("11_rud78")
+PoofSound = ExtResource("12_35au3")
 
 [node name="WarpManager" type="Node" parent="." unique_id=1702806432 node_paths=PackedStringArray("Scroller")]
 script = ExtResource("11_8s3fr")

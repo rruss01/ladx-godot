@@ -1,11 +1,17 @@
 using Godot;
 
 public enum ItemButton { B = 0, A = 1 }
+public enum AmmoType { Bombs, Arrows, Powder }
 
 public partial class Inventory : Node
 {
 	public const int ItemSlots = 10;
 	public static Inventory Instance { get; private set; }
+	private static readonly int[][] AmmoMax = {
+	[30, 60], // Bombs
+	[30, 60], // Arrows
+	[20, 40]  // Magic Powder
+	};
 	
 	[Signal] public delegate void SlotChangedEventHandler(int slot, ItemData item);
 	[Signal] public delegate void EquippedChangedEventHandler(int button, ItemData item);
@@ -21,18 +27,13 @@ public partial class Inventory : Node
 	private readonly ItemData[] _slots = new ItemData[ItemSlots];
 	private readonly ItemData[] _equipped = new ItemData[2];
 	public Godot.Collections.Array<ItemData> CurrentItems;
-	
-	public int BombCount = 20;
-	public int BombBagLevel = 0;
-	public readonly int[] MaxBombs = [20, 60];
-	
-	public int ArrowCount = 20;
-	public int QuiverLevel = 0;
-	public readonly int[] MaxArrows = [20, 60];
-	
-	public int PowderCount = 20;
-	public int PowderLevel = 0;
-	public readonly int[] MaxPowder = [20, 40];
+
+	private readonly int[] _ammoCount = new int[AmmoMax.Length];
+	private readonly int[] _ammoLevel = new int[AmmoMax.Length];
+
+
+	public int GetAmmo(AmmoType type) => _ammoCount[(int)type];
+	public int GetMaxAmmo(AmmoType type) => AmmoMax[(int)type][_ammoLevel[(int)type]];
 	
 	public int RupeeCount = 0;
 	private readonly int _maxRupees = 999;
@@ -40,18 +41,8 @@ public partial class Inventory : Node
 	public int CurrentHealth = 6;
 	public int MaxHealth = 6;
 	
-	public void AddBomb(int amount = 1) {
-		BombCount = Mathf.Min(BombCount + amount, MaxBombs[BombBagLevel]);
-		EmitSignal(SignalName.AmmoChanged);
-	}
-	
-	public void AddArrow(int amount = 5) {
-		ArrowCount = Mathf.Min(ArrowCount + amount, MaxArrows[QuiverLevel]);
-		EmitSignal(SignalName.AmmoChanged);
-	}
-	
-	public void AddPowder(int amount = 5) {
-		PowderCount = Mathf.Min(PowderCount + amount, MaxPowder[PowderLevel]);
+	public void AddAmmo(AmmoType type, int amount) {
+		_ammoCount[(int)type] = Mathf.Min(GetAmmo(type) + amount, GetMaxAmmo(type));
 		EmitSignal(SignalName.AmmoChanged);
 	}
 	
@@ -80,11 +71,20 @@ public partial class Inventory : Node
 	}
 
 	// rewrite to TrySpendAmmo?
-	public bool TryPlaceBomb() {
-		if (BombCount <= 0) return false;
-		BombCount--;
+	public bool TrySpendAmmo(AmmoType type, int amount) {
+		if (GetAmmo(type) < amount) return false;
+		_ammoCount[(int)type] -= amount;
 		EmitSignal(SignalName.AmmoChanged);
 		return true;
+	}
+
+	public void UpgradeAmmo(AmmoType type)
+	{
+		int level = _ammoLevel[(int)type];
+		if (level + 1 >= AmmoMax[(int)type].Length) return;
+		_ammoLevel[(int)type] = level + 1;
+		_ammoCount[(int)type] = GetMaxAmmo(type);
+		EmitSignal(SignalName.AmmoChanged);
 	}
 	
 	public override void _EnterTree() {
@@ -94,8 +94,11 @@ public partial class Inventory : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		SetHealth(6);
+		SetHealth(MaxHealth);
 		AddRupees(0);
+		AddAmmo(AmmoType.Bombs, 20);
+		AddAmmo(AmmoType.Arrows, 20);
+		AddAmmo(AmmoType.Powder, 20);
 		CurrentItems = StartingItems;
 		_equipped[(int)ItemButton.B] = StartingB;
 		_equipped[(int)ItemButton.A] = StartingA;

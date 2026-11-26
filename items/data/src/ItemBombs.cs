@@ -8,7 +8,7 @@ public partial class ItemBombs : ItemData
 
 	private const string Group = "bomb";
 	
-	public override int GetCount() => Inventory.Instance.BombCount;
+	public override int GetCount() => Inventory.Instance.GetAmmo(AmmoType.Bombs);
 	
 	public override void OnPress(Player player, ItemButton button)
 	{
@@ -18,7 +18,7 @@ public partial class ItemBombs : ItemData
 		if (player.GetTree().GetNodesInGroup(Group).Count > 0)
 			return;
 
-		if (Inventory.Instance.TryPlaceBomb()) {
+		if (Inventory.Instance.TrySpendAmmo(AmmoType.Bombs, 1)) {
 			Bomb bomb = BombScene.Instantiate<Bomb>();
 			bomb.AddToGroup(Group);
 			player.GetParent().AddChild(bomb);

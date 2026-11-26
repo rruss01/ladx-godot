@@ -62,6 +62,7 @@ public partial class Player : CharacterBody2D
 
 		private static int B(bool value) => value ? 1 : 0;
 	}
+	public void FaceDpad() => UpdateFacing(ReadDpad());
 
 	public override void _Ready()
 	{

@@ -1,10 +1,16 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://2l3kocqiw7lw"]
+[gd_resource type="Resource" script_class="ItemBow" format=3 uid="uid://2l3kocqiw7lw"]
 
 [ext_resource type="Texture2D" uid="uid://cug37oawrtv5w" path="res://assets/hud/items/icon_bow.tres" id="1_4sso7"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_65rus"]
+[ext_resource type="PackedScene" uid="uid://gygdd72njnia" path="res://items/arrow.tscn" id="1_g6vqi"]
+[ext_resource type="AudioStream" uid="uid://blkel2rw0ykqd" path="res://audio/sfx/engine/error.wav" id="2_5axhy"]
+[ext_resource type="AudioStream" uid="uid://nwnt7bvlujam" path="res://audio/sfx/player/items/bow_arrow.wav" id="4_mt6mg"]
+[ext_resource type="Script" uid="uid://ctfnv2k4qtgn0" path="res://items/data/src/ItemBow.cs" id="5_nipau"]
 
 [resource]
-script = ExtResource("2_65rus")
+script = ExtResource("5_nipau")
+ArrowScene = ExtResource("1_g6vqi")
+ShootSound = ExtResource("4_mt6mg")
+EmptySound = ExtResource("2_5axhy")
 DisplayName = "bow"
 Icon = ExtResource("1_4sso7")
 metadata/_custom_type_script = "uid://77rcrk7c21yd"
