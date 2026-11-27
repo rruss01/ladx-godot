@@ -62,8 +62,7 @@ public partial class Boomerang : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		// The whoosh is just retriggered on a fixed interval, which is what makes it "loop".
-		// (The original uses a global timer, so its first whoosh can lag by up to 25 ticks.)
+		// fake loop
 		if (SoundEveryTicks > 0 && _age % SoundEveryTicks == 0)
 			_sound?.Play();
 
@@ -97,7 +96,7 @@ public partial class Boomerang : CharacterBody2D
 			return;
 		}
 
-		if (hitWall)
+		if (hitWall) // TODO: or leaves screen bounds
 		{
 			// Cut the outbound timer; the turn-around happens next tick.
 			_ticksLeft = 0;
@@ -133,10 +132,10 @@ public partial class Boomerang : CharacterBody2D
 
 		if (_phase == Phase.Returning)
 		{
-			// The returning boomerang flies straight through walls (no MoveAndCollide)...
+			// The returning boomerang flies straight through walls...
 			GlobalPosition += new Vector2(whole.X, whole.Y);
 
-			// ...but still cuts any bush or tall grass it passes over.
+			// ...but still cuts any bushes/grass it passes over.
 			CutTileUnderneath();
 			return false;
 		}
@@ -148,8 +147,7 @@ public partial class Boomerang : CharacterBody2D
 		if (whole.Y != 0)
 			hit |= Step(new Vector2(0, whole.Y));
 
-		// Tall grass has no collision, so it is cut like on the way back: by checking the
-		// tile under the boomerang's center (bushes can't get this far, they stop it first).
+		// Tall grass has no collision
 		CutTileUnderneath();
 		return hit;
 	}
@@ -160,16 +158,14 @@ public partial class Boomerang : CharacterBody2D
 		if (collision == null)
 			return false;
 
-		// Probe point just inside the tile we ran into. Solid interactive tiles bounce it back
-		// without a clink; anything else is a plain wall.
+		// Probe point just inside the tile it ran into
 		Vector2 insideWall = collision.GetPosition() - collision.GetNormal() * 2f;
 		InteractiveTiles tiles = InteractiveTiles.Instance;
 
 		// Ask BEFORE slashing: a cut bush turns inert and would look like a plain wall.
 		if (tiles != null && tiles.IsInteractiveAt(insideWall))
 		{
-			// A bush gets cut (it still bounces the boomerang); a rock or pot ignores a slash.
-			tiles.TryInteract(insideWall, Interaction.Slash, 0, false); // false: the original boomerang drops no items
+			tiles.TryInteract(insideWall, Interaction.Slash, 0, false);
 		}
 		else
 		{
@@ -179,14 +175,14 @@ public partial class Boomerang : CharacterBody2D
 		return true;
 	}
 
-	// Cuts whatever slashable tile is under the boomerang's center (like the original).
+	// Cuts whatever slashable tile is under the boomerang's center
 	private void CutTileUnderneath()
 	{
 		InteractiveTiles.Instance?.TryInteract(GlobalPosition, Interaction.Slash, 0, false);
 	}
 
-	// Port of GetVectorTowardsLink: the LONGER axis gets exactly 'length', the shorter axis gets
-	// the proportional share (rounded down). So a diagonal return is faster than a straight one.
+	// The LONGER axis gets exactly 'length', the shorter axis gets the proportional share. 
+	// So a diagonal return is faster than a straight one.
 	private Vector2I VectorTowardsThrower(int length)
 	{
 		if (!IsInstanceValid(Thrower))
@@ -211,7 +207,6 @@ public partial class Boomerang : CharacterBody2D
 
 	private void PlayClink()
 	{
-		// Assign to parent so the sound isn't cut off if the boomerang is caught quickly.
 		AudioStreamPlayer clink = new AudioStreamPlayer { Stream = ClinkSound };
 		clink.Finished += clink.QueueFree;
 		GetParent().AddChild(clink);

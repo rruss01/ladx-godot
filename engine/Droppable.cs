@@ -9,7 +9,6 @@ public enum DropKind { Heart, Rupee }
 //   |- Sprite             (Sprite2D named "Sprite": your art, centred on the node)
 //
 // The Area2D's collision MASK must include the layer Link is on (layer/monitoring as in ItemPickup).
-// All numbers below come from LADX-Disassembly (DroppableHeart/RupeeEntityHandler, PickableHandler).
 public partial class Droppable : Area2D
 {
 	[Export] public DropKind Kind { get; set; } = DropKind.Heart;
@@ -64,7 +63,7 @@ public partial class Droppable : Area2D
 		{
 			_z16 = 0;
 
-			// Bounce at half the landing speed (the original's "sra, cpl").
+			// Bounce at half the landing speed
 			int bounce = ~(_speedZ >> 1);
 			if (bounce >= MinBounceSpeed)
 			{

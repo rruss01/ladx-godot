@@ -1,10 +1,18 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://v8yduitin78k"]
+[gd_resource type="Resource" script_class="ItemPowder" format=3 uid="uid://v8yduitin78k"]
 
+[ext_resource type="AudioStream" uid="uid://blkel2rw0ykqd" path="res://audio/sfx/engine/error.wav" id="1_vjco0"]
 [ext_resource type="Texture2D" uid="uid://b1hdglfqygmvk" path="res://assets/hud/items/icon_magic_powder.tres" id="1_x26ub"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_7im37"]
+[ext_resource type="Texture2D" uid="uid://txqij8unnv7v" path="res://assets/maps/tiles/powder.png" id="3_y42h8"]
+[ext_resource type="Resource" uid="uid://qk4plnfcvqxm" path="res://items/data/mushroom.tres" id="4_03tck"]
+[ext_resource type="AudioStream" uid="uid://d21kfbqcnhfl2" path="res://audio/sfx/player/items/magicpowder.wav" id="5_n4uae"]
+[ext_resource type="Script" uid="uid://cwwtgq6dxjf" path="res://items/data/src/ItemPowder.cs" id="6_xbw03"]
 
 [resource]
-script = ExtResource("2_7im37")
+script = ExtResource("6_xbw03")
+SprinkleSound = ExtResource("5_n4uae")
+EmptySound = ExtResource("1_vjco0")
+ParticleTexture = ExtResource("3_y42h8")
 DisplayName = "magic_powder"
 Icon = ExtResource("1_x26ub")
+Replaces = ExtResource("4_03tck")
 metadata/_custom_type_script = "uid://77rcrk7c21yd"

@@ -170,4 +170,20 @@ public partial class Inventory : Node
 		EmitSignal(SignalName.SlotChanged, slot, previous);
 		EmitSignal(SignalName.EquippedChanged, (int)button, chosen);
 	}
+	
+	public void Remove(ItemData item) {
+	for (int b = 0; b < _equipped.Length; b++)
+		if (_equipped[b] == item)
+		{
+			_equipped[b] = null;
+			EmitSignal(SignalName.EquippedChanged, b, (ItemData)null);
+		}
+
+	for (int i = 0; i < ItemSlots; i++)
+		if (_slots[i] == item)
+		{
+			_slots[i] = null;
+			EmitSignal(SignalName.SlotChanged, i, (ItemData)null);
+		}
+	}
 }

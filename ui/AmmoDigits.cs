@@ -4,7 +4,7 @@ public partial class AmmoDigits : HBoxContainer
 {
 	[Export] public Godot.Collections.Array<Texture2D> DigitTextures { get; set; } = new();
 
-	public void SetCount(int count)    // -1 hides it
+	public void SetCount(int count) // -1 hides it
 	{
 		Visible = count >= 0;
 		if (count < 0) return;

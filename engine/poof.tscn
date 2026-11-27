@@ -3,22 +3,22 @@
 [ext_resource type="Script" uid="uid://c6xnmnc6qtgw5" path="res://engine/fx/Poof.cs" id="1_arurp"]
 [ext_resource type="Texture2D" uid="uid://dpse6ue115ajj" path="res://assets/maps/tiles/poof.png" id="2_ay1sn"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hfu67"]
-atlas = ExtResource("2_ay1sn")
-region = Rect2(0, 0, 16, 16)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_jxjj6"]
 atlas = ExtResource("2_ay1sn")
 region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfu67"]
+atlas = ExtResource("2_ay1sn")
+region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vgjww"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_hfu67")
+"texture": SubResource("AtlasTexture_jxjj6")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jxjj6")
+"texture": SubResource("AtlasTexture_hfu67")
 }],
 "loop": 1,
 "name": &"default",
@@ -29,4 +29,5 @@ animations = [{
 script = ExtResource("1_arurp")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=2127485409]
+position = Vector2(8, 8)
 sprite_frames = SubResource("SpriteFrames_vgjww")

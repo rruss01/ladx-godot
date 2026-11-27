@@ -5,7 +5,7 @@ public partial class Arrow : Projectile
 	private AnimatedSprite2D _sprite;
 	private AnimatedSprite2D Sprite => _sprite ??= GetNode<AnimatedSprite2D>("Sprite");
 	private Vector2 _spriteBase;
-	private int _z, _vz;                   // 1/16 px, like Droppable
+	private int _z, _vz;
 
 	protected override int BounceShift => 2;
 

@@ -40,6 +40,8 @@ public abstract partial class FxBurst : Node2D
 		ShowPose(PoseAt(0));
 	}
 
+	protected virtual void OnTick(int tick) {}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		_tick++;
@@ -50,6 +52,7 @@ public abstract partial class FxBurst : Node2D
 		}
 
 		ShowPose(PoseAt(_tick));
+		OnTick(_tick);
 	}
 
 	private void ShowPose(int pose)

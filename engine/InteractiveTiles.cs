@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
 
-public enum Interaction { Slash, Lift, Push, Bomb }
+public enum Interaction { Slash, Lift, Push, Bomb, Powder }
 
 // What the player is now holding after lifting a tile: enough to draw it and to break it later.
 public readonly record struct LiftedTile(int TileId, Vector2I Cell, Texture2D Art, string BreakEffect, string Spawns);

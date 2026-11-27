@@ -1,19 +1,5 @@
 using Godot;
 
-// A bush, rock or pot that Link has picked up. It lives through three phases:
-//
-//   Lifting  Link is frozen while the object slides from where it was to over his head
-//   Carried  it rides over his head while he walks around
-//   Thrown   it flies 3 px per tick in the direction he faces, falls, and breaks
-//
-// Everything here comes from LADX-Disassembly:
-//   lift positions      entities/bank3.asm  Data_003_5701 / 5711 / 5721, func_003_5795
-//   lift timing         entities/bank3.asm  EntityLiftedHandler (Data_003_56EA)
-//   throw speeds        bank14.asm          Data_014_5313 / 5323 / 5333
-//   landing and smashing entities/03_liftable_rock.asm
-//
-// Nothing needs to be set up in the editor: Player.cs creates one of these in code, and this
-// class builds its own sprite and collision shape.
 public partial class CarriedObject : CharacterBody2D
 {
 	private enum Phase { Lifting, Carried, Thrown }
@@ -68,8 +54,7 @@ public partial class CarriedObject : CharacterBody2D
 		_sprite = new Sprite2D { Texture = _tile.Art, TextureFilter = TextureFilterEnum.Nearest };
 		AddChild(_sprite);
 
-		// Same shape and position as Link's own collision box, so the object flies along the
-		// line Link could walk along. It only collides once thrown (the mask is 0 until then).
+		// only collides once thrown
 		AddChild(new CollisionShape2D
 		{
 			Shape = new RectangleShape2D { Size = new Vector2(8, 5) },
@@ -84,7 +69,7 @@ public partial class CarriedObject : CharacterBody2D
 		if (_scroller != null)
 			_scroller.RoomChanged += OnRoomChanged;
 
-		FollowPlayer(); // place it right away so it never shows for a frame at (0, 0)
+		FollowPlayer(); // placed immediately so it never shows for a frame at (0, 0)
 	}
 
 	public override void _ExitTree()
