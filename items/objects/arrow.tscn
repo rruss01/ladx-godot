@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://gygdd72njnia"]
 
-[ext_resource type="Script" uid="uid://rrc2s1wxktox" path="res://items/Arrow.cs" id="1_tfcgf"]
-[ext_resource type="Texture2D" uid="uid://dtf6cfk2xtcj2" path="res://assets/maps/tiles/projectiles.png" id="1_tl37p"]
+[ext_resource type="Script" uid="uid://rrc2s1wxktox" path="res://items/objects/src/Arrow.cs" id="1_e5kqf"]
+[ext_resource type="Texture2D" uid="uid://dtf6cfk2xtcj2" path="res://assets/maps/tiles/projectiles.png" id="2_nsxl6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgjww"]
 size = Vector2(8, 6)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tfcgf"]
-atlas = ExtResource("1_tl37p")
+atlas = ExtResource("2_nsxl6")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lxthq"]
-atlas = ExtResource("1_tl37p")
+atlas = ExtResource("2_nsxl6")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vgjww"]
@@ -29,7 +29,7 @@ animations = [{
 }]
 
 [node name="Arrow" type="Area2D" unique_id=1174336590]
-script = ExtResource("1_tfcgf")
+script = ExtResource("1_e5kqf")
 
 [node name="Hitbox" type="CollisionShape2D" parent="." unique_id=268613137]
 visible = false

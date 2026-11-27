@@ -1,23 +1,23 @@
 [gd_scene format=3 uid="uid://b7lkcew1qdsuf"]
 
-[ext_resource type="Script" uid="uid://bj5l2otsgclyo" path="res://items/Bomb.cs" id="1_amjlg"]
-[ext_resource type="AudioStream" uid="uid://bb24sy7mcf5g0" path="res://audio/sfx/player/player_bounce.wav" id="2_tqfld"]
-[ext_resource type="Texture2D" uid="uid://vvfg1oaflwq0" path="res://assets/maps/tiles/throwables.png" id="3_6uah4"]
-[ext_resource type="PackedScene" uid="uid://cjqtsw5r6132j" path="res://engine/explosion.tscn" id="3_38yse"]
+[ext_resource type="Script" uid="uid://bj5l2otsgclyo" path="res://items/objects/src/Bomb.cs" id="1_uvpb1"]
+[ext_resource type="AudioStream" uid="uid://bb24sy7mcf5g0" path="res://audio/sfx/player/player_bounce.wav" id="2_bwkgg"]
+[ext_resource type="PackedScene" uid="uid://cjqtsw5r6132j" path="res://engine/explosion.tscn" id="3_syvda"]
+[ext_resource type="Texture2D" uid="uid://vvfg1oaflwq0" path="res://assets/maps/tiles/throwables.png" id="4_areg5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tqfld"]
 size = Vector2(8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lnnoo"]
-atlas = ExtResource("3_6uah4")
+atlas = ExtResource("4_areg5")
 region = Rect2(32, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tqfld"]
-atlas = ExtResource("3_6uah4")
+atlas = ExtResource("4_areg5")
 region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6uah4"]
-atlas = ExtResource("3_6uah4")
+atlas = ExtResource("4_areg5")
 region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lnnoo"]
@@ -40,9 +40,9 @@ animations = [{
 [node name="Bomb" type="CharacterBody2D" unique_id=155679579]
 collision_layer = 0
 motion_mode = 1
-script = ExtResource("1_amjlg")
-BombSound = ExtResource("2_tqfld")
-ExplosionScene = ExtResource("3_38yse")
+script = ExtResource("1_uvpb1")
+BombSound = ExtResource("2_bwkgg")
+ExplosionScene = ExtResource("3_syvda")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=917842435]
 visible = false

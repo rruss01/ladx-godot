@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://txqij8unnv7v"
-path="res://.godot/imported/powder.png-a801b7537b495079bfda828d7a9aed2d.ctex"
+uid="uid://dxqq82714ch3d"
+path="res://.godot/imported/explosion.png-97cc3c7ca9921bd8ce80ed5616771924.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/tiles/powder.png"
-dest_files=["res://.godot/imported/powder.png-a801b7537b495079bfda828d7a9aed2d.ctex"]
+source_file="res://assets/fx/explosion.png"
+dest_files=["res://.godot/imported/explosion.png-97cc3c7ca9921bd8ce80ed5616771924.ctex"]
 
 [params]
 

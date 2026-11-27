@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drrj7bxtlt7os"
-path="res://.godot/imported/broken_rock.png-121869632f183715dbed71c20e52722d.ctex"
+uid="uid://dpse6ue115ajj"
+path="res://.godot/imported/poof.png-c82bb3d5a45c44e87d99a5dccbdb5617.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/tiles/broken_rock.png"
-dest_files=["res://.godot/imported/broken_rock.png-121869632f183715dbed71c20e52722d.ctex"]
+source_file="res://assets/fx/poof.png"
+dest_files=["res://.godot/imported/poof.png-c82bb3d5a45c44e87d99a5dccbdb5617.ctex"]
 
 [params]
 

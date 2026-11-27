@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemBoomerang" format=3 uid="uid://brm5go51akvw1"]
 
-[ext_resource type="PackedScene" uid="uid://cb2to6cln3x0a" path="res://items/boomerang.tscn" id="1_3j7n4"]
+[ext_resource type="PackedScene" uid="uid://cb2to6cln3x0a" path="res://items/objects/boomerang.tscn" id="1_3j7n4"]
 [ext_resource type="Texture2D" uid="uid://2kl1qjqive2f" path="res://assets/hud/items/icon_boomerang.tres" id="1_s3u3b"]
 [ext_resource type="Script" uid="uid://du2n48t6l7c1l" path="res://items/data/src/ItemBoomerang.cs" id="3_srul7"]
 

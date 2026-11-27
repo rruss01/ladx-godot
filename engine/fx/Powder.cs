@@ -8,10 +8,10 @@ public partial class Powder : FxBurst
 	private static readonly Vector2 ProbeOffset = new(7, 7);
 
 	private static readonly Vector2[] SpawnOffset = [
-		new( 14,   0),   // right
-		new(-14,   0),   // left
-		new(  0, -12),   // up
-		new(  0,  12),   // down
+		new( 14,   8),   // right
+		new(-14,   8),   // left
+		new(  6, -8),   // up
+		new(  0,  16),   // down
 	];
 
 	public static Vector2 SpawnPosition(Vector2 spriteTopLeft, Vector2I facing) =>

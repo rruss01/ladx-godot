@@ -1,6 +1,6 @@
 [gd_resource type="Resource" format=3 uid="uid://c66lsps70847l"]
 
-[ext_resource type="PackedScene" uid="uid://b7lkcew1qdsuf" path="res://items/bomb.tscn" id="1_8os4v"]
+[ext_resource type="PackedScene" uid="uid://b7lkcew1qdsuf" path="res://items/objects/bomb.tscn" id="1_8os4v"]
 [ext_resource type="Texture2D" uid="uid://bt5b7vx7ufj5j" path="res://assets/hud/items/icon_bombs.tres" id="1_eu8mm"]
 [ext_resource type="Script" uid="uid://h4m42e3eg2qg" path="res://items/data/src/ItemBombs.cs" id="3_k1h6w"]
 

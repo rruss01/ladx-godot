@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://csx03j8hjp546" path="res://maps/MapInfo.cs" id="1_2yvwq"]
 [ext_resource type="Texture2D" uid="uid://dga1jvs3homyc" path="res://maps/overworld.png" id="2_57sj3"]
 [ext_resource type="Texture2D" uid="uid://binhs4oourp4r" path="res://assets/maps/collision/overworld_collision.png" id="2_tmk0e"]
-[ext_resource type="Texture2D" uid="uid://8lr8cyxkhm24" path="res://assets/hud/tile_ids.png" id="3_meoah"]
-[ext_resource type="Texture2D" uid="uid://dhibwovyuaco" path="res://assets/hud/tiles16_atlas.png" id="3_tmk0e"]
+[ext_resource type="Texture2D" uid="uid://8lr8cyxkhm24" path="res://assets/maps/tiles/tile_ids.png" id="3_meoah"]
+[ext_resource type="Texture2D" uid="uid://dhibwovyuaco" path="res://assets/maps/tiles/tiles16_atlas.png" id="3_tmk0e"]
 [ext_resource type="Script" uid="uid://xmkhe5u77mt4" path="res://engine/WarpData.cs" id="4_meoah"]
 
 [sub_resource type="Resource" id="Resource_8s3fr"]

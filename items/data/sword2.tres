@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://do7xygpk8ld1t" path="res://assets/hud/items/icon_sword2.tres" id="1_ypjlr"]
 [ext_resource type="Resource" uid="uid://15eu281tadqw" path="res://items/data/sword1.tres" id="2_1r00u"]
-[ext_resource type="Script" uid="uid://l7e04d006dwn" path="res://items/Swingable.cs" id="2_ypjlr"]
+[ext_resource type="Script" uid="uid://l7e04d006dwn" path="res://items/objects/src/Swingable.cs" id="2_ypjlr"]
 
 [resource]
 script = ExtResource("2_ypjlr")

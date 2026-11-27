@@ -5,10 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://cq72q74any12x" path="res://assets/player/roy_sheet3.png" id="3_32hag"]
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="3_g1dw6"]
 [ext_resource type="Shader" uid="uid://bepauv4h7vvhn" path="res://items/swingable.gdshader" id="3_qjkh3"]
-[ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://player/SwordSprite.cs" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://items/objects/src/SwordSprite.cs" id="4_yw30f"]
 [ext_resource type="Texture2D" uid="uid://dhfx76s3eo3qq" path="res://assets/player/roy_push_pull.png" id="5_e7oew"]
 [ext_resource type="Texture2D" uid="uid://deo4c7j3n1cye" path="res://assets/player/roy_jump.png" id="5_tqiix"]
-[ext_resource type="Script" uid="uid://honpn3bhrqj4" path="res://player/WandSprite.cs" id="6_g6k8r"]
+[ext_resource type="Script" uid="uid://honpn3bhrqj4" path="res://items/objects/src/WandSprite.cs" id="6_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://ddfc3mghqa30b" path="res://assets/player/roy_sheet2.png" id="6_tqiix"]
 [ext_resource type="Script" uid="uid://bwkt506kx88bi" path="res://items/SwordAudio.cs" id="7_yllr7"]
 [ext_resource type="AudioStream" uid="uid://bt4274cidynqw" path="res://audio/sfx/player/items/sword/sword_slash1.wav" id="8_kb6p2"]
@@ -768,7 +768,7 @@ script = ExtResource("1_onrkg")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1967307610]
 sprite_frames = SubResource("SpriteFrames_i3pqv")
-animation = &"item-down"
+animation = &"attack-down"
 
 [node name="Sword" type="AnimatedSprite2D" parent="." unique_id=1581256795]
 z_index = -1

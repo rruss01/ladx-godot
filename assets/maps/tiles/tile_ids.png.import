@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhibwovyuaco"
-path="res://.godot/imported/tiles16_atlas.png-4167c2f488eca1d0415a64b1bd9e04e8.ctex"
+uid="uid://8lr8cyxkhm24"
+path="res://.godot/imported/tile_ids.png-317dc21ac6536078a0ec66141aa2ce49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hud/tiles16_atlas.png"
-dest_files=["res://.godot/imported/tiles16_atlas.png-4167c2f488eca1d0415a64b1bd9e04e8.ctex"]
+source_file="res://assets/maps/tiles/tile_ids.png"
+dest_files=["res://.godot/imported/tile_ids.png-317dc21ac6536078a0ec66141aa2ce49.ctex"]
 
 [params]
 
