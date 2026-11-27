@@ -12,13 +12,16 @@ public partial class Player : CharacterBody2D
 	private bool _canMove = true;
 	public void LockMovement() => _canMove = false;
 
+	private AnimatedSprite2D _sprite;
+	private int _itemPoseTicks;
+	public bool IsUsingItem => _itemPoseTicks > 0;
+
 	// --- Sword ---
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
 	private const int SwordSwingFrames = 14; // sum of SwordSwingSteps
 	private const int SwordReach = 12;
 	private int _swingFrame = -1; // -1 = not swinging
 	private int _spinCounter = 0; // 0 = not spinning. Counts down from 32, from LADX's wIsUsingSpinAttack
-	private AnimatedSprite2D _sprite;
 	private SwordSprite _sword;
 	private SwordAudio _swordAudio;
 	public bool IsSpinning => _spinCounter > 0;
@@ -122,6 +125,17 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
+	public void BeginItemPose(int ticks) { _itemPoseTicks = ticks; }
+
+	private void UpdateItemPose()
+	{
+		_itemPoseTicks--;
+		_sprite.Animation = "item-" + FacingDirection();
+		_sprite.Frame = 0;
+		_sprite.Pause();
+		_sprite.FlipH = _facing.X < 0;
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		_canMove = true;
@@ -129,20 +143,12 @@ public partial class Player : CharacterBody2D
 		UpdateAir();
 		
 		// 0. Spin attack in progress: movement fully blocked, only the spin runs
-		if (_spinCounter > 0)
-		{
-			UpdateSpin();
-			return;
-		}
+		if (_spinCounter > 0) { UpdateSpin(); return; }
 		// 1. Swing in progress: movement fully blocked, only the swing runs
-		if (_swingFrame >= 0)
-		{
-			UpdateSwing();
-			return;
-		}
+		if (_swingFrame >= 0) { UpdateSwing(); return; }
 
-		if (UpdateBracelet())
-			return;
+		if (IsUsingItem) { UpdateItemPose(); return; }
+		if (UpdateBracelet()) { return; }
 
 		// 2. Use item if item button pressed, as long as nothing is being carried.
 		if (!IsCarrying)
@@ -150,7 +156,7 @@ public partial class Player : CharacterBody2D
 			foreach (ItemButton button in Buttons) {
 				if (!Input.IsActionJustPressed(ActionFor(button))) { continue; }
 				Inventory.Instance.GetEquipped(button)?.OnPress(this, button);
-				if (_swingFrame >= 0) { return; }
+				if (_swingFrame >= 0 || IsUsingItem) { return; }
 			}
 		}
 
@@ -159,8 +165,6 @@ public partial class Player : CharacterBody2D
 				Inventory.Instance.GetEquipped(button)?.OnHeld(this, button);
 		
 		if (!_canMove) { return; }
-
-		// otherwise move normally
 		UpdateMovement();
 	}
 
@@ -172,10 +176,7 @@ public partial class Player : CharacterBody2D
 		_sword.HideSword();
 	}
 
-	public void PlayChargedSound()
-	{
-		_swordAudio.PlayCharged();
-	}
+	public void PlayChargedSound() => _swordAudio.PlayCharged();
 
 	private DPad ReadDpad()
 	{
@@ -378,20 +379,9 @@ public partial class Player : CharacterBody2D
 	private bool UpdateBracelet()
 	{
 		// --- Already holding something ---
-		if (_carried == null)
-			return false;
-		
-		if (!IsInstanceValid(_carried))
-		{
-			_carried = null;
-			return false;
-		}
-
-		if (!_carried.IsLifted)
-		{
-			ShowPose("grab", 1, "idle");
-			return true;
-		}
+		if (_carried == null) return false;
+		if (!IsInstanceValid(_carried)) { _carried = null; return false; }
+		if (!_carried.IsLifted) { ShowPose("grab", 1, "idle"); return true; }
 
 		if (ThrowPressed())
 		{

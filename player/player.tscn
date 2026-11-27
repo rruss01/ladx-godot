@@ -374,6 +374,30 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_urp6f")
+}],
+"loop": 1,
+"name": &"item-down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1c27")
+}],
+"loop": 1,
+"name": &"item-right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pylmc")
+}],
+"loop": 1,
+"name": &"item-up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_b8hi5")
 }, {
 "duration": 1.0,
@@ -744,7 +768,7 @@ script = ExtResource("1_onrkg")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1967307610]
 sprite_frames = SubResource("SpriteFrames_i3pqv")
-animation = &"grab-up"
+animation = &"item-down"
 
 [node name="Sword" type="AnimatedSprite2D" parent="." unique_id=1581256795]
 z_index = -1

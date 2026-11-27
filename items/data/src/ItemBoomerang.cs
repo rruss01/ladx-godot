@@ -8,6 +8,7 @@ public partial class ItemBoomerang : ItemData
 
 	private const int Straight = 32; // $20
 	private const int Diagonal = 24; // $18
+	private const int ItemPoseTicks = 12;
 
 	private const string Group = "boomerang";
 
@@ -19,6 +20,8 @@ public partial class ItemBoomerang : ItemData
 		if (player.GetTree().GetNodesInGroup(Group).Count > 0)
 			return;
 
+		player.FaceDpad();
+		player.BeginItemPose(ItemPoseTicks);
 		Boomerang boomerang = BoomerangScene.Instantiate<Boomerang>();
 		boomerang.AddToGroup(Group);
 		boomerang.Launch(player, ChooseVelocity(player));
