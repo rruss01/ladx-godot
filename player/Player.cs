@@ -58,6 +58,10 @@ public partial class Player : CharacterBody2D
 	public ItemButton SwordButton { get; private set; }
 	private readonly bool[] _wasHeld = new bool[2];
 
+	public bool IsShielding { get; private set; }
+	public void RaiseShield() => IsShielding = true;
+	public bool Blocks(Vector2I projectileDir) => IsShielding && Facing == -projectileDir;
+
 	// dpad struct to handle movement
 	private readonly record struct DPad(bool Right, bool Left, bool Up, bool Down)
 	{
@@ -158,6 +162,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		IsShielding = false;
 		_canMove = true;
 		UpdateButtonEdges();
 		UpdateAir();
@@ -286,11 +291,15 @@ public partial class Player : CharacterBody2D
 		string state = dpad.Count > 0 ? "walk" : "idle";
 		if (IsCarrying)
 			state = $"carry-{state}"; // both hands are busy, so no shield
-		else if (Inventory.Instance.GetEquipped(ItemButton.B)?.DisplayName == "shield1" || Inventory.Instance.GetEquipped(ItemButton.A)?.DisplayName == "shield1")
-			state = $"shield{state}";
+		else if (IsShieldEquipped())
+			state = (IsShielding ? "block" : "shield") + state;
 		_sprite.Play($"{state}-{FacingDirection()}");
 		_sprite.FlipH = _facing.X < 0;
 	}
+
+	private bool IsShieldEquipped() => 
+		Inventory.Instance.GetEquipped(ItemButton.A) is ItemShield ||
+		Inventory.Instance.GetEquipped(ItemButton.B) is ItemShield;
 
 	public void StartSwing(bool chargeable, ItemButton button)
 	{

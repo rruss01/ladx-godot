@@ -8,7 +8,7 @@
 
 [resource]
 script = ExtResource("5_dsq5x")
-Power = 1
+Power = 2
 PullTicks = 4
 LiftStageTicks = 4
 LiftSound = ExtResource("2_33fjw")

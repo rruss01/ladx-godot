@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://crq5h7jr3meoi" path="res://assets/player/roy_final.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://blacoso06ln75" path="res://player/Player.cs" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cq72q74any12x" path="res://assets/player/roy_sheet3.png" id="3_32hag"]
+[ext_resource type="Texture2D" uid="uid://332khca2ik5w" path="res://assets/player/roy_block.png" id="3_e7oew"]
 [ext_resource type="Texture2D" uid="uid://dw6uj4h7wna7p" path="res://assets/hud/weapons_items_hud.png" id="3_g1dw6"]
 [ext_resource type="Shader" uid="uid://bepauv4h7vvhn" path="res://items/swingable.gdshader" id="3_qjkh3"]
 [ext_resource type="Script" uid="uid://cmrtsktia7c2s" path="res://items/objects/src/SwordSprite.cs" id="4_yw30f"]
@@ -53,6 +54,30 @@ region = Rect2(0, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pylmc"]
 atlas = ExtResource("1_4flbx")
 region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmu53"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0b8q"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_237xx"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pxes"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w7j2h"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfgyi"]
+atlas = ExtResource("3_e7oew")
+region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g4c7l"]
 atlas = ExtResource("3_32hag")
@@ -257,6 +282,63 @@ animations = [{
 "loop": 1,
 "name": &"attack-up",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmu53")
+}],
+"loop": 1,
+"name": &"blockidle-down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0b8q")
+}],
+"loop": 1,
+"name": &"blockidle-right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_237xx")
+}],
+"loop": 1,
+"name": &"blockidle-up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8pxes")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmu53")
+}],
+"loop": 1,
+"name": &"blockwalk-down",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w7j2h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0b8q")
+}],
+"loop": 1,
+"name": &"blockwalk-right",
+"speed": 7.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfgyi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_237xx")
+}],
+"loop": 1,
+"name": &"blockwalk-up",
+"speed": 7.5
 }, {
 "frames": [{
 "duration": 1.0,
@@ -768,7 +850,7 @@ script = ExtResource("1_onrkg")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1967307610]
 sprite_frames = SubResource("SpriteFrames_i3pqv")
-animation = &"attack-down"
+animation = &"blockwalk-up"
 
 [node name="Sword" type="AnimatedSprite2D" parent="." unique_id=1581256795]
 z_index = -1

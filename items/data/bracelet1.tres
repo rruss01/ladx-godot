@@ -7,6 +7,7 @@
 
 [resource]
 script = ExtResource("2_script")
+Power = 1
 LiftSound = ExtResource("2_wxtok")
 ThrowSound = ExtResource("3_wxtok")
 DisplayName = "bracelet1"

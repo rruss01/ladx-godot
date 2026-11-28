@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dqu5e6ptc5c1q"]
+[gd_resource type="Resource" script_class="ItemShield" format=3 uid="uid://dqu5e6ptc5c1q"]
 
 [ext_resource type="Texture2D" uid="uid://bssdxwo1jler5" path="res://assets/hud/icons/icon_shield2.tres" id="1_hv7os"]
-[ext_resource type="Script" uid="uid://77rcrk7c21yd" path="res://items/data/src/ItemData.cs" id="2_n70dk"]
 [ext_resource type="Resource" uid="uid://b7u7bdfkntsk6" path="res://items/data/shield1.tres" id="2_y1si3"]
+[ext_resource type="AudioStream" uid="uid://dkpn3liltxvyn" path="res://audio/sfx/player/items/shield.wav" id="3_ftev6"]
+[ext_resource type="Script" uid="uid://t05i8qdkdmxh" path="res://items/data/src/ItemShield.cs" id="4_7p1nv"]
 
 [resource]
-script = ExtResource("2_n70dk")
+script = ExtResource("4_7p1nv")
+Level = 2
+ShieldSound = ExtResource("3_ftev6")
 DisplayName = "shield2"
 Icon = ExtResource("1_hv7os")
 Replaces = ExtResource("2_y1si3")
