@@ -18,6 +18,9 @@ public partial class Hud : CanvasLayer
 	private Control _bDigits;
 	private Control _aDigits;
 
+	[Export] public AudioStream RupeeSound { get; set; }
+	private AudioStreamPlayer _rupeePlayer;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		_bIcon = GetNode<TextureRect>("BottomBar/IconB");
@@ -27,11 +30,14 @@ public partial class Hud : CanvasLayer
 		_hearts = GetNode<Control>("BottomBar/Hearts");
 		_rupeeDigits = GetNode<Control>("BottomBar/RupeeDigits");
 		_bar = GetNode<Control>("BottomBar");
+		_rupeePlayer = new AudioStreamPlayer { Stream = RupeeSound };
+		AddChild(_rupeePlayer);
 		
 		Inventory.Instance.EquippedChanged += OnEquippedChanged;
 		Inventory.Instance.AmmoChanged += RefreshAmmo;
 		Inventory.Instance.RupeesChanged += SetRupees;
 		Inventory.Instance.HealthChanged += SetHearts;
+		Inventory.Instance.RupeesStepped += OnRupeeStep;
 		SetItemB(Inventory.Instance.GetEquipped(ItemButton.B));
 		SetItemA(Inventory.Instance.GetEquipped(ItemButton.A));
 		SetHearts(Inventory.Instance.CurrentHealth, Inventory.Instance.MaxHealth);
@@ -39,6 +45,7 @@ public partial class Hud : CanvasLayer
 		RefreshAmmo();
 	}
 
+	private void OnRupeeStep() => _rupeePlayer.Play();
 	public void SetItemB(ItemData item) => _bIcon.Texture = item?.Icon;
 	public void SetItemA(ItemData item) => _aIcon.Texture = item?.Icon;
 	

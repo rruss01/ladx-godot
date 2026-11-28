@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c57p7vxai6bkp"]
 
-[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://engine/Droppable.cs" id="1_4uynk"]
+[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://engine/items/minor/Droppable.cs" id="1_4uynk"]
 [ext_resource type="AudioStream" uid="uid://c7l4in6opfalp" path="res://audio/sfx/player/events/get_item.wav" id="2_3weh3"]
-[ext_resource type="Texture2D" uid="uid://iyw48y32qd0d" path="res://assets/hud/items/heart.png" id="3_7u4ye"]
+[ext_resource type="Texture2D" uid="uid://iyw48y32qd0d" path="res://assets/items/heart.png" id="3_7u4ye"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_84k86"]
 size = Vector2(6, 10)

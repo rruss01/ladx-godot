@@ -18,6 +18,7 @@ public partial class MapManager : Node
 	[Export] public ScreenScroller Scroller { get; set; }
 	[Export] public CollisionLoader Collision { get; set; }
 	[Export] public InteractiveTiles Tiles { get; set; }
+	[Export] public AnimatedTiles Animated { get; set; }
 	[Export] public WarpManager Warps { get; set; }
 
 	[ExportGroup("Starting point")]
@@ -169,6 +170,7 @@ public partial class MapManager : Node
 			Scroller.SetBounds(_current.MinRoom, _current.MaxRoom, _current.RoomSize);
 			Collision.SetMap(_current);
 			Tiles.SetMap(_current);
+			Animated?.SetMap(_current);
 			Warps?.SetMap(_current);
 
 			// Music: a region map picks by room, any other map has one song. Play() ignores a

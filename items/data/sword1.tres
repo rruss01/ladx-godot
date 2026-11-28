@@ -1,6 +1,6 @@
 [gd_resource type="Resource" format=3 uid="uid://15eu281tadqw"]
 
-[ext_resource type="Texture2D" uid="uid://bas63owgeju14" path="res://assets/hud/items/icon_sword1.tres" id="1_3uxj1"]
+[ext_resource type="Texture2D" uid="uid://bas63owgeju14" path="res://assets/hud/icons/icon_sword1.tres" id="1_3uxj1"]
 [ext_resource type="Script" uid="uid://l7e04d006dwn" path="res://items/objects/src/Swingable.cs" id="2_ycupj"]
 
 [resource]

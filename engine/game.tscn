@@ -14,14 +14,15 @@
 [ext_resource type="PackedScene" uid="uid://b1vcvh1qb7x2h" path="res://ui/hud.tscn" id="10_7530g"]
 [ext_resource type="AudioStream" uid="uid://b0p4l7bdp8i22" path="res://audio/sfx/interactive_tiles/rock_shatter.wav" id="10_kefuq"]
 [ext_resource type="Script" uid="uid://vi2t8mx56rf7" path="res://engine/WarpManager.cs" id="11_8s3fr"]
-[ext_resource type="Script" uid="uid://8vs2y5aumsoe" path="res://engine/ItemDrops.cs" id="11_kefuq"]
+[ext_resource type="Script" uid="uid://8vs2y5aumsoe" path="res://engine/items/ItemDrops.cs" id="11_kefuq"]
 [ext_resource type="Script" uid="uid://bgl8udsxx1yfu" path="res://ui/Hud.cs" id="11_rjwnk"]
-[ext_resource type="PackedScene" uid="uid://c848mm3nipgso" path="res://engine/poof.tscn" id="11_rud78"]
-[ext_resource type="PackedScene" uid="uid://c57p7vxai6bkp" path="res://engine/heart.tscn" id="12_2p33s"]
+[ext_resource type="PackedScene" uid="uid://c848mm3nipgso" path="res://engine/fx/poof.tscn" id="11_rud78"]
+[ext_resource type="PackedScene" uid="uid://c57p7vxai6bkp" path="res://engine/items/minor/heart.tscn" id="12_2p33s"]
 [ext_resource type="AudioStream" uid="uid://b0aja348qb83s" path="res://audio/sfx/engine/poof.wav" id="12_35au3"]
-[ext_resource type="PackedScene" uid="uid://dr8r8iipa2os1" path="res://engine/rupee.tscn" id="12_ukri2"]
+[ext_resource type="PackedScene" uid="uid://dr8r8iipa2os1" path="res://engine/items/minor/rupee.tscn" id="12_ukri2"]
 [ext_resource type="Texture2D" uid="uid://cs8d0k8hvh3w2" path="res://assets/hud/hearts/heart_full.tres" id="12_wsdf4"]
 [ext_resource type="Texture2D" uid="uid://5djgv0806mf8" path="res://assets/hud/hearts/heart_half.tres" id="13_4akcr"]
+[ext_resource type="PackedScene" uid="uid://by788y2bia6y0" path="res://engine/fx/animated_tiles.tscn" id="13_iqdlx"]
 [ext_resource type="Texture2D" uid="uid://8vgclhw0t58u" path="res://assets/hud/hearts/heart_empty.tres" id="14_h10dc"]
 [ext_resource type="Texture2D" uid="uid://cr4qq76gb2tfj" path="res://assets/hud/digits/digit_0.tres" id="15_vae2l"]
 [ext_resource type="Texture2D" uid="uid://now2ie3kqonn" path="res://assets/hud/digits/digit_1.tres" id="16_v0ycv"]
@@ -36,6 +37,7 @@
 [ext_resource type="Script" uid="uid://deiyc2rnwjkyq" path="res://engine/music/MusicManager.cs" id="31_hpu6b"]
 [ext_resource type="Script" uid="uid://dsnadbfx2gjk4" path="res://engine/music/MusicEntry.cs" id="32_vae2l"]
 [ext_resource type="AudioStream" uid="uid://dwkc2rga5yomw" path="res://audio/music/overworld/sword_search.ogg" id="33_v0ycv"]
+[ext_resource type="AudioStream" uid="uid://df6pletaft8mh" path="res://audio/sfx/player/events/get_rupee.wav" id="34_35au3"]
 [ext_resource type="AudioStream" uid="uid://kliu1pv5i6n2" path="res://audio/music/overworld/mabe_village.ogg" id="34_v2ahj"]
 [ext_resource type="AudioStream" uid="uid://d17gdjq5dhk41" path="res://audio/music/overworld/mysterious_woods.ogg" id="35_l5u62"]
 [ext_resource type="AudioStream" uid="uid://dhcko3ikm6h2o" path="res://audio/music/overworld/tal_tal_heights.ogg" id="36_vw3e5"]
@@ -147,6 +149,10 @@ RockSound = ExtResource("10_kefuq")
 PoofScene = ExtResource("11_rud78")
 PoofSound = ExtResource("12_35au3")
 
+[node name="AnimatedTiles" parent="." unique_id=1033738700 node_paths=PackedStringArray("Loader", "Scroller") instance=ExtResource("13_iqdlx")]
+Loader = NodePath("../CollisionLoader")
+Scroller = NodePath("../ScreenScroller")
+
 [node name="WarpManager" type="Node" parent="." unique_id=1702806432 node_paths=PackedStringArray("Scroller")]
 script = ExtResource("11_8s3fr")
 Scroller = NodePath("../ScreenScroller")
@@ -158,12 +164,13 @@ Scroller = NodePath("../ScreenScroller")
 HeartScene = ExtResource("12_2p33s")
 RupeeScene = ExtResource("12_ukri2")
 
-[node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles", "Warps")]
+[node name="MapManager" type="Node" parent="." unique_id=1531493602 node_paths=PackedStringArray("MapRoot", "Scroller", "Collision", "Tiles", "Animated", "Warps")]
 script = ExtResource("9_8ri5x")
 MapRoot = NodePath("../CurrentMap")
 Scroller = NodePath("../ScreenScroller")
 Collision = NodePath("../CollisionLoader")
 Tiles = NodePath("../InteractiveTiles")
+Animated = NodePath("../AnimatedTiles")
 Warps = NodePath("../WarpManager")
 StartMap = "uid://ffsh41po7lb3"
 StartRoom = Vector2i(2, 2)
@@ -178,6 +185,7 @@ HeartFull = ExtResource("12_wsdf4")
 HeartHalf = ExtResource("13_4akcr")
 HeartEmpty = ExtResource("14_h10dc")
 DigitTextures = Array[Texture2D]([ExtResource("15_vae2l"), ExtResource("16_v0ycv"), ExtResource("17_v2ahj"), ExtResource("18_l5u62"), ExtResource("19_vw3e5"), ExtResource("20_ouy2d"), ExtResource("21_8s3fr"), ExtResource("22_vkxd7"), ExtResource("23_rud78"), ExtResource("24_35au3")])
+RupeeSound = ExtResource("34_35au3")
 
 [node name="MusicManager" type="Node" parent="." unique_id=681281925 node_paths=PackedStringArray("Scroller")]
 script = ExtResource("31_hpu6b")

@@ -10,6 +10,8 @@ public partial class MapInfo : Node2D
 {
 	// Unique name, e.g. "overworld" or "links_house". Permanent changes are saved per map id.
 	[Export] public string MapId { get; set; } = "";
+	[Export] public TileMapLayer Animated { get; set; }
+	[Export(PropertyHint.File, "*.json")] public string AnimatedTilesTable { get; set; } = "";
 
 	// The rooms this map spans, as grid coordinates. A house or shop is one room: (0,0) to (0,0).
 	[Export] public Vector2I MinRoom { get; set; } = Vector2I.Zero;

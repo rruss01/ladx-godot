@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cjqtsw5r6132j"]
 
-[ext_resource type="Script" uid="uid://b82x1j4hnxy7" path="res://engine/fx/Explosion.cs" id="1_t66tp"]
+[ext_resource type="Script" uid="uid://b82x1j4hnxy7" path="res://engine/fx/src/Explosion.cs" id="1_t66tp"]
 [ext_resource type="AudioStream" uid="uid://bjmdqrotvx7o3" path="res://audio/sfx/player/items/bomb_explode.wav" id="2_jyhjq"]
 [ext_resource type="Texture2D" uid="uid://dxqq82714ch3d" path="res://assets/fx/explosion.png" id="2_rebeq"]
 

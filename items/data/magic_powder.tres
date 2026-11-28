@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemPowder" format=3 uid="uid://v8yduitin78k"]
 
 [ext_resource type="AudioStream" uid="uid://blkel2rw0ykqd" path="res://audio/sfx/engine/error.wav" id="1_vjco0"]
-[ext_resource type="Texture2D" uid="uid://b1hdglfqygmvk" path="res://assets/hud/items/icon_magic_powder.tres" id="1_x26ub"]
+[ext_resource type="Texture2D" uid="uid://b1hdglfqygmvk" path="res://assets/hud/icons/icon_magic_powder.tres" id="1_x26ub"]
 [ext_resource type="Texture2D" uid="uid://txqij8unnv7v" path="res://assets/fx/powder.png" id="3_y42h8"]
 [ext_resource type="Resource" uid="uid://qk4plnfcvqxm" path="res://items/data/mushroom.tres" id="4_03tck"]
 [ext_resource type="AudioStream" uid="uid://d21kfbqcnhfl2" path="res://audio/sfx/player/items/magicpowder.wav" id="5_n4uae"]

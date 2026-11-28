@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://by788y2bia6y0"]
+
+[ext_resource type="Script" uid="uid://tjp5ndqowa74" path="res://engine/fx/AnimatedTiles.cs" id="1_pn1l4"]
+
+[node name="AnimatedTiles" type="Node" unique_id=1033738700]
+script = ExtResource("1_pn1l4")

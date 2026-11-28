@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c848mm3nipgso"]
 
-[ext_resource type="Script" uid="uid://c6xnmnc6qtgw5" path="res://engine/fx/Poof.cs" id="1_arurp"]
+[ext_resource type="Script" uid="uid://c6xnmnc6qtgw5" path="res://engine/fx/src/Poof.cs" id="1_arurp"]
 [ext_resource type="Texture2D" uid="uid://dpse6ue115ajj" path="res://assets/fx/poof.png" id="2_ay1sn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jxjj6"]

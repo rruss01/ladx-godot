@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cogp4741vkd"
-path="res://.godot/imported/rupee1.png-9e614bdf19ee970ab76e65a2e74e1720.ctex"
+uid="uid://dtf6cfk2xtcj2"
+path="res://.godot/imported/projectiles.png-31c884cbb746a787ba0f164d0c8e3fa7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hud/items/rupee1.png"
-dest_files=["res://.godot/imported/rupee1.png-9e614bdf19ee970ab76e65a2e74e1720.ctex"]
+source_file="res://assets/items/projectiles.png"
+dest_files=["res://.godot/imported/projectiles.png-31c884cbb746a787ba0f164d0c8e3fa7.ctex"]
 
 [params]
 

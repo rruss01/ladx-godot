@@ -10,7 +10,8 @@ using Godot;
 public partial class ScreenScroller : Camera2D
 {
 	[Signal] public delegate void RoomChangedEventHandler(Vector2I room);
- 
+	[Signal] public delegate void ScrollStartedEventHandler(Vector2I nextRoom); 
+
 	[Export] public Node2D Target { get; set; }
  
 	// Visible play area per room (the HUD covers the rest of the 160x144 screen).
@@ -162,6 +163,7 @@ public partial class ScreenScroller : Camera2D
 		_totalTicks = Mathf.Max(1, Mathf.CeilToInt((float)distance / ScrollSpeed));
 		_ticks = 0;
 		_scrolling = true;
+		EmitSignal(SignalName.ScrollStarted, _nextRoom);
  
 		GetTree().Paused = true; // freezes the player, enemies, everything but this camera
 	}

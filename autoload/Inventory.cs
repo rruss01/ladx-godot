@@ -16,9 +16,10 @@ public partial class Inventory : Node
 	[Signal] public delegate void SlotChangedEventHandler(int slot, ItemData item);
 	[Signal] public delegate void EquippedChangedEventHandler(int button, ItemData item);
 	[Signal] public delegate void AmmoChangedEventHandler();
-	[Signal] public delegate void RupeesChangedEventHandler(int amount);
 	[Signal] public delegate void HealthChangedEventHandler(int health, int maxHealth);
-
+	[Signal] public delegate void RupeesChangedEventHandler(int amount);
+	[Signal] public delegate void RupeesSteppedEventHandler();
+	
 	// DEBUG
 	[Export] public ItemData StartingB { get; set; }
 	[Export] public ItemData StartingA { get; set; }
@@ -36,21 +37,61 @@ public partial class Inventory : Node
 	public int GetMaxAmmo(AmmoType type) => AmmoMax[(int)type][_ammoLevel[(int)type]];
 	
 	public int RupeeCount = 0;
-	private readonly int _maxRupees = 999;
+	private const int MaxRupees = 999;
+	private int _addBuffer;
+	private int _subBuffer;
 	
 	public int CurrentHealth = 6;
 	public int MaxHealth = 6;
 	
+	public void AddRupees(int amount) => _addBuffer += amount;
+	public void SpendRupees(int amount) => _subBuffer += amount;
+	public bool HasRupees(int amount) => RupeeCount - _subBuffer >= amount;
+
+	private static int StepFor(int buffer) => Mathf.Min(buffer / 32 + 1, 9);
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if ((Engine.GetPhysicsFrames() & 1) != 0) return;
+
+		bool stepped = false;
+
+		if (_addBuffer > 0)
+		{
+			int step = StepFor(_addBuffer);
+			_addBuffer -= step;
+			RupeeCount += step;
+			if (RupeeCount > MaxRupees)
+			{
+				RupeeCount = MaxRupees;
+				_addBuffer = 0;
+			}
+			stepped = true;
+		}
+
+		if (_subBuffer > 0)
+		{
+			int step = StepFor(_subBuffer);
+			_subBuffer -= step;
+			RupeeCount -= step;
+			if (RupeeCount < 0)
+			{
+				RupeeCount = 0;
+				_subBuffer = 0;
+			}
+			stepped = true;
+		}
+		if (stepped)
+		{
+			EmitSignal(SignalName.RupeesChanged, RupeeCount);
+			EmitSignal(SignalName.RupeesStepped);
+		}
+	}
+
 	public void AddAmmo(AmmoType type, int amount) {
 		_ammoCount[(int)type] = Mathf.Min(GetAmmo(type) + amount, GetMaxAmmo(type));
 		EmitSignal(SignalName.AmmoChanged);
 	}
-	
-	public void AddRupees(int amount) { 
-		RupeeCount = Mathf.Min(RupeeCount + amount, _maxRupees); 
-		EmitSignal(SignalName.RupeesChanged, RupeeCount); 
-	}
-
 	public void AddHealth(int halfHearts) { 
 		CurrentHealth = Mathf.Min(CurrentHealth + halfHearts, MaxHealth); 
 		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaxHealth);
@@ -95,7 +136,6 @@ public partial class Inventory : Node
 	public override void _Ready()
 	{
 		SetHealth(MaxHealth);
-		AddRupees(0);
 		AddAmmo(AmmoType.Bombs, 20);
 		AddAmmo(AmmoType.Arrows, 20);
 		AddAmmo(AmmoType.Powder, 20);

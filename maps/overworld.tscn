@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://8lr8cyxkhm24" path="res://assets/maps/tiles/tile_ids.png" id="3_meoah"]
 [ext_resource type="Texture2D" uid="uid://dhibwovyuaco" path="res://assets/maps/tiles/tiles16_atlas.png" id="3_tmk0e"]
 [ext_resource type="Script" uid="uid://xmkhe5u77mt4" path="res://engine/WarpData.cs" id="4_meoah"]
+[ext_resource type="Texture2D" uid="uid://bjifdv8esevtr" path="res://assets/maps/tiles/animated_tiles.png" id="6_v48ge"]
 
 [sub_resource type="Resource" id="Resource_8s3fr"]
 script = ExtResource("4_meoah")
@@ -634,6 +635,112 @@ texture_region_size = Vector2i(160, 128)
 resource_name = "world"
 sources/0 = SubResource("TileSetAtlasSource_meoah")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bpull"]
+texture = ExtResource("6_v48ge")
+0:0/animation_frame_0/duration = 0.267
+0:0/animation_frame_1/duration = 0.267
+0:0/animation_frame_2/duration = 0.267
+0:0/animation_frame_3/duration = 0.267
+0:0/0 = 0
+0:1/animation_frame_0/duration = 0.267
+0:1/animation_frame_1/duration = 0.267
+0:1/animation_frame_2/duration = 0.267
+0:1/animation_frame_3/duration = 0.267
+0:1/0 = 0
+0:2/animation_frame_0/duration = 0.267
+0:2/animation_frame_1/duration = 0.267
+0:2/animation_frame_2/duration = 0.267
+0:2/animation_frame_3/duration = 0.267
+0:2/0 = 0
+0:3/animation_frame_0/duration = 0.267
+0:3/animation_frame_1/duration = 0.267
+0:3/animation_frame_2/duration = 0.267
+0:3/animation_frame_3/duration = 0.267
+0:3/0 = 0
+0:4/animation_frame_0/duration = 0.267
+0:4/animation_frame_1/duration = 0.267
+0:4/animation_frame_2/duration = 0.267
+0:4/animation_frame_3/duration = 0.267
+0:4/0 = 0
+0:5/animation_frame_0/duration = 0.267
+0:5/animation_frame_1/duration = 0.267
+0:5/animation_frame_2/duration = 0.267
+0:5/animation_frame_3/duration = 0.267
+0:5/0 = 0
+0:6/animation_frame_0/duration = 0.267
+0:6/animation_frame_1/duration = 0.267
+0:6/animation_frame_2/duration = 0.267
+0:6/animation_frame_3/duration = 0.267
+0:6/0 = 0
+0:7/animation_frame_0/duration = 0.267
+0:7/animation_frame_1/duration = 0.267
+0:7/animation_frame_2/duration = 0.267
+0:7/animation_frame_3/duration = 0.267
+0:7/0 = 0
+0:8/animation_frame_0/duration = 0.267
+0:8/animation_frame_1/duration = 0.267
+0:8/animation_frame_2/duration = 0.267
+0:8/animation_frame_3/duration = 0.267
+0:8/0 = 0
+0:9/animation_frame_0/duration = 0.267
+0:9/animation_frame_1/duration = 0.267
+0:9/animation_frame_2/duration = 0.267
+0:9/animation_frame_3/duration = 0.267
+0:9/0 = 0
+0:10/animation_frame_0/duration = 0.267
+0:10/animation_frame_1/duration = 0.267
+0:10/animation_frame_2/duration = 0.267
+0:10/animation_frame_3/duration = 0.267
+0:10/0 = 0
+0:11/animation_frame_0/duration = 0.267
+0:11/animation_frame_1/duration = 0.267
+0:11/animation_frame_2/duration = 0.267
+0:11/animation_frame_3/duration = 0.267
+0:11/0 = 0
+0:12/animation_frame_0/duration = 0.067
+0:12/animation_frame_1/duration = 0.067
+0:12/animation_frame_2/duration = 0.067
+0:12/animation_frame_3/duration = 0.067
+0:12/0 = 0
+0:13/animation_frame_0/duration = 0.267
+0:13/animation_frame_1/duration = 0.267
+0:13/animation_frame_2/duration = 0.267
+0:13/animation_frame_3/duration = 0.267
+0:13/0 = 0
+0:14/animation_frame_0/duration = 0.067
+0:14/animation_frame_1/duration = 0.067
+0:14/animation_frame_2/duration = 0.067
+0:14/animation_frame_3/duration = 0.067
+0:14/0 = 0
+0:16/animation_frame_0/duration = 0.067
+0:16/animation_frame_1/duration = 0.067
+0:16/animation_frame_2/duration = 0.067
+0:16/animation_frame_3/duration = 0.067
+0:16/0 = 0
+0:17/animation_frame_0/duration = 0.267
+0:17/animation_frame_1/duration = 0.267
+0:17/animation_frame_2/duration = 0.267
+0:17/animation_frame_3/duration = 0.267
+0:17/0 = 0
+0:18/animation_frame_0/duration = 0.067
+0:18/animation_frame_1/duration = 0.067
+0:18/animation_frame_2/duration = 0.067
+0:18/animation_frame_3/duration = 0.067
+0:18/0 = 0
+0:19/animation_frame_0/duration = 0.267
+0:19/animation_frame_1/duration = 0.267
+0:19/animation_frame_2/duration = 0.267
+0:19/animation_frame_3/duration = 0.267
+0:19/0 = 0
+0:15/animation_frame_0/duration = 0.267
+0:15/animation_frame_1/duration = 0.267
+0:15/animation_frame_2/duration = 0.267
+0:15/animation_frame_3/duration = 0.267
+0:15/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_d6d7a"]
+sources/0 = SubResource("TileSetAtlasSource_bpull")
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v48ge"]
 texture = ExtResource("3_tmk0e")
 0:0/0 = 0
@@ -1091,9 +1198,11 @@ texture = ExtResource("3_tmk0e")
 [sub_resource type="TileSet" id="TileSet_jexs8"]
 sources/0 = SubResource("TileSetAtlasSource_v48ge")
 
-[node name="Overworld" type="Node2D" unique_id=780234610 node_paths=PackedStringArray("Objects")]
+[node name="Overworld" type="Node2D" unique_id=780234610 node_paths=PackedStringArray("Animated", "Objects")]
 script = ExtResource("1_2yvwq")
 MapId = "overworld"
+Animated = NodePath("Animated")
+AnimatedTilesTable = "res://maps/overworld_animated.json"
 MaxRoom = Vector2i(15, 15)
 CollisionMask = ExtResource("2_tmk0e")
 TileIds = ExtResource("3_meoah")
@@ -1107,6 +1216,10 @@ z_index = -4
 position = Vector2(160, 1280)
 tile_map_data = PackedByteArray("AAAJAAgAAQABAAUAAAABAAgAAQABAAcAAAACAAgAAQABAAYAAAADAAgAAQABAAYAAAAEAAgAAQABAAUAAAAFAAgAAQABAAUAAAAGAAgAAQABAAUAAAAHAAgAAQABAAUAAAAIAAgAAQABAAUAAAAAAAgAAQAAAAcAAAAEAAMAAAABAAoAAAAOAAMAAAACAAoAAAD6/wMAAAAAAAoAAAD6//v/AAAAAAkAAAAEAPv/AAABAAkAAAAOAPv/AAACAAkAAAAYAPv/AAADAAkAAAAYAAMAAAADAAoAAAAEAAsAAAABAAsAAAD6/wsAAAAAAAsAAAAOAAsAAAACAAsAAAAYAAsAAAADAAsAAAAEABMAAAABAAwAAAD6/xMAAAAAAAwAAAAOABMAAAACAAwAAAAYABMAAAADAAwAAAD6/xsAAAAAAA0AAAAEABsAAAABAA0AAAAOABsAAAACAA0AAAAYABsAAAADAA0AAAAiABsAAAAEAA0AAAAiABMAAAAEAAwAAAAiAAsAAAAEAAsAAAAiAAMAAAAEAAoAAAD6/yMAAAAAAA4AAAAEACMAAAABAA4AAAAOACMAAAACAA4AAAAYACMAAAADAA4AAAAiACMAAAAEAA4AAAD6/ysAAAAAAA8AAAAEACsAAAABAA8AAAAOACsAAAACAA8AAAAXACsAAAADAA8AAAAYACsAAAADAA8AAAAiACsAAAAEAA8AAAAsACsAAAAFAA8AAAAsACMAAAAFAA4AAAAsABsAAAAFAA0AAAAsABMAAAAFAAwAAAAsAAsAAAAFAAsAAAAsAAMAAAAFAAoAAAA2AAMAAAAGAAoAAAA2AAsAAAAGAAsAAAA2ABMAAAAGAAwAAAA2ABsAAAAGAA0AAAA2ACMAAAAGAA4AAAA2ACsAAAAGAA8AAABAACsAAAAHAA8AAABAACMAAAAHAA4AAABAABsAAAAHAA0AAABAABMAAAAHAAwAAABAAAsAAAAHAAsAAABAAAMAAAAHAAoAAABAAPv/AAAHAAkAAAA2APv/AAAGAAkAAAAsAPv/AAAFAAkAAAAiAPv/AAAEAAkAAAD6//P/AAAAAAgAAAAEAPP/AAABAAgAAAAOAPP/AAACAAgAAAAYAPP/AAADAAgAAAAiAPP/AAAEAAgAAAAsAPP/AAAFAAgAAAA2APP/AAAGAAgAAABAAPP/AAAHAAgAAAA2AOv/AAAGAAcAAABAAOv/AAAHAAcAAABAAOP/AAAHAAYAAAA2AOP/AAAGAAYAAAAsAOP/AAAFAAYAAAAsAOv/AAAFAAcAAAAiAOP/AAAEAAYAAAAiAOv/AAAEAAcAAAAYAOP/AAADAAYAAAAOAOP/AAACAAYAAAAEAOP/AAABAAYAAAAYAOv/AAADAAcAAAAOAOv/AAACAAcAAAAEAOv/AAABAAcAAAD6/+v/AAAAAAcAAAD6/+P/AAAAAAYAAAD6/9v/AAAAAAUAAAAEANv/AAABAAUAAAAOANv/AAACAAUAAAAYANv/AAADAAUAAAAiANv/AAAEAAUAAAAsANv/AAAFAAUAAAA2ANv/AAAGAAUAAABAANv/AAAHAAUAAAAiANP/AAAEAAQAAAAsANP/AAAFAAQAAAA2ANP/AAAGAAQAAABAANP/AAAHAAQAAAAYANP/AAADAAQAAAAOANP/AAACAAQAAAAEANP/AAABAAQAAAD6/9P/AAAAAAQAAAD6/8v/AAAAAAMAAAAEAMv/AAABAAMAAAAOAMv/AAACAAMAAAAYAMv/AAADAAMAAAAiAMv/AAAEAAMAAAAsAMv/AAAFAAMAAAA2AMv/AAAGAAMAAABAAMv/AAAHAAMAAABKAMv/AAAIAAMAAABKANP/AAAIAAQAAABKANv/AAAIAAUAAABKAOP/AAAIAAYAAABKAOv/AAAIAAcAAABKAPP/AAAIAAgAAABKAPv/AAAIAAkAAABKAAMAAAAIAAoAAABKAAsAAAAIAAsAAABKABMAAAAIAAwAAABKABsAAAAIAA0AAABKACMAAAAIAA4AAABKACsAAAAIAA8AAABUACsAAAAJAA8AAABUACMAAAAJAA4AAABUABsAAAAJAA0AAABUABMAAAAJAAwAAABUAAsAAAAJAAsAAABUAAMAAAAJAAoAAABUAPv/AAAJAAkAAABUAPP/AAAJAAgAAABUAOv/AAAJAAcAAABUAOP/AAAJAAYAAABUANv/AAAJAAUAAABUANP/AAAJAAQAAABeANP/AAAKAAQAAABeANv/AAAKAAUAAABeAOP/AAAKAAYAAABeAOv/AAAKAAcAAABeAPP/AAAKAAgAAABeAPv/AAAKAAkAAABeAAMAAAAKAAoAAABeAAsAAAAKAAsAAABeABMAAAAKAAwAAABeABsAAAAKAA0AAABeACMAAAAKAA4AAABeACsAAAAKAA8AAABoACsAAAALAA8AAABoACMAAAALAA4AAABoABsAAAALAA0AAABoABMAAAALAAwAAABoAAsAAAALAAsAAABoAAMAAAALAAoAAABoAPv/AAALAAkAAABoAPP/AAALAAgAAABoAOv/AAALAAcAAABoAOP/AAALAAYAAABoANv/AAALAAUAAABoANP/AAALAAQAAABoAMv/AAALAAMAAABeAMv/AAAKAAMAAABUAMv/AAAJAAMAAAD6/8P/AAAAAAIAAAAEAMP/AAABAAIAAAAOAMP/AAACAAIAAAAYAMP/AAADAAIAAAAiAMP/AAAEAAIAAAAsAMP/AAAFAAIAAAA2AMP/AAAGAAIAAABAAMP/AAAHAAIAAABKAMP/AAAIAAIAAABUAMP/AAAJAAIAAABeAMP/AAAKAAIAAABoAMP/AAALAAIAAAByAMP/AAAMAAIAAAB8AMP/AAANAAIAAACGAMP/AAAOAAIAAACQAMP/AAAPAAIAAACQAMv/AAAPAAMAAACGAMv/AAAOAAMAAAB8AMv/AAANAAMAAAByAMv/AAAMAAMAAAByANP/AAAMAAQAAAB8ANP/AAANAAQAAACGANP/AAAOAAQAAACQANP/AAAPAAQAAAByANv/AAAMAAUAAAB8ANv/AAANAAUAAACGANv/AAAOAAUAAACQANv/AAAPAAUAAACQAOP/AAAPAAYAAACQAOv/AAAPAAcAAACGAOP/AAAOAAYAAAB8AOP/AAANAAYAAAByAOP/AAAMAAYAAAByAOv/AAAMAAcAAAB8AOv/AAANAAcAAACGAOv/AAAOAAcAAAByAPP/AAAMAAgAAAB8APP/AAANAAgAAACGAPP/AAAOAAgAAACQAPP/AAAPAAgAAACQAPv/AAAPAAkAAACGAPv/AAAOAAkAAAB8APv/AAANAAkAAAByAPv/AAAMAAkAAAByAAMAAAAMAAoAAAB8AAMAAAANAAoAAACGAAMAAAAOAAoAAACQAAMAAAAPAAoAAACQAAsAAAAPAAsAAACGAAsAAAAOAAsAAAB8AAsAAAANAAsAAAByAAsAAAAMAAsAAAByABMAAAAMAAwAAAB8ABMAAAANAAwAAACGABMAAAAOAAwAAACQABMAAAAPAAwAAACQABsAAAAPAA0AAACGABsAAAAOAA0AAAB8ABsAAAANAA0AAAByABsAAAAMAA0AAAByACMAAAAMAA4AAAB8ACMAAAANAA4AAAByACsAAAAMAA8AAAB8ACsAAAANAA8AAACGACsAAAAOAA8AAACQACsAAAAPAA8AAACQACMAAAAPAA4AAACGACMAAAAOAA4AAACQALv/AAAPAAEAAACQALP/AAAPAAAAAACGALP/AAAOAAAAAACGALv/AAAOAAEAAAB8ALP/AAANAAAAAAByALP/AAAMAAAAAAByALv/AAAMAAEAAAB8ALv/AAANAAEAAABoALP/AAALAAAAAABoALv/AAALAAEAAABeALv/AAAKAAEAAABeALP/AAAKAAAAAABUALP/AAAJAAAAAABKALP/AAAIAAAAAABAALP/AAAHAAAAAABAALv/AAAHAAEAAABKALv/AAAIAAEAAABUALv/AAAJAAEAAAA2ALP/AAAGAAAAAAA2ALv/AAAGAAEAAAAsALv/AAAFAAEAAAAiALv/AAAEAAEAAAAYALv/AAADAAEAAAAOALv/AAACAAEAAAAOALP/AAACAAAAAAAYALP/AAADAAAAAAAiALP/AAAEAAAAAAAsALP/AAAFAAAAAAAEALP/AAABAAAAAAAEALv/AAABAAEAAAD6/7v/AAAAAAEAAAD6/7P/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_v48ge")
+
+[node name="Animated" type="TileMapLayer" parent="." unique_id=728658087]
+z_index = -3
+tile_set = SubResource("TileSet_d6d7a")
 
 [node name="Objects" type="TileMapLayer" parent="." unique_id=1813603249]
 z_index = -2

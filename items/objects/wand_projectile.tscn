@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://b18xwuqy5o28m"]
+
+[ext_resource type="Texture2D" uid="uid://dtf6cfk2xtcj2" path="res://assets/items/projectiles.png" id="1_4fxmr"]
+[ext_resource type="Script" uid="uid://cfvkfasl1v0iu" path="res://items/objects/src/WandProjectile.cs" id="1_r5f8f"]
+[ext_resource type="Texture2D" uid="uid://p3l868ftyj10" path="res://assets/fx/flame.png" id="2_r5f8f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aj24f"]
+size = Vector2(8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wywhv"]
+atlas = ExtResource("1_4fxmr")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0d364"]
+atlas = ExtResource("2_r5f8f")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnacp"]
+atlas = ExtResource("2_r5f8f")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qd7i8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wywhv")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0d364")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qnacp")
+}],
+"loop": 1,
+"name": &"flame",
+"speed": 7.5
+}]
+
+[node name="Wand" type="Area2D" unique_id=724293949]
+script = ExtResource("1_r5f8f")
+
+[node name="Hitbox" type="CollisionShape2D" parent="." unique_id=689601488]
+visible = false
+shape = SubResource("RectangleShape2D_aj24f")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=239627276]
+sprite_frames = SubResource("SpriteFrames_qd7i8")
+animation = &"flame"

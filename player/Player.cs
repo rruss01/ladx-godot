@@ -15,6 +15,9 @@ public partial class Player : CharacterBody2D
 	private AnimatedSprite2D _sprite;
 	private int _itemPoseTicks;
 	public bool IsUsingItem => _itemPoseTicks > 0;
+	private System.Action<int> _onPoseTick;
+	private WandSprite _wand;
+	private bool _usesWand;
 
 	// --- Sword ---
 	private static readonly int[] SwordSwingSteps = [3, 3, 8]; // draw, swing start, swing middle
@@ -72,6 +75,7 @@ public partial class Player : CharacterBody2D
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		GlobalPosition = GlobalPosition.Round();
 		_sword = GetNode<SwordSprite>("Sword");
+		_wand = GetNode<WandSprite>("Wand");
 		_swordAudio = GetNode<SwordAudio>("SwordAudio");
 		_spriteBase = _sprite.Offset;
 		_swordBase = _sword.Offset;
@@ -125,15 +129,31 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	public void BeginItemPose(int ticks) { _itemPoseTicks = ticks; }
+	public void BeginItemPose(int ticks, System.Action<int> onTick = null, bool showWand = false) 
+	{ 
+		_itemPoseTicks = ticks;
+		_onPoseTick = onTick;
+		_usesWand = showWand;
+	}
 
 	private void UpdateItemPose()
 	{
 		_itemPoseTicks--;
+
 		_sprite.Animation = "item-" + FacingDirection();
 		_sprite.Frame = 0;
 		_sprite.Pause();
 		_sprite.FlipH = _facing.X < 0;
+
+		if (_usesWand)
+			_wand.ShowPose(_facing, _itemPoseTicks >= 8 ? 0 : 1);
+
+		_onPoseTick?.Invoke(_itemPoseTicks);
+		if (_itemPoseTicks == 0) { 
+			_onPoseTick = null; 
+			_wand.HideWand();
+			_usesWand = false;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)

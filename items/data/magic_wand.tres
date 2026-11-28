@@ -1,11 +1,14 @@
-[gd_resource type="Resource" format=3 uid="uid://rsywqo366hoc"]
+[gd_resource type="Resource" script_class="ItemWand" format=3 uid="uid://rsywqo366hoc"]
 
-[ext_resource type="Texture2D" uid="uid://c7uo7o07gdw35" path="res://assets/hud/items/icon_magic_wand.tres" id="1_ucct8"]
-[ext_resource type="Script" uid="uid://l7e04d006dwn" path="res://items/objects/src/Swingable.cs" id="2_ucct8"]
+[ext_resource type="AudioStream" uid="uid://bx86net1jb1dd" path="res://audio/sfx/player/items/firerod.wav" id="1_m45nq"]
+[ext_resource type="Texture2D" uid="uid://c7uo7o07gdw35" path="res://assets/hud/icons/icon_magic_wand.tres" id="1_ucct8"]
+[ext_resource type="PackedScene" uid="uid://b18xwuqy5o28m" path="res://items/objects/wand_projectile.tscn" id="2_giy8l"]
+[ext_resource type="Script" uid="uid://cs2anq6k7la7w" path="res://items/data/src/ItemWand.cs" id="4_dh4b7"]
 
 [resource]
-script = ExtResource("2_ucct8")
-Chargeable = false
+script = ExtResource("4_dh4b7")
+FireballScene = ExtResource("2_giy8l")
+CastSound = ExtResource("1_m45nq")
 DisplayName = "magic_wand"
 Icon = ExtResource("1_ucct8")
 metadata/_custom_type_script = "uid://77rcrk7c21yd"

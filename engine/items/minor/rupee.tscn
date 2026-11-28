@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dr8r8iipa2os1"]
 
-[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://engine/Droppable.cs" id="1_17cav"]
-[ext_resource type="AudioStream" uid="uid://df6pletaft8mh" path="res://audio/sfx/player/events/get_rupee.wav" id="2_84k86"]
-[ext_resource type="Texture2D" uid="uid://cogp4741vkd" path="res://assets/hud/items/rupee1.png" id="2_ptbjj"]
+[ext_resource type="Script" uid="uid://cj1ji273ia34u" path="res://engine/items/minor/Droppable.cs" id="1_17cav"]
+[ext_resource type="AudioStream" uid="uid://c7l4in6opfalp" path="res://audio/sfx/player/events/get_item.wav" id="2_0n4er"]
+[ext_resource type="Texture2D" uid="uid://cogp4741vkd" path="res://assets/items/rupee1.png" id="2_ptbjj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2p33s"]
 size = Vector2(6, 16)
@@ -11,7 +11,7 @@ size = Vector2(6, 16)
 script = ExtResource("1_17cav")
 Kind = 1
 Amount = 1
-PickupSound = ExtResource("2_84k86")
+PickupSound = ExtResource("2_0n4er")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=426525692]
 visible = false

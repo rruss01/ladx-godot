@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Godot;
 
-public enum Interaction { Slash, Lift, Push, Bomb, Powder }
+public enum Interaction { Slash, Lift, Push, Bomb, Powder, Fire }
 
 // What the player is now holding after lifting a tile: enough to draw it and to break it later.
 public readonly record struct LiftedTile(int TileId, Vector2I Cell, Texture2D Art, string BreakEffect, string Spawns);
@@ -23,6 +23,30 @@ public sealed class TileBehavior
 {
 	public readonly Dictionary<Interaction, TileReaction> Reactions = new();
 	public bool Permanent;      // stays changed after the player leaves the room
+}
+
+public sealed class TileIdGrid
+{
+	private readonly int[] _ids;
+	private readonly Vector2I _size;
+
+	public TileIdGrid(Texture2D source)
+	{
+		Image img = source.GetImage();
+		if (img.IsCompressed()) img.Decompress();
+		_size = new Vector2I(img.GetWidth(), img.GetHeight());
+		_ids = new int[_size.X * _size.Y];
+		for (int y = 0; y < _size.Y; y++)
+			for (int x = 0; x < _size.X; x++)
+			{
+				Color c = img.GetPixel(x, y);
+				_ids[y * _size.X + x] = c.R8 | (c.G8 << 8);   // id is stored in R and G
+			}
+	}
+
+	// 'rel' is the cell relative to the map's first room; out of range = -1
+	public int At(Vector2I rel) =>
+		rel.X < 0 || rel.Y < 0 || rel.X >= _size.X || rel.Y >= _size.Y ? -1 : _ids[rel.Y * _size.X + rel.X];
 }
 
 // Makes tiles of the baked map react to the sword, bombs, lifting and pushing.

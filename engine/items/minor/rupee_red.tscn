@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dlxb6gbfuhedu"]
+
+[ext_resource type="PackedScene" uid="uid://dr8r8iipa2os1" path="res://engine/items/minor/rupee.tscn" id="1_sck7d"]
+[ext_resource type="Texture2D" uid="uid://n4ef4m6s2wmf" path="res://assets/items/rupee30.png" id="2_ib78u"]
+
+[node name="Rupee" unique_id=1935556637 instance=ExtResource("1_sck7d")]
+Amount = 30
+
+[node name="Sprite" parent="." index="1" unique_id=188037844]
+texture = ExtResource("2_ib78u")
